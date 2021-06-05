@@ -1,0 +1,25 @@
+{
+  "name": "ballebot",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "type": "module",
+  "repository": "https://github.com/Ballerini-Server/BalleBot.git",
+  "author": "rafaballerini <rafaella_ballerini@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.1"
+  },
+  "peerDependencies": {
+    "eslint-config-airbnb-base": "^14.2.1"
+  }
+}
