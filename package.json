@@ -7,7 +7,7 @@
   "author": "rafaballerini <rafaella_ballerini@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "commit": "cz"
+    "commit": "git add . && cz && git push"
   },
   "husky": {
     "hooks": {
