@@ -8,6 +8,6 @@
 
 ## Como rodar o projeto
 
-## Style Guide**
+## Style Guide
 
 ## Alteração
