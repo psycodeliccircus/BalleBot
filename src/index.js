@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { Client } from 'discord.js';
+// eslint-disable-next-line import/extensions
 import CommandHandler from './commands/Command.handler.js';
 
 const prefix = process.env.BOT_PREFIX;
