@@ -2,7 +2,8 @@ import path from 'path';
 import { readdirSync } from 'fs';
 import { Collection } from 'discord.js';
 
-const commandFolders = ['everyone', 'padawan', 'mods', 'staff'];
+// const commandFolders = ['everyone', 'padawan', 'mods', 'staff'];
+const commandFolders = ['everyone'];
 
 const CommandHandler = () => {
   const returnCollection = new Collection();
@@ -20,10 +21,9 @@ const CommandHandler = () => {
         file.endsWith('.command.js')
       );
 
-      commandFiles.forEach((file) => {
-        /* eslint-disable-next-line */
-        const command = require(`${folderPath}/${file}`);
-        returnCollection.set(command.name, command);
+      commandFiles.forEach(async (file) => {
+        const { default: command } = await import(`${folderPath}/${file}`);
+        returnCollection.set(command.name.toLowerCase(), command);
       });
     });
   }

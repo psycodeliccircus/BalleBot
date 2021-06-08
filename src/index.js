@@ -14,12 +14,16 @@ client.once('ready', () => {
   console.log(`Logged as ${client.user.tag}`);
 });
 
-client.once('message', (message) => {
+client.on('message', (message) => {
   if (!message.author.bot && message.content.startsWith(prefix)) {
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-    client.Commands.get(command)({ client, message, args });
+    try {
+      client.Commands.get(command).run({ client, message, args });
+    } catch (e) {
+      console.error(e);
+    }
   }
 });
 
