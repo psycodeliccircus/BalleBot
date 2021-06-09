@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Client } from 'discord.js';
-// eslint-disable-next-line import/extensions
+import EventHandler from './events/Events.handler.js';
 import CommandHandler from './commands/Command.handler.js';
 
 const prefix = process.env.BOT_PREFIX;
@@ -9,9 +9,10 @@ const client = new Client({
   partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 });
 
+client.Events = EventHandler();
 client.Commands = CommandHandler();
 
-client.once('ready', () => {
+client.Events = client.once('ready', () => {
   console.log(`Logged as ${client.user.tag}`);
 });
 
