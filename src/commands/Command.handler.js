@@ -2,7 +2,7 @@ import path from 'path';
 import { readdirSync } from 'fs';
 import { Collection } from 'discord.js';
 
-const commandFolders = ['everyone'];
+const commandFolders = ['everyone', 'padawan', 'mods', 'staff'];
 
 const CommandHandler = () => {
   const returnCollection = new Collection();
