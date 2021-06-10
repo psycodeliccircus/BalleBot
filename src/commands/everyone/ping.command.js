@@ -1,7 +1,7 @@
 export default {
   name: 'Ping',
   description: '',
-  permissions: ['KICK_MEMBERS'],
+  permissions: [],
   run: ({ message }) => {
     message.reply('Pong!');
   },
