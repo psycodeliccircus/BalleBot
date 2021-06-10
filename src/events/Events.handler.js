@@ -1,12 +1,9 @@
 import path from 'path';
-import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
 
-const eventFolders = ['client'];
+const eventFolders = ['client', 'guild'];
 
-const EventHandler = () => {
-  const returnCollection = new Collection();
-
+const EventHandler = (client) => {
   if (eventFolders) {
     eventFolders.forEach((folder) => {
       const folderPath = path.resolve(
@@ -21,13 +18,19 @@ const EventHandler = () => {
       );
 
       eventFiles.forEach(async (file) => {
-        const { default: command } = await import(`./${folder}/${file}`);
-        returnCollection.set(command.name, command);
+        const { default: event } = await import(`./${folder}/${file}`);
+        if (event.once) {
+          client.once(event.name.toLowerCase(), (...args) =>
+            event.run(client, ...args)
+          );
+        } else {
+          client.on(event.name.toLowerCase(), (...args) =>
+            event.run(client, ...args)
+          );
+        }
       });
     });
   }
-
-  return returnCollection;
 };
 
 export default EventHandler;
