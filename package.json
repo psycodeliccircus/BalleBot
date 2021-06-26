@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "commit": "git add . && cz && git push",
-    "commit:partial": "cz && git push"
+    "commit:partial": "cz"
   },
   "husky": {
     "hooks": {
