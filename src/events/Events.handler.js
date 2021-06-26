@@ -20,11 +20,11 @@ const EventHandler = (client) => {
       eventFiles.forEach(async (file) => {
         const { default: event } = await import(`./${folder}/${file}`);
         if (event.once) {
-          client.once(event.name.toLowerCase(), (...args) =>
+          client.once(event.name, (...args) =>
             event.run(client, ...args)
           );
         } else {
-          client.on(event.name.toLowerCase(), (...args) =>
+          client.on(event.name, (...args) =>
             event.run(client, ...args)
           );
         }
