@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "commit": "git add . && cz && git push"
+    "commit": "git add . && cz && git push",
+    "commit:partial": "cz && git push"
   },
   "husky": {
     "hooks": {
@@ -26,7 +27,8 @@
   },
   "dependencies": {
     "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "mongoose": "^5.12.14"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
