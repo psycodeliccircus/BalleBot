@@ -2,13 +2,13 @@ import path from 'path';
 import { readdirSync } from 'fs';
 import { Collection } from 'discord.js';
 
-const commandFolders = ['everyone', 'padawan', 'mods', 'staff'];
+const commandFolders = ['championship'];
 
 function genCommand(folder, returnCollection) {
   const folderPath = path.resolve(
     path.dirname(''),
     'src',
-    'commands',
+    'buttons',
     folder
   );
 
@@ -18,16 +18,11 @@ function genCommand(folder, returnCollection) {
       genCommand(path.join(folder, file.name), returnCollection)
       return;
     }
-    if (!file.name.endsWith('command.js')) return;
+    if (!file.name.endsWith('button.js')) return;
     const name = `./${path.join('.', folder, file.name).replace(/\\/g, '/')}`;
 
     try {
       const { default: command } = await import(`${name}`);
-      if (command.aliases) {
-        command.aliases.map((alias) => {
-          returnCollection.set(alias.toLowerCase(), command)
-        })
-      }
       command.name = command.name.toLowerCase()
       returnCollection.set(command.name, command);
     } catch (e) {
@@ -36,7 +31,7 @@ function genCommand(folder, returnCollection) {
   });
 }
 
-const CommandHandler = () => {
+const ButtonHandler = () => {
   const returnCollection = new Collection();
 
   if (commandFolders) {
@@ -46,4 +41,4 @@ const CommandHandler = () => {
   return returnCollection;
 };
 
-export default CommandHandler;
+export default ButtonHandler;

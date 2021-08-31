@@ -5,6 +5,7 @@ class GroupRepository {
   constructor() {
     this.repository = mongoose.model('groups', Group);
   }
+
   async insertMany(list) {
     try {
       await this.repository.insertMany(list)
@@ -40,14 +41,32 @@ class GroupRepository {
     throw new Error('Group not found');
   }
 
+  async findById(id) {
+    const item = await this.repository.findOne({ id }, { noCursorTimeout: false })
+    if (item !== undefined) {
+      return item;
+    }
+    throw new Error('Group not found');
+  }
+
   async listAll() {
     const list = await this.repository.find({}, { noCursorTimeout: false }).map((item) => item)
     return list
   }
 
-  async listAcceptedGroups() {
-    const list = await this.repository.find({ 'status': 'aproved' }, { noCursorTimeout: false }).map(item => item)
-    return list
+  async updateRepo(group) {
+    try {
+      await this.repository.updateOne(
+        {
+          'id': group.id
+        }, {
+        $set: {
+          'repo': group.repo
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async updateOne(name, data) {
@@ -65,6 +84,26 @@ class GroupRepository {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  async insertGithub(id, liderGH) {
+    try {
+      await this.repository.updateOne(
+        {
+          'id': id
+        }, {
+        $set: {
+          'liderGH': liderGH,
+        }
+      }
+      )
+    } catch (error) {
+
+    }
+  }
+
+  async deleteOne(id) {
+    await this.repository.deleteOne({ id });
   }
 }
 

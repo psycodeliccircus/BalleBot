@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import User from "../Schemas/User.js";
 
 class UserRepository {
+
   constructor() {
     try {
-
       this.repository = mongoose.model('users', User);
     } catch (error) {
-
     }
   }
+
   async insertOne(user) {
     try {
       await this.repository.create(user);
@@ -27,7 +27,7 @@ class UserRepository {
 
   async getLength() {
     const length = await this.repository.countDocuments()
-    console.log(length)
+    return length
   }
 
   async getRandomGroup() {
@@ -70,6 +70,14 @@ class UserRepository {
       }
     ])
     return result;
+  }
+
+  async clear() {
+    await this.repository.updateMany({ hasGroup: true }, {
+      $set: {
+        hasGroup: false
+      }
+    })
   }
 }
 
