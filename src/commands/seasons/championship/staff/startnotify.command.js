@@ -6,7 +6,7 @@ export default {
   permissions: ['staff'],
   run: async ({ message }) => {
     setInterval(() => {
-      message.channel.send('→Bebam Água←')
-    }, 1000)
-  }
-}
+      message.channel.send('→Bebam Água←');
+    }, 1000);
+  },
+};

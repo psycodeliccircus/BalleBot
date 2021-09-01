@@ -1,4 +1,5 @@
-import GroupRepository from "../../services/database/Models/GroupRepository.js";
+import GroupRepository from '../../../../services/database/Models/GroupRepository.js';
+import { loadTemplate } from '../../../../services/embedTemplates/championship.templates.js';
 
 export default {
   name: 'list',
@@ -11,13 +12,13 @@ export default {
       const repository = new GroupRepository();
       const groupList = await repository.listAll();
       for (const group of groupList) {
-        const embed = loadTemplate(group)
-        await message.send({ embed })
+        const embed = loadTemplate(group);
+        await message.send({ embed });
       }
-      await message.send(`${groupList.length} equipes registradas!`)
+      await message.send(`${groupList.length} equipes registradas!`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       await message.send('Ocorreu um erro');
     }
-  }
-}
+  },
+};

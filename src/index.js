@@ -1,5 +1,5 @@
 import 'dotenv/config';
-// import './services/database/connection.js';
+import './services/database/connection.js';
 import { Client } from 'discord.js';
 import disbut from 'discord-buttons';
 import db from 'quick.db';

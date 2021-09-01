@@ -1,5 +1,5 @@
 import { MessageButton } from 'discord-buttons';
-import GroupRepository from '../../services/database/Models/GroupRepository.js'
+import GroupRepository from '../../services/database/Models/GroupRepository.js';
 
 export default {
   name: 'CancelCrew',
@@ -7,18 +7,18 @@ export default {
   permissions: [],
   run: async ({ button }) => {
     if (button.id.endsWith(button.clicker.user.id)) {
-      const groupRepository = new GroupRepository()
+      const groupRepository = new GroupRepository();
 
       await groupRepository.deleteOne(button.clicker.user.id);
       await button.reply.defer();
 
       const confirmButton = new MessageButton()
-        .setLabel("Cancel")
+        .setLabel('Cancel')
         .setID(button.id)
-        .setStyle("gray")
+        .setStyle('gray')
         .setDisabled(true);
 
-      await button.message.edit("Ok, registro cancelado!", confirmButton);
+      await button.message.edit('Ok, registro cancelado!', confirmButton);
     }
   },
 };

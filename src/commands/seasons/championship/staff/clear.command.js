@@ -1,4 +1,4 @@
-import UserRepository from '../../../../services/database/Models/UserRepository.js'
+import UserRepository from '../../../../services/database/Models/UserRepository.js';
 
 export default {
   name: 'clear',
@@ -9,5 +9,5 @@ export default {
   run: async () => {
     const userRepository = new UserRepository();
     await userRepository.clear();
-  }
-}
+  },
+};

@@ -1,4 +1,4 @@
-import { MessageButton } from "discord-buttons";
+import { MessageButton } from 'discord-buttons';
 
 export default {
   name: 'ConfirmCrew',
@@ -6,12 +6,12 @@ export default {
   permissions: [],
   run: async ({ button }) => {
     if (button.id.endsWith(button.clicker.user.id)) {
-      console.log('teste')
+      console.log('teste');
 
       const confirmButton = new MessageButton()
-        .setLabel("Confirm")
+        .setLabel('Confirm')
         .setID(button.id)
-        .setStyle("gray")
+        .setStyle('gray')
         .setDisabled(true);
 
       button.message.edit('Confirm', confirmButton);

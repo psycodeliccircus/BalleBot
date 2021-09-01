@@ -1,6 +1,6 @@
-import { MessageButton } from "discord-buttons";
-import { loadTemplate } from "../../services/embedTemplates/championship.templates.js";
-import GroupRepository from "../../services/database/Models/GroupRepository.js";
+import { MessageButton } from 'discord-buttons';
+import { loadTemplate } from '../../../../services/embedTemplates/championship.templates.js';
+import GroupRepository from '../../../../services/database/Models/GroupRepository.js';
 
 const fillGroupData = (acc, curr) => {
   const [key, value] = curr.split(':');
@@ -8,17 +8,17 @@ const fillGroupData = (acc, curr) => {
   const hasMembro = key.toLowerCase().includes('membro');
   const hasGithub = key.toLowerCase().includes('github');
   const hasDiscord = key.toLowerCase().includes('discord');
-  const hasLider = key.toLowerCase().includes('lider')
-  const isLeader = (hasLider && !(hasGithub || hasDiscord));
+  const hasLider = key.toLowerCase().includes('lider');
+  const isLeader = hasLider && !(hasGithub || hasDiscord);
 
   acc.name = hasEquipe ? value.trim() : acc.name;
   acc.lider = isLeader ? value.trim() : acc.lider;
-  acc.crew = hasMembro ? value.split('|').map(item => item.trim()) : acc.crew;
+  acc.crew = hasMembro ? value.split('|').map((item) => item.trim()) : acc.crew;
   acc.liderGH = hasGithub ? value.trim() : acc.liderGH;
   acc.liderDisc = hasDiscord ? value.trim() : acc.liderDisc;
 
   return acc;
-}
+};
 
 export default {
   name: 'register',
@@ -30,19 +30,18 @@ export default {
     const { id } = message.author;
     const content = args.join(' ');
 
-    const groupRepository = new GroupRepository()
+    const groupRepository = new GroupRepository();
     const findedGroup = await groupRepository.findById(id);
     if (!findedGroup) {
-
       const confirmButton = new MessageButton()
-        .setLabel("Confirmar")
+        .setLabel('Confirmar')
         .setID(`confirmcrew${message.author.id}`)
-        .setStyle("blurple");
+        .setStyle('blurple');
 
       const cancelButton = new MessageButton()
-        .setLabel("Cancelar")
+        .setLabel('Cancelar')
         .setID(`cancelcrew${message.author.id}`)
-        .setStyle("blurple");
+        .setStyle('blurple');
 
       const objectModel = {
         id,
@@ -53,8 +52,10 @@ export default {
         liderDisc: '',
       };
 
-      const data = content.split('\n').reduce(fillGroupData, objectModel)
-      data.crew = data.crew.filter(member => !member.includes(data.liderDisc));
+      const data = content.split('\n').reduce(fillGroupData, objectModel);
+      data.crew = data.crew.filter(
+        (member) => !member.includes(data.liderDisc)
+      );
 
       if (data.crew.length < 0 || data.crew.length > 3) {
         throw new Error('A equipe deve ter entre 2 a 4 membros');
@@ -64,12 +65,17 @@ export default {
 
       const embed = loadTemplate(data);
 
-      await message.channel.send("Equipe criada", { buttons: [confirmButton, cancelButton], embed });
+      await message.channel.send('Equipe criada', {
+        buttons: [confirmButton, cancelButton],
+        embed,
+      });
       return;
     }
-    await message.channel.send("Você já está em uma equipe, não pode participar de mais uma");
-  }
-}
+    await message.channel.send(
+      'Você já está em uma equipe, não pode participar de mais uma'
+    );
+  },
+};
 /*
 crew: ["Lawless#7439 - Alpha Vylly", "Matan#9968 - Mateus Andriola"],
 name:"Grupo de teste",

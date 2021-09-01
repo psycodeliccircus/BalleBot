@@ -1,24 +1,31 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed } from 'discord.js';
 
 export function loadTemplate(group) {
   return new MessageEmbed({
     title: 'Apresentação da equipe',
     description: group.name,
     author: {
-      name: group.name
+      name: group.name,
     },
-    url: group.liderGH.startsWith('https') ? group.liderGH : `https://github.com/${group.liderGH}`,
+    url: group.liderGH.startsWith('https')
+      ? group.liderGH
+      : `https://github.com/${group.liderGH}`,
     color: 0x582c48,
     fields: [
       { name: 'Lider', value: group.lider, inline: true },
       { name: 'Discord do Lider', value: group.liderDisc, inline: true },
       { name: 'Github do Lider', value: group.liderGH, inline: false },
-      { name: 'Equipe', value: group.crew.map(member => (`- ${member}`)).join('\n'), inline: true },
+      {
+        name: 'Equipe',
+        value: group.crew.map((member) => `- ${member}`).join('\n'),
+        inline: true,
+      },
     ],
     footer: {
       text: `Clique no botão Confirmar para confirmar seus dados!
-Ou use o botão Cancelar para excluir essa equipe!` }
-  })
+Ou use o botão Cancelar para excluir essa equipe!`,
+    },
+  });
 }
 
 export function registeredGithubUser(user) {
@@ -29,7 +36,7 @@ export function registeredGithubUser(user) {
     thumbnail: { url: user.avatar_url, height: 20, width: 20 },
     color: 0x582c48,
   });
-  return embed
+  return embed;
 }
 
 export function repoCreatedTemplate({ group, message, status, error }) {
@@ -39,17 +46,21 @@ export function repoCreatedTemplate({ group, message, status, error }) {
       description: `Resposta do github com status: ${status}`,
       color: 0x344e7f,
       author: {
-        name: group.name
+        name: group.name,
       },
       fields: [
         { name: 'Repositório', value: group.repo, inline: false },
-        ...error.errors.map(errorData => (
-          { name: errorData.field, value: errorData.message, inline: false }
-        )),
+        ...error.errors.map((errorData) => ({
+          name: errorData.field,
+          value: errorData.message,
+          inline: false,
+        })),
       ],
-      footer: { text: 'Confira os repositórios dessa conta, ou atualize os dados da equipe com o commando update.' }
-    })
-    return embed
+      footer: {
+        text: 'Confira os repositórios dessa conta, ou atualize os dados da equipe com o commando update.',
+      },
+    });
+    return embed;
   }
 
   const embed = new MessageEmbed({
@@ -58,7 +69,7 @@ export function repoCreatedTemplate({ group, message, status, error }) {
     url: `https://github.com/Matan18/${group.repo}`,
     color: 0x344e7f,
     author: {
-      name: group.name
+      name: group.name,
     },
     fields: [
       { name: 'Repositório', value: group.repo, inline: false },
@@ -66,17 +77,18 @@ export function repoCreatedTemplate({ group, message, status, error }) {
       { name: 'Discord do Lider', value: group.liderDisc, inline: true },
       { name: 'Lider', value: group.lider, inline: true },
     ],
-    footer: { text: 'Reaja com ☑  para fazer o convite para o lider!' }
-  })
-  return embed
+    footer: { text: 'Reaja com ☑  para fazer o convite para o lider!' },
+  });
+  return embed;
 }
 
+// eslint-disable-next-line camelcase
 export function invitationSentTemplate(group, html_url) {
   const embed = new MessageEmbed({
     title: 'Convite de equipe enviado',
     description: `O convite de acesso ao repositório ${group.name} foi enviado para ${group.liderGH}`,
     author: {
-      name: group.name
+      name: group.name,
     },
     url: html_url,
     color: 0x714141,
@@ -84,14 +96,12 @@ export function invitationSentTemplate(group, html_url) {
       { name: 'Repositório', value: group.name, inline: false },
       { name: 'Lider', value: group.lider, inline: true },
       { name: 'LiderDisc', value: group.liderDisc, inline: true },
-    ]
-  })
-  return embed
+    ],
+  });
+  return embed;
 }
 
-export function invitationErrorTemplate(
-  group,
-  errorData) {
+export function invitationErrorTemplate(group, errorData) {
   const embed = new MessageEmbed({
     title: 'Erro ao enviar convite',
     description: `O convite de acesso ao repositório ${group.name} teve o seguinte erro: ${errorData.message}`,
@@ -106,30 +116,39 @@ export function invitationErrorTemplate(
       { name: 'LiderGH', value: group.liderGH, inline: false },
       { name: 'LiderDisc', value: group.liderDisc, inline: true },
       { name: 'Lider', value: group.lider, inline: true },
-    ]
+    ],
   });
-  return embed
+  return embed;
 }
 
 export function getRepoInfoTemplate({ group, collaborators, commits }) {
-  const collaboratorslist = collaborators.filter(collaborator => collaborator.login !== 'Matan18').map(collaborator => {
-    return { name: '*', value: collaborator.login, inline: false }
-  }
-  )
+  const collaboratorslist = collaborators
+    .filter((collaborator) => collaborator.login !== 'Matan18')
+    .map((collaborator) => {
+      return { name: '*', value: collaborator.login, inline: false };
+    });
   const fields = [
     { name: 'Lider', value: group.lider, inline: true },
     { name: 'Discord do Lider', value: group.liderDisc, inline: true },
     { name: 'Github do Lider', value: group.liderGH, inline: true },
-    { name: 'Colaboradores', value: `${collaborators.length - 1}`, inline: false },
+    {
+      name: 'Colaboradores',
+      value: `${collaborators.length - 1}`,
+      inline: false,
+    },
     ...collaboratorslist,
-  ]
+  ];
   if (commits) {
     const commitsFields = [
       { name: '*', value: '==========', inline: false },
       { name: 'Commits', value: `${commits.length}`, inline: false },
-      { name: 'Último commit', value: `${commits[0].commit.message}`, inline: false }
-    ]
-    fields.push(...commitsFields)
+      {
+        name: 'Último commit',
+        value: `${commits[0].commit.message}`,
+        inline: false,
+      },
+    ];
+    fields.push(...commitsFields);
   }
 
   const embed = new MessageEmbed({
@@ -138,23 +157,25 @@ export function getRepoInfoTemplate({ group, collaborators, commits }) {
     url: `https://github.com/Matan18/${group.repo}`,
     color: 0x344e7f,
     author: {
-      name: group.name
+      name: group.name,
     },
-    fields
-  })
-  return embed
+    fields,
+  });
+  return embed;
 }
 
 export function invitedJuryToRepo(groups, jury) {
-  const fields = groups.map(group => (
-    { name: group.name, value: group.liderDisc, inline: true }
-  ))
+  const fields = groups.map((group) => ({
+    name: group.name,
+    value: group.liderDisc,
+    inline: true,
+  }));
 
   const embed = new MessageEmbed({
     title: `Convites enviados para o jurado: ${jury.name}`,
     author: { name: jury.github },
     color: 0xe63d3d,
-    fields
+    fields,
   });
   return embed;
 }
@@ -164,9 +185,9 @@ export function showJuryTemplate(jury) {
     title: `Apresentação de jurado: ${jury.name}`,
     author: { name: jury.github },
     thumbnail: {
-      url: `https://github.com/${jury.github}.png`
+      url: `https://github.com/${jury.github}.png`,
     },
     color: 0xe63d3d,
-  })
-  return embed
+  });
+  return embed;
 }

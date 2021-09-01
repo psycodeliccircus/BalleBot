@@ -3,6 +3,6 @@ export default {
   description: '',
   permissions: [],
   run: async ({ message }) => {
-    await message.react('🤞')
+    await message.react('👀');
   },
 };
