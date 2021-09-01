@@ -36,9 +36,7 @@ export default {
           const userHasPermission = commandToBeExecuted.permissions.find(
             (permissionName) =>
               rolesUser.includes(rolesPermissions[permissionName]) ||
-              message.guild.ownerID === message.author.id ||
-              message.author.id === '553414151758807064' ||
-              message.author.id === '760275647016206347'
+              message.guild.ownerID === message.author.id
           );
 
           if (
