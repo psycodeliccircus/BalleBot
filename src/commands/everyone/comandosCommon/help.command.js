@@ -18,8 +18,7 @@ export default {
   run: ({ message, client, args }) => {
     const commandsDatabase = new client.Database.table('commandsDatabase');
 
-    let helpCommand = args[0];
-    if (helpCommand) helpCommand = helpCommand.replace(prefix, '');
+    const helpCommand = args[0]?.replace(prefix, '');
 
     const fullCommand = commandsDatabase.get(`${helpCommand}`);
 
@@ -101,8 +100,8 @@ export default {
         .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`Informações sobre o comando \`${prefix}${helpCommand}\`:`)
         .setDescription(
-          `**• Categoria: ${category || 'Sem Categoria'}**\n
-          \n**• Como usar:**\n${description} \`\n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
+          `**• Categoria: ${category || 'Sem Categoria'}**
+          \n**• Como usar:**\n \`${description}\` \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
             ' | '
           )}\n**• Sinônimos: **\n${markedAliases.join(' | ')}`
         )
