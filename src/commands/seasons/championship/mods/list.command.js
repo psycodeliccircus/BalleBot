@@ -2,8 +2,10 @@ import GroupRepository from "../../services/database/Models/GroupRepository.js";
 
 export default {
   name: 'list',
-  description: 'Vai listar todas as equipes cadastradas no banco de dados, com o mesmo botão para criar o repositório',
-  permissions: [],
+  description: 'Vai listar todas as equipes cadastradas no banco de dados',
+  event: 'campeonato',
+  category: 'Championship 🏅',
+  permissions: ['staff'],
   run: async ({ message }) => {
     try {
       const repository = new GroupRepository();

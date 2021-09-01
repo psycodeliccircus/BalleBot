@@ -22,8 +22,10 @@ const fillGroupData = (acc, curr) => {
 
 export default {
   name: 'register',
+  event: 'campeonato',
+  category: 'Championship 🏅',
   description: 'Vai registrar uma equipe',
-  permissions: [],
+  permissions: ['everyone'],
   run: async ({ message, args }) => {
     const { id } = message.author;
     const content = args.join(' ');

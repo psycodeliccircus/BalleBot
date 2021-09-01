@@ -3,7 +3,9 @@ import UserRepository from '../../services/database/Models/UserRepository.js'
 export default {
   name: 'sort',
   description: '',
-  permissions: [],
+  event: 'campeonato',
+  permissions: ['staff'],
+  category: 'Championship 🏅',
   run: async ({ message }) => {
     const userRepository = new UserRepository();
     const length = await userRepository.getLength();

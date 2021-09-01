@@ -5,7 +5,9 @@ import { repoCreatedTemplate } from "../../services/embedTemplates/championship.
 export default {
   name: 'inviteallgroups',
   description: 'Vai criar todos os repositórios e convidar os lideres para os repositórios.',
-  permissions: [],
+  event: 'campeonato',
+  category: 'Championship 🏅',
+  permissions: ['staff'],
   run: async ({ message }) => {
     console.log("start")
     const githubRequests = new GithubRequests();

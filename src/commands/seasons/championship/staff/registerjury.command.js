@@ -5,7 +5,9 @@ import { GithubRequests } from "../../services/githubRequests.js";
 export default {
   name: 'registerjury',
   description: 'Vai registrar um jurado ao campeonado, deve passar o username no github dele como primeiro parâmetro, depois o nome',
-  permissions: [],
+  event: 'campeonato',
+  category: 'Championship 🏅',
+  permissions: ['staff'],
   run: async ({ message }) => {
     const [_, githubUsername, ...name] = message.content.substr(1).split(' ');
     const githubRequests = new GithubRequests();

@@ -5,7 +5,9 @@ import { GithubRequests } from "../../services/githubRequests.js";
 export default {
   name: 'repos',
   description: 'Vai verificar o estado de todos os repositórios',
-  permissions: [],
+  event: 'campeonato',
+  category: 'Championship 🏅',
+  permissions: ['staff'],
   run: async ({ message }) => {
     const githubRequests = new GithubRequests();
     const groupsRepository = new GroupRepository();
