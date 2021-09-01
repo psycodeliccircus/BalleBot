@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Group = new mongoose.Schema({
   id: String,
@@ -8,6 +8,6 @@ const Group = new mongoose.Schema({
   liderGH: String,
   crew: [String],
   status: String,
-})
+});
 
 export default Group;

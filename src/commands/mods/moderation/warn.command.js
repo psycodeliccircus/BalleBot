@@ -1,6 +1,6 @@
-import Discord from 'discord.js'
-import { prefix } from '../../../assets/prefix.js'
-import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js'
+import Discord from 'discord.js';
+import { prefix } from '../../../assets/prefix.js';
+import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 
 export default {
   name: 'warn',
@@ -9,52 +9,65 @@ export default {
   aliases: ['addwarn'],
   category: 'Moderação ⚔️',
   run: ({ message, client, args }) => {
-
-    const guildIdDatabase = new client.Database.table(`guild_id_${message.guild.id}`)
+    const guildIdDatabase = new client.Database.table(
+      `guild_id_${message.guild.id}`
+    );
 
     const { user, index } = getUserOfCommand(client, message);
 
     if (!user) {
-      message.channel.send(message.author, new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Não encontrei o usuário!`)
-        .setDescription(`**Tente usar**` + '```' + `${prefix}warn @usuário <motivo>` + '```')
-        .setTimestamp())
-      return
+      message.channel.send(
+        message.author,
+        new Discord.MessageEmbed()
+          .setColor('#ff8997')
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setTitle(`Não encontrei o usuário!`)
+          .setDescription(
+            `**Tente usar**\`\`\`${prefix}warn @usuário <motivo>\`\`\``
+          )
+          .setTimestamp()
+      );
+      return;
     }
-    let reason = '<Motivo não especificado>'
+    let reason = '<Motivo não especificado>';
 
-    if (args[1]) { reason = message.content.slice(index, message.content.length) }
-
+    if (args[1]) {
+      reason = message.content.slice(index, message.content.length);
+    }
 
     if (guildIdDatabase.has(`user_id_${user.id}`)) {
-
-      guildIdDatabase.set(`user_id_${user.id}.name`, user.username)
-      guildIdDatabase.set(`user_id_${user.id}.discriminator`, user.discriminator)
-      guildIdDatabase.add(`user_id_${user.id}.warnsCount`, 1)
-      guildIdDatabase.push(`user_id_${user.id}.reasons`, reason)
-
+      guildIdDatabase.set(`user_id_${user.id}.name`, user.username);
+      guildIdDatabase.set(
+        `user_id_${user.id}.discriminator`,
+        user.discriminator
+      );
+      guildIdDatabase.add(`user_id_${user.id}.warnsCount`, 1);
+      guildIdDatabase.push(`user_id_${user.id}.reasons`, reason);
     } else {
       guildIdDatabase.set(`user_id_${user.id}`, {
         name: user.username,
         discriminator: user.discriminator,
         id: user.id,
         warnsCount: 1,
-        reasons: [reason]
-      })
+        reasons: [reason],
+      });
     }
 
-    const channelLog = client.channels.cache.get(guildIdDatabase.get('channel_log'))
+    const channelLog = client.channels.cache.get(
+      guildIdDatabase.get('channel_log')
+    );
 
     if (channelLog) {
-      channelLog.send(message.author, new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`O usuário ${user.tag} foi punido!`)
-        .setDescription('**Motivo: **\n\n' + '```' + `${reason}` + '```')
-        .setFooter(`Id do user: ${user.id}`)
-        .setTimestamp())
+      channelLog.send(
+        message.author,
+        new Discord.MessageEmbed()
+          .setColor('#ff8997')
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setTitle(`O usuário ${user.tag} foi punido!`)
+          .setDescription(`**Motivo: **\n\n\`\`\`${reason}\`\`\``)
+          .setFooter(`Id do user: ${user.id}`)
+          .setTimestamp()
+      );
     }
 
     user.send(
@@ -62,17 +75,22 @@ export default {
         .setColor('#ff8997')
         .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`Você recebeu um warn!`)
-        .setDescription('**Motivo: **\n' + '```' + reason + '```' + `\n**Aplicada por: ${message.author.tag}**`)
+        .setDescription(
+          `**Motivo: **\n\`\`\`}${reason}\`\`\`\n**Aplicada por: ${message.author.tag}**`
+        )
         .setFooter(`Id do user: ${user.id}`)
-        .setTimestamp())
+        .setTimestamp()
+    );
 
-    message.channel.send(message.author, new Discord.MessageEmbed()
-      .setColor('#ff8997')
-      .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-      .setTitle(`O usuário ${user.tag} foi punido!`)
-      .setDescription('**Motivo: **\n\n' + '```' + `${reason}` + '```')
-      .setFooter(`Id do user: ${user.id}`)
-      .setTimestamp())
-
-  }
-}
+    message.channel.send(
+      message.author,
+      new Discord.MessageEmbed()
+        .setColor('#ff8997')
+        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+        .setTitle(`O usuário ${user.tag} foi punido!`)
+        .setDescription(`**Motivo: **\n\n\`\`\`${reason}\`\`\``)
+        .setFooter(`Id do user: ${user.id}`)
+        .setTimestamp()
+    );
+  },
+};

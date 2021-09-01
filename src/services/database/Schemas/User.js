@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const User = new mongoose.Schema({
   username: String,
@@ -7,6 +7,6 @@ const User = new mongoose.Schema({
   level: Number,
   name: String,
   hasGroup: { type: Boolean, default: false },
-})
+});
 
 export default User;

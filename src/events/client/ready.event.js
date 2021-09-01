@@ -1,4 +1,4 @@
-import { statusActivity } from '../../assets/statusActivity.js'
+import { statusActivity } from '../../assets/statusActivity.js';
 
 export default {
   name: 'ready',

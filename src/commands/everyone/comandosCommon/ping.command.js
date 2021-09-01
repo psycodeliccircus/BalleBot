@@ -1,5 +1,5 @@
-import Discord from 'discord.js'
-import { prefix } from '../../../assets/prefix.js'
+import Discord from 'discord.js';
+import { prefix } from '../../../assets/prefix.js';
 
 export default {
   name: 'Ping',
@@ -9,14 +9,20 @@ export default {
   dm: true,
   category: 'Utility ⛏️',
   run: ({ message, client }) => {
-
-    message.channel.send("Loading").then(msg => {
-
-      msg.edit('', new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setTitle('🏓Pong!')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setDescription(` Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API latency is ${Math.round(client.ws.ping)}ms`))
+    message.channel.send('Loading').then((msg) => {
+      const timestampDiff = msg.createdTimestamp - message.createdTimestamp;
+      msg.edit(
+        '',
+        new Discord.MessageEmbed()
+          .setColor('#ff8997')
+          .setTitle('🏓Pong!')
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(
+            ` Latency is ${timestampDiff}ms. API latency is ${Math.round(
+              client.ws.ping
+            )}ms`
+          )
+      );
     });
-  }
+  },
 };
