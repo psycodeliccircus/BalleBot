@@ -3,7 +3,10 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
@@ -11,6 +14,18 @@
   "rules": {
     "prettier/prettier": "Error",
     "no-console": "off",
-    "import/extensions": [".js"]
+    "import/extensions": "off",
+    "consistent-return": "off",
+    "import/prefer-default-export": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
+    "no-plusplus": "off",
+    "no-restricted-globals": "off",
+    "new-cap": [
+      "error",
+      {
+        "properties": false
+      }
+    ]
   }
 }

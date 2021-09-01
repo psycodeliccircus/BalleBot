@@ -1,4 +1,4 @@
-import UserRepository from '../../../../services/database/Models/UserRepository.js'
+import UserRepository from '../../../../services/database/Models/UserRepository.js';
 
 export default {
   name: 'Participar',
@@ -8,9 +8,9 @@ export default {
   permissions: [],
   run: async ({ message, args }) => {
     const messageId = message.id;
-    const username = `${message.author.username}#${message.author.discriminator}`
-    const userId = message.author.id
-    const argIndex = args.findIndex(arg => !isNaN(Number(arg)))
+    const username = `${message.author.username}#${message.author.discriminator}`;
+    const userId = message.author.id;
+    const argIndex = args.findIndex((arg) => !isNaN(Number(arg)));
     let level = Number(args.splice(argIndex, 1));
     if (level > 5) {
       level = 5;
@@ -22,10 +22,10 @@ export default {
     const user = { username, userId, messageId, level, name };
     try {
       const userRepository = new UserRepository();
-      await userRepository.insertOne(user)
-      await message.react('🤞')
+      await userRepository.insertOne(user);
+      await message.react('🤞');
     } catch (error) {
-
+      console.error(error);
     }
   },
 };

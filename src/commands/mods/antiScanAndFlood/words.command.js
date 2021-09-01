@@ -1,5 +1,13 @@
-import Discord from 'discord.js'
-import { prefix } from '../../../assets/prefix.js'
+import Discord from 'discord.js';
+import { prefix } from '../../../assets/prefix.js';
+
+function bouncer(array) {
+  const filterArray = array.filter((item) => {
+    return Boolean(item);
+  });
+
+  return filterArray;
+}
 
 export default {
   name: 'words',
@@ -9,33 +17,36 @@ export default {
   dm: true,
   category: 'AntiSpam ⚠️',
   run: ({ message, client }) => {
-    const guildIdDatabase = new client.Database.table(`guild_id_${message.guild.id}`)
+    const guildIdDatabase = new client.Database.table(
+      `guild_id_${message.guild.id}`
+    );
 
     if (guildIdDatabase.has('wordsBanned')) {
       const listOfWords = bouncer(guildIdDatabase.get('wordsBanned')).sort();
 
-      message.channel.send(message.author, new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setTitle(`${message.author.tag} Aqui está todas as palavras do banco de dados: `)
-        .setDescription('```' + listOfWords.join(' | ') + '```')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true })))
+      message.channel.send(
+        message.author,
+        new Discord.MessageEmbed()
+          .setColor('#ff8997')
+          .setTitle(
+            `${message.author.tag} Aqui está todas as palavras do banco de dados: `
+          )
+          .setDescription(`\`\`\`${listOfWords.join(' | ')}\`\`\``)
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+      );
     } else {
-      message.channel.send(message.author, new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setTitle(`${message.author.tag} Seu servidor não foi encontrado: `)
-        .setDescription(`Para ativar o sistema de words primeiro adicione palavras com ${prefix}addwords <palavra1> <palavra2> <palavra3> etc...
+      message.channel.send(
+        message.author,
+        new Discord.MessageEmbed()
+          .setColor('#ff8997')
+          .setTitle(`${message.author.tag} Seu servidor não foi encontrado: `)
+          .setDescription(
+            `Para ativar o sistema de words primeiro adicione palavras com ${prefix}addwords <palavra1> <palavra2> <palavra3> etc...
             \nPara configurar onde os reports irão ser mandados
-            \nPara mais detalhes consulte o comando addlog no ${prefix}help addwords`)
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true })))
+            \nPara mais detalhes consulte o comando addlog no ${prefix}help addwords`
+          )
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+      );
     }
-  }
+  },
 };
-
-function bouncer(array) {
-
-  const filterArray = array.filter(function (item) {
-    return Boolean(item);
-  });
-
-  return filterArray;
-}
