@@ -12,7 +12,7 @@ export default {
     const commandsDatabase = new client.Database.table('commandsDatabase')
 
     let helpCommand = args[0]
-    if (helpCommand) helpCommand = helpCommand.replace('=', '')
+    if (helpCommand) helpCommand = helpCommand.replace(prefix, '')
 
     const fullCommand = commandsDatabase.get(`${helpCommand}`);
 

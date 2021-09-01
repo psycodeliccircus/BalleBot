@@ -30,11 +30,13 @@ export default {
 
 
           const userHasPermission = commandToBeExecuted.permissions.find(permissionName => (
-            rolesUser.includes(rolesPermissions[permissionName]) || message.guild.ownerID === message.author.id
-
+            rolesUser.includes(rolesPermissions[permissionName]) ||
+            message.guild.ownerID === message.author.id
           ));
 
-          if ((!userHasPermission && commandToBeExecuted.name.toLowerCase() !== 'setadm') || !rolesPermissions.staff) {
+          if ((!userHasPermission ||
+            commandToBeExecuted.name.toLowerCase() !== 'setadm') &&
+            !rolesPermissions.staff) {
             message.channel.send(message.author, new Discord.MessageEmbed()
               .setColor('#ff8997')
               .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
