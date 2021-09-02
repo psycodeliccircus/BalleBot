@@ -47,7 +47,6 @@ export async function confirmWarn(message, client, user, reason) {
               reasons: [reason],
             });
           }
-
           const channelLog = client.channels.cache.get(
             guildIdDatabase.get('channel_log')
           );

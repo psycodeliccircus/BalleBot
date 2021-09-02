@@ -31,7 +31,6 @@ export default {
     if (args[1]) {
       reason = message.content.slice(index, message.content.length);
     }
-
     confirmWarn(message, client, user, reason);
   },
 };

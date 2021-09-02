@@ -62,7 +62,6 @@ export default {
             );
             return;
           }
-
           if (userHasPermission) {
             commandToBeExecuted.run({ client, message, args });
           } else {
