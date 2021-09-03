@@ -9,6 +9,9 @@ export default {
   aliases: ['removewarn', 'removerwarn', 'retirarwarn'],
   category: 'Moderação ⚔️',
   run: ({ message, client, args }) => {
+    if (!args[0]) {
+      return;
+    }
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );

@@ -11,8 +11,11 @@ export default {
   aliases: ['addwarn', 'advertencia', 'avisar'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args }) => {
+    if (!args[0]) {
+      return;
+    }
     const { user, index } = getUserOfCommand(client, message);
-    await message.delete();
+
     if (!user) {
       message.channel.send(
         message.author,
@@ -68,46 +71,87 @@ export default {
     if (await confirmMessage(message, messageAnt)) {
       messageAnt.delete();
 
-      const guildIdDatabase = new client.Database.table(
-        `guild_id_${message.guild.id}`
-      );
+      const memberUser = client.guilds.cache
+        .get(message.guild.id)
+        .members.cache.get(user.id);
 
-      const channelLog = client.channels.cache.get(
-        guildIdDatabase.get('channel_log')
-      );
-
-      if (channelLog) {
-        channelLog.send(message.author, messageInviteLog());
+      if (
+        memberUser.roles.highest.position >=
+        message.guild.me.roles.highest.position
+      ) {
+        message.channel
+          .send(
+            message.author,
+            new Discord.MessageEmbed()
+              .setColor('#ff8997')
+              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setTitle(`Eu não tenho permissão para avisar o usuário`)
+              .setDescription(
+                `O usuário ${user.tag} está acima de mim, eleve meu cargo acima do dele`
+              )
+              .setTimestamp()
+          )
+          .then((msg) => msg.delete({ timeout: 15000 }));
+      } else if (
+        memberUser.roles.highest.position >=
+        message.member.roles.highest.position
+      ) {
+        message.channel
+          .send(
+            message.author,
+            new Discord.MessageEmbed()
+              .setColor('#ff8997')
+              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setTitle(`Você não tem permissão para avisar o usuário`)
+              .setDescription(
+                `O usuário ${user.tag} está acima de você, por isso não podes adicionar um aviso a ele`
+              )
+              .setTimestamp()
+          )
+          .then((msg) => msg.delete({ timeout: 15000 }));
       } else {
-        message.channel.send(
-          message.author,
-          messageInviteLog().then((msg) => msg.delete({ timeout: 15000 }))
-        );
-      }
-
-      if (guildIdDatabase.has(`user_id_${user.id}`)) {
-        guildIdDatabase.set(`user_id_${user.id}.name`, user.username);
-        guildIdDatabase.set(
-          `user_id_${user.id}.discriminator`,
-          user.discriminator
+        const guildIdDatabase = new client.Database.table(
+          `guild_id_${message.guild.id}`
         );
 
-        guildIdDatabase.add(`user_id_${user.id}.warnsCount`, 1);
-        guildIdDatabase.push(`user_id_${user.id}.reasons`, reason);
-        guildIdDatabase.push(`user_id_${user.id}.dataReasonsWarns`, new Date());
-      } else {
-        guildIdDatabase.set(`user_id_${user.id}`, {
-          name: user.username,
-          discriminator: user.discriminator,
-          id: user.id,
-          warnsCount: 1,
-          reasons: [reason],
-          dataReasonsWarns: [new Date()],
-        });
-      }
+        const channelLog = client.channels.cache.get(
+          guildIdDatabase.get('channel_log')
+        );
 
-      user
-        .send(
+        if (channelLog) {
+          channelLog.send(message.author, messageInviteLog());
+        } else {
+          message.channel.send(
+            message.author,
+            messageInviteLog().then((msg) => msg.delete({ timeout: 15000 }))
+          );
+        }
+
+        if (guildIdDatabase.has(`user_id_${user.id}`)) {
+          guildIdDatabase.set(`user_id_${user.id}.name`, user.username);
+          guildIdDatabase.set(
+            `user_id_${user.id}.discriminator`,
+            user.discriminator
+          );
+
+          guildIdDatabase.add(`user_id_${user.id}.warnsCount`, 1);
+          guildIdDatabase.push(`user_id_${user.id}.reasons`, reason);
+          guildIdDatabase.push(
+            `user_id_${user.id}.dataReasonsWarns`,
+            new Date()
+          );
+        } else {
+          guildIdDatabase.set(`user_id_${user.id}`, {
+            name: user.username,
+            discriminator: user.discriminator,
+            id: user.id,
+            warnsCount: 1,
+            reasons: [reason],
+            dataReasonsWarns: [new Date()],
+          });
+        }
+
+        user.send(
           new Discord.MessageEmbed()
             .setColor('#ff8997')
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
@@ -119,22 +163,8 @@ export default {
             )
             .setFooter(`Id do user: ${user.id}`)
             .setTimestamp()
-        )
-        .catch(() =>
-          message.channel
-            .send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor('#ff8997')
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setTitle(`Não foi possível avisar na DM do usuário!`)
-                .setDescription(
-                  `O usuário ${user.tag} possui a DM fechada, por isso não pude avisá-lo`
-                )
-                .setTimestamp()
-            )
-            .then((msg) => msg.delete({ timeout: 15000 }))
         );
+      }
     } else {
       await messageAnt.delete();
     }

@@ -9,7 +9,10 @@ export default {
   permissions: ['everyone'],
   aliases: ['warns'],
   category: 'Moderação ⚔️',
-  run: ({ message, client }) => {
+  run: ({ message, client, args }) => {
+    if (!args[0]) {
+      return;
+    }
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );
