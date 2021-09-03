@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
+import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 
 export default {
   name: 'warnlist',
@@ -32,12 +33,16 @@ export default {
 
     if (guildIdDatabase.has(`user_id_${user.id}`)) {
       const myUser = guildIdDatabase.get(`user_id_${user.id}`);
-      const warnUser = myUser.reasons;
+      const warnsUser = myUser.reasons;
 
-      if (warnUser) {
-        const messageCommands = warnUser.reduce(
+      if (warnsUser) {
+        const messageCommands = warnsUser.reduce(
           (previous, current, index) =>
-            `${previous}**Aviso ${index + 1}:** \n ${current}\n\n`,
+            `${previous}**Aviso ${
+              index + 1
+            }:** \n **Data:** ${parseDateForDiscord(
+              myUser.dataReasonsWarns[index]
+            )} \n **Motivo:** \n \`\`\`${current}\`\`\`\n\n`,
           ''
         );
 
@@ -46,10 +51,10 @@ export default {
           new Discord.MessageEmbed()
             .setColor('#ff8997')
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setTitle(
-              `Lista de warns do usuário ${`${myUser.name}#${myUser.discriminator}`}`
-            )
+            .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
+            .setTitle(`Lista de warns do usuário: `)
             .setDescription(messageCommands)
+            .setFooter(`Id do user: ${user.id}`)
         );
         return;
       }

@@ -2,6 +2,7 @@ export function getUserOfCommand(client, message) {
   const [command, ...rest] = message.content.split(' ');
   let [userTag, ...msg] = rest;
   msg = msg.join(' ');
+  userTag.replace('<', '').replace('>', '');
   if (isNaN(userTag)) {
     const index = message.content.indexOf('#');
 

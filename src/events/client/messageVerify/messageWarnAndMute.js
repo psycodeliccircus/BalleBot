@@ -2,32 +2,36 @@ import Discord from 'discord.js';
 
 export function messageWarnAndMute(message, client, messageMarked) {
   function messageDmAlert() {
-    message.author.send(
-      new Discord.MessageEmbed()
-        .setColor('YELLOW')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Você enviou uma mensagem suspeita:`)
-        .setDescription(
-          `**Espere um moderador rever seu caso, por hora você está silenciado do servidor!**
+    message.author
+      .send(
+        new Discord.MessageEmbed()
+          .setColor('YELLOW')
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setTitle(`Você enviou uma mensagem suspeita:`)
+          .setDescription(
+            `**Espere um moderador rever seu caso, por hora você está silenciado do servidor!**
             \n**Essa foi a mensagem:**
             \n ${messageMarked}`
-        )
-        .addFields({
-          name: 'Mensagem enviada no canal:',
-          value: message.channel,
-        })
-        .setTimestamp()
-    );
+          )
+          .addFields({
+            name: 'Mensagem enviada no canal:',
+            value: message.channel,
+          })
+          .setTimestamp()
+      )
+      .catch();
   }
 
-  message.channel.send(
-    message.author,
-    new Discord.MessageEmbed()
-      .setColor('YELLOW')
-      .setTitle(
-        `${message.author.tag} você usou uma palavra ou link proibido e recebeu +1 warn, não use novamente ou será banido⚠️`
-      )
-  );
+  message.channel
+    .send(
+      message.author,
+      new Discord.MessageEmbed()
+        .setColor('YELLOW')
+        .setTitle(
+          `${message.author.tag} você usou uma palavra ou link proibido e recebeu +1 warn, não use novamente ou será banido⚠️`
+        )
+    )
+    .then((msg) => msg.delete({ timeout: 15000 }));
 
   message.delete();
 
@@ -49,6 +53,10 @@ export function messageWarnAndMute(message, client, messageMarked) {
       `user_id_${message.author.id}.reasons`,
       `Palavra/Link proibido : ${messageMarked}`
     );
+    guildIdDatabase.push(
+      `user_id_${message.author.id}.dataReasonsWarns`,
+      new Date()
+    );
   } else {
     guildIdDatabase.set(`user_id_${message.author.id}`, {
       name: message.author.username,
@@ -56,6 +64,7 @@ export function messageWarnAndMute(message, client, messageMarked) {
       id: message.author.id,
       warnsCount: 1,
       reasons: [`Palavra/Link proibido : ${messageMarked}`],
+      dataReasonsWarns: [new Date()],
     });
   }
 
@@ -72,7 +81,10 @@ export function messageWarnAndMute(message, client, messageMarked) {
             `Usuário ${message.author.tag} enviou uma mensagem suspeita:`
           )
           .setTimestamp()
-          .setAuthor(message.author.tag)
+          .setAuthor(
+            `${message.author.tag}`,
+            message.author.displayAvatarURL({ dynamic: true })
+          )
           .setFooter(`usuário: ${message.author.id}`)
           .setDescription(`*Essa foi a mensagem:*\n ${messageMarked}`)
           .addFields({
@@ -82,8 +94,6 @@ export function messageWarnAndMute(message, client, messageMarked) {
           .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
       );
     }
-    messageDmAlert();
-  } else {
-    messageDmAlert();
   }
+  messageDmAlert();
 }

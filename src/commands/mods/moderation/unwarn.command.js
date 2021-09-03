@@ -6,7 +6,7 @@ export default {
   name: 'unwarn',
   description: `${prefix}unwarn <idUser> <aviso1> ou ${prefix}unwarn @user <aviso1> ou ${prefix}unwarn <tagUser> <aviso1>`,
   permissions: ['mods'],
-  aliases: ['removewarn'],
+  aliases: ['removewarn', 'removerwarn', 'retirarwarn'],
   category: 'Moderação ⚔️',
   run: ({ message, client, args }) => {
     const guildIdDatabase = new client.Database.table(
@@ -44,6 +44,7 @@ export default {
       if (isNaN(warnRemove)) {
         if (warnRemove.toLowerCase() === 'all') {
           guildIdDatabase.delete(`user_id_${user.id}.reasons`);
+          guildIdDatabase.delete(`user_id_${user.id}.dataReasonsWarns`);
           guildIdDatabase.set(`user_id_${user.id}.warnsCount`, 0);
           guildIdDatabase.set(`user_id_${user.id}.reasons`, []);
 
@@ -68,6 +69,9 @@ export default {
       }
 
       const reasons = guildIdDatabase.get(`user_id_${user.id}.reasons`);
+      const dataReasonsWarns = guildIdDatabase.get(
+        `user_id_${user.id}.dataReasonsWarns`
+      );
 
       if (reasons.length !== 0) {
         if (warnRemove > reasons.length) {
@@ -78,10 +82,15 @@ export default {
 
         const avisoDeleted = reasons[warnRemove];
         reasons.splice(warnRemove, 1);
+        dataReasonsWarns.splice(warnRemove, 1);
 
         guildIdDatabase.delete(`user_id_${user.id}.reasons`);
         guildIdDatabase.set(`user_id_${user.id}.reasons`, reasons);
-
+        guildIdDatabase.delete(`user_id_${user.id}.dataReasonsWarns`);
+        guildIdDatabase.set(
+          `user_id_${user.id}.dataReasonsWarns`,
+          dataReasonsWarns
+        );
         guildIdDatabase.subtract(`user_id_${user.id}.warnsCount`, 1);
 
         message.channel.send(

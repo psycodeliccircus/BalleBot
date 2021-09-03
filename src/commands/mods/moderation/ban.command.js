@@ -36,7 +36,8 @@ export default {
       new Discord.MessageEmbed()
         .setColor('#FF0000')
         .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Você está preste a Banir ${user.tag}`)
+        .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
+        .setTitle(`Você está prestes a Banir um usuário!`)
         .setDescription(
           `**Pelo Motivo de : **\n\n\`\`\`${reason}\`\`\` \nPara confirmar clique em ✅\n para cancelar clique em ❎`
         )
@@ -90,7 +91,9 @@ export default {
               new Discord.MessageEmbed()
                 .setColor('#ff8997')
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setTitle(`Você foi banido do servidor ${message.guild.name}`)
+                .setTitle(
+                  `Você foi banido do servidor **${message.guild.name}**`
+                )
                 .setDescription(
                   `**Motivo: **\n\`\`\`${reason}\`\`\`\n**Aplicada por: ${message.author.tag}**`
                 )
