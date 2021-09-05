@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import { prefix } from '../../assets/prefix.js';
 import { messageErro } from '../../utils/Embeds/error.template.js';
+import { helpWithASpecificCommand } from '../everyone/comandosCommon/help.command.js';
 
 export default {
   name: 'setAdm',
@@ -12,7 +13,11 @@ export default {
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );
-
+    if (!args[0]) {
+      const [command] = message.content.slice(prefix.length).split(/ +/);
+      helpWithASpecificCommand(client.Commands.get(command), message, client);
+      return;
+    }
     if (!args[2]) {
       message.channel.send(message.author, messageErro(client));
       return;
@@ -21,9 +26,7 @@ export default {
 
     loadsToBeConsidered.forEach((idrole, roleIndex) => {
       if (idrole.indexOf('@') !== -1) {
-        loadsToBeConsidered[roleIndex] = idrole
-          .replace('<@&', '')
-          .replace('>', '');
+        loadsToBeConsidered[roleIndex] = idrole.replace(/(<)|(@&)|(>)/g, '');
       }
     });
 

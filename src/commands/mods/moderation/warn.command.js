@@ -3,6 +3,7 @@ import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { confirmMessage } from './confirmMessage.js';
+import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 
 export default {
   name: 'warn',
@@ -12,36 +13,53 @@ export default {
   category: 'Moderação ⚔️',
   run: async ({ message, client, args }) => {
     if (!args[0]) {
+      const [command] = message.content.slice(prefix.length).split(/ +/);
+      helpWithASpecificCommand(client.Commands.get(command), message, client);
       return;
     }
+
     const { user, index } = getUserOfCommand(client, message);
 
     if (!user) {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor('#ff8997')
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-          .setTitle(`Não encontrei o usuário!`)
-          .setDescription(
-            `**Tente usar**\`\`\`${prefix}warn @usuário <motivo>\`\`\``
-          )
-          .setTimestamp()
-      );
+      message.channel
+        .send(
+          message.author,
+          new Discord.MessageEmbed()
+            .setColor('#ff8997')
+            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+            .setTitle(`Não encontrei o usuário!`)
+            .setDescription(
+              `**Tente usar**\`\`\`${prefix}warn @usuário <motivo>\`\`\``
+            )
+            .setTimestamp()
+        )
+        .then((msg) => msg.delete({ timeout: 15000 }));
       return;
     }
-    let reason = '<Motivo não especificado>';
-
-    if (args[1]) {
-      reason = message.content.slice(index, message.content.length);
+    if (user.id === message.guild.me.id) {
+      message.channel
+        .send(
+          message.author,
+          new Discord.MessageEmbed()
+            .setColor('#ff8997')
+            .setTitle(`Hey, você não pode avisar eu mesma, isso não é legal :(`)
+            .setTimestamp()
+        )
+        .then((msg) => msg.delete({ timeout: 15000 }));
+      return;
     }
+
+    const reason =
+      args[0] && index !== 0
+        ? message.content.slice(index, message.content.length)
+        : '<Motivo não especificado>';
 
     const messageAnt = await message.channel.send(
       new Discord.MessageEmbed()
         .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
         .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Você está preste a avisar o Usuário`)
+        .setTitle(`Você está preste a avisar o Usuário ${user.tag}`)
         .setDescription(
           `**Pelo Motivo de : **\n\n\`\`\`${reason}\`\`\` \nPara confirmar clique em ✅\n para cancelar clique em ❎`
         )
@@ -52,7 +70,7 @@ export default {
     function messageInviteLog() {
       return new Discord.MessageEmbed()
         .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
         .setTitle(`O usuário ${user.tag} foi avisado!`)
         .addFields(
           {
@@ -61,7 +79,7 @@ export default {
           },
           {
             name: '**Aplicadado por:**',
-            value: `${message.author.tag} - ${message.author.id}`,
+            value: `${message.author} - ${message.author.id}`,
           }
         )
         .setFooter(`Id do user avisado: ${user.id}`)
@@ -77,23 +95,6 @@ export default {
 
       if (
         memberUser.roles.highest.position >=
-        message.guild.me.roles.highest.position
-      ) {
-        message.channel
-          .send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-              .setTitle(`Eu não tenho permissão para avisar o usuário`)
-              .setDescription(
-                `O usuário ${user.tag} está acima de mim, eleve meu cargo acima do dele`
-              )
-              .setTimestamp()
-          )
-          .then((msg) => msg.delete({ timeout: 15000 }));
-      } else if (
-        memberUser.roles.highest.position >=
         message.member.roles.highest.position
       ) {
         message.channel
@@ -101,10 +102,10 @@ export default {
             message.author,
             new Discord.MessageEmbed()
               .setColor('#ff8997')
-              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
               .setTitle(`Você não tem permissão para avisar o usuário`)
               .setDescription(
-                `O usuário ${user.tag} está acima de você, por isso não podes adicionar um aviso a ele`
+                `O usuário ${user} está acima ou no mesmo cargo que você, por isso não podes adicionar um aviso a ele`
               )
               .setTimestamp()
           )
@@ -151,19 +152,35 @@ export default {
           });
         }
 
-        user.send(
-          new Discord.MessageEmbed()
-            .setColor('#ff8997')
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setTitle(
-              `Você recebeu um warn do servidor **${message.guild.name}**`
-            )
-            .setDescription(
-              `**Motivo: **\n\`\`\`${reason}\`\`\`\n**Aplicada por: ${message.author.tag}**`
-            )
-            .setFooter(`Id do user: ${user.id}`)
-            .setTimestamp()
-        );
+        user
+          .send(
+            new Discord.MessageEmbed()
+              .setColor('#ff8997')
+              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setTitle(
+                `Você recebeu um warn do servidor **${message.guild.name}**`
+              )
+              .setDescription(
+                `**Motivo: **\n\`\`\`${reason}\`\`\`\n**Aplicada por: ${message.author.tag}**`
+              )
+              .setFooter(`Id do user: ${user.id}`)
+              .setTimestamp()
+          )
+          .catch(() =>
+            message.channel
+              .send(
+                message.author,
+                new Discord.MessageEmbed()
+                  .setColor('#ff8997')
+                  .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                  .setDescription(
+                    `O usuário ${user} possui a DM fechada, por isso não pude avisá-lo`
+                  )
+                  .setTitle(`Não foi possível avisar na DM do usuário!`)
+                  .setTimestamp()
+              )
+              .then((msg) => msg.delete({ timeout: 15000 }))
+          );
       }
     } else {
       await messageAnt.delete();

@@ -9,6 +9,41 @@ function getMessageCommands(listTempleteCategories, namesCategories) {
   }, '');
 }
 
+export function helpWithASpecificCommand(fullCommand, message, client) {
+  const markedAliases = [];
+  const markedPermissions = [];
+
+  if (fullCommand.aliases) {
+    for (let i = 0; i < fullCommand.aliases.length; i++) {
+      markedAliases[i] = `\`${prefix + fullCommand.aliases[i]}\``;
+    }
+  }
+  for (let i = 0; i < fullCommand.permissions.length; i++) {
+    markedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
+  }
+
+  const { category, description } = fullCommand;
+  message.channel
+    .send(
+      message.author,
+      new Discord.MessageEmbed()
+        .setColor('#ff8997')
+        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+        .setTitle(
+          `Informações sobre o comando \`${prefix}${fullCommand.name}\`:`
+        )
+        .setDescription(
+          `**• Categoria: ${category || 'Sem Categoria'}**
+        \n**• Como usar:**\n${description} \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
+            ' | '
+          )}\n**• Sinônimos: **\n${
+            markedAliases.join(' | ') || '`<Este comando não possui sinônimos>`'
+          }`
+        )
+    )
+    .then((msg) => msg.delete({ timeout: 15000 }));
+}
+
 export default {
   name: 'help',
   description: `${prefix}help <comando> `,
@@ -21,9 +56,6 @@ export default {
     const helpCommand = args[0]?.replace(prefix, '').toLowerCase();
 
     const fullCommand = commandsDatabase.get(`${helpCommand}`);
-
-    const markedAliases = [];
-    const markedPermissions = [];
 
     if (!fullCommand) {
       const getNamesCommands = [];
@@ -80,31 +112,7 @@ export default {
             `• Para saber as informações de um comando específico, use ${prefix}help <comando>`
           )
       );
-      return;
     }
-
-    for (let i = 0; i < fullCommand.aliases.length; i++) {
-      markedAliases[i] = `\`${prefix + fullCommand.aliases[i]}\``;
-    }
-    for (let i = 0; i < fullCommand.permissions.length; i++) {
-      markedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
-    }
-
-    if (markedAliases.length === 0)
-      markedAliases[0] = '`Este comando não possui sinônimos`';
-    const { category, description } = fullCommand;
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Informações sobre o comando \`${prefix}${helpCommand}\`:`)
-        .setDescription(
-          `**• Categoria: ${category || 'Sem Categoria'}**
-          \n**• Como usar:**\n${description} \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
-            ' | '
-          )}\n**• Sinônimos: **\n${markedAliases.join(' | ')}`
-        )
-    );
+    helpWithASpecificCommand(fullCommand, message, client); // chamar função
   },
 };

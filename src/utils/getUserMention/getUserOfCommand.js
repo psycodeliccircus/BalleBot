@@ -2,12 +2,14 @@ export function getUserOfCommand(client, message) {
   const [command, ...rest] = message.content.split(' ');
   let [userTag, ...msg] = rest;
   msg = msg.join(' ');
-  userTag.replace('<', '').replace('>', '');
+  if (userTag) userTag.replace(/(<)(>)/g, '');
+
   if (isNaN(userTag)) {
     const index = message.content.indexOf('#');
 
     if (index >= 0) {
       userTag = message.content.slice(command.length + 1, index + 5);
+
       msg = message.content.slice(index + 5, message.content.length);
     }
   }
