@@ -2,7 +2,7 @@ import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 
 function getMessageCommands(listTempleteCategories, namesCategories) {
-  return listTempleteCategories.reduce((prev, arr, index) => {
+  return listTempleteCategories.reduce((prev, _arr, index) => {
     return `${prev}**${listTempleteCategories[index]}** \n ${namesCategories[
       listTempleteCategories[index]
     ].namesCommands.join(' | ')}\n\n`;
@@ -34,7 +34,7 @@ export function helpWithASpecificCommand(fullCommand, message, client) {
         )
         .setDescription(
           `**• Categoria: ${category || 'Sem Categoria'}**
-        \n**• Como usar:**\n${description} \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
+    \n**• Como usar:**\n\`\` ${description}\`\` \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
             ' | '
           )}\n**• Sinônimos: **\n${
             markedAliases.join(' | ') || '`<Este comando não possui sinônimos>`'
@@ -112,7 +112,9 @@ export default {
             `• Para saber as informações de um comando específico, use ${prefix}help <comando>`
           )
       );
+
+      return;
     }
-    helpWithASpecificCommand(fullCommand, message, client); // chamar função
+    helpWithASpecificCommand(fullCommand, message, client);
   },
 };

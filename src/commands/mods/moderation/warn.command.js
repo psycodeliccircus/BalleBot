@@ -51,7 +51,7 @@ export default {
 
     const reason =
       args[0] && index !== 0
-        ? message.content.slice(index, message.content.length)
+        ? message.content.slice(index, message.content.length).trim()
         : '<Motivo não especificado>';
 
     const messageAnt = await message.channel.send(
@@ -63,7 +63,7 @@ export default {
         .setDescription(
           `**Pelo Motivo de : **\n\n\`\`\`${reason}\`\`\` \nPara confirmar clique em ✅\n para cancelar clique em ❎`
         )
-        .setFooter(`Id do user: ${user.id}`)
+        .setFooter(`ID do usuário: ${user.id}`)
         .setTimestamp()
     );
 
@@ -82,7 +82,7 @@ export default {
             value: `${message.author} - ${message.author.id}`,
           }
         )
-        .setFooter(`Id do user avisado: ${user.id}`)
+        .setFooter(`ID do usuário avisado: ${user.id}`)
         .setTimestamp();
     }
 
@@ -163,7 +163,7 @@ export default {
               .setDescription(
                 `**Motivo: **\n\`\`\`${reason}\`\`\`\n**Aplicada por: ${message.author.tag}**`
               )
-              .setFooter(`Id do user: ${user.id}`)
+              .setFooter(`ID do usuário: ${user.id}`)
               .setTimestamp()
           )
           .catch(() =>

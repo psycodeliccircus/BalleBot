@@ -85,7 +85,7 @@ export default {
                     `Todos os avisos foram removidos do usuário ${user.tag}`
                   )
                   .setDescription(`**O usuário não possui avisos**`)
-                  .setFooter(`Id do user: ${user.id}`)
+                  .setFooter(`ID do usuário: ${user.id}`)
                   .setTimestamp()
               )
               .then((msg) => msg.delete({ timeout: 15000 }));

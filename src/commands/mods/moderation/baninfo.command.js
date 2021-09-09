@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 
 export default {
   name: 'baninfo',
@@ -14,11 +15,11 @@ export default {
       helpWithASpecificCommand(client.Commands.get(command), message, client);
       return;
     }
+    const { user } = getUserOfCommand(client, message);
 
-    const userID = args[0].replace(/(<)|(@!)|(>)/g, '');
     const userBanned = await message.guild
       .fetchBans()
-      .then((x) => x.get(userID));
+      .then((x) => x.get(user.id));
 
     if (!userBanned) {
       message.channel.send(
@@ -48,6 +49,10 @@ export default {
         )}:F>**`
       : '`<Data não especificada, utilize o ballebot sempre que for banir para ter essa função>`';
 
+    const descriptionBan = userBanned.reason
+      ? userBanned.reason.replace(' — Data: ', '').replace(dataValidation, '')
+      : '<Descrição ou motivo não especificado>';
+
     message.channel.send(
       message.author,
       new Discord.MessageEmbed()
@@ -57,11 +62,9 @@ export default {
           `Informações sobre o banimento do usuário: ${`${userBanned.user.username}#${userBanned.user.discriminator}`} `
         )
         .setDescription(
-          `**Data:** ${userDataBanned}\n**Motivo:**\`\`\`${
-            userBanned.reason || '<Motivo não especificado>'
-          }\`\`\``
+          `**Data:** ${userDataBanned}\n**Descrição:**\`\`\`${descriptionBan}\`\`\``
         )
-        .setFooter(`Id do user: ${userBanned.user.id}`)
+        .setFooter(`ID do usuário: ${userBanned.user.id}`)
         .setTimestamp()
     );
   },

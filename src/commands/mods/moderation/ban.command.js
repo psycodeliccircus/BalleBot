@@ -50,7 +50,7 @@ export default {
 
     const reason =
       args[0] && index !== 0
-        ? message.content.slice(index, message.content.length)
+        ? message.content.slice(index, message.content.length).trim()
         : '<Motivo não especificado>';
 
     const messageAnt = await message.channel.send(
@@ -62,7 +62,7 @@ export default {
         .setDescription(
           `**Pelo Motivo de : **\n\n\`\`\`${reason}\`\`\` \nPara confirmar clique em ✅\n para cancelar clique em ❎`
         )
-        .setFooter(`Id do user: ${user.id}`)
+        .setFooter(`ID do usuário: ${user.id}`)
         .setTimestamp()
     );
 
@@ -154,7 +154,7 @@ export default {
                 .setDescription(
                   `**Data: ${dateForMessage}**\n**Motivo: **\`\`\`${reason}\`\`\``
                 )
-                .setFooter(`Id do user: ${user.id}`)
+                .setFooter(`ID do usuário: ${user.id}`)
                 .setTimestamp();
             }
             if (channelLog) {
@@ -176,7 +176,7 @@ export default {
                   .setDescription(
                     `**Motivo: **\n\`\`\`${reason}\`\`\`\n**Aplicada por: ${message.author}**`
                   )
-                  .setFooter(`Id do user: ${user.id}`)
+                  .setFooter(`ID do usuário: ${user.id}`)
                   .setTimestamp()
               )
               .catch(() =>
@@ -192,7 +192,7 @@ export default {
                       .setTitle(
                         `Não foi possível avisar na DM do usuário banido!`
                       )
-                      .setFooter(`Id do user: ${user.id}`)
+                      .setFooter(`ID do usuário: ${user.id}`)
                       .setTimestamp()
                   )
                   .then((msg) => msg.delete({ timeout: 15000 }))
