@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import { verifyBannedWords } from './messageVerify/messageVerifyWords.js';
+import Colors from '../../utils/layoutEmbed/colors.js';
 
 const { prefix } = process.env;
 
@@ -27,8 +28,13 @@ export default {
     try {
       const commandToBeExecuted = client.Commands.get(commandName);
       if (commandToBeExecuted) {
-        if (message.channel.type === 'dm' && commandToBeExecuted.dm)
-          return commandToBeExecuted.run({ client, message, args });
+        const dmTrueOrFalse = commandToBeExecuted.dm;
+        if (message.channel.type === 'dm') {
+          if (dmTrueOrFalse) {
+            return commandToBeExecuted.run({ client, message, args });
+          }
+          return;
+        }
 
         const guildIdDatabase = new client.Database.table(
           `guild_id_${message.guild.id}`
@@ -57,7 +63,7 @@ export default {
           message.channel.send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
+              .setColor(Colors.pink_red)
               .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
               .setTitle(
                 `${message.author.tag} Olá! Fico muito feliz e agredecida por ter me adicionado!!!!`
@@ -78,7 +84,7 @@ export default {
             .send(
               message.author,
               new Discord.MessageEmbed()
-                .setColor('#ff8997')
+                .setColor(Colors.pink_red)
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                 .setTitle(
                   `${message.author.tag} Hey, você não tem permissão :(`

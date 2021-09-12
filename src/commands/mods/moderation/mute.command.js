@@ -3,6 +3,8 @@ import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { confirmMessage } from './confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'mute',
@@ -10,6 +12,7 @@ export default {
   permissions: ['mods'],
   aliases: ['mutar', 'silenciar'],
   category: 'Moderação ⚔️',
+  dm: false,
   run: async ({ message, client, args }) => {
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
@@ -24,8 +27,8 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+            .setColor(Colors.pink_red)
+            .setThumbnail(Icons.erro)
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
               `**Tente usar**\`\`\`${prefix}mute @usuário <motivo> <tempo>\`\`\``
@@ -40,7 +43,8 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setThumbnail(Icons.erro)
+            .setColor(Colors.pink_red)
             .setTitle(`Hey, você não pode me mutar e isso não é legal :(`)
             .setTimestamp()
         )
@@ -58,8 +62,8 @@ export default {
 
     const messageAnt = await message.channel.send(
       new Discord.MessageEmbed()
-        .setColor('#FF0000')
-        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+        .setColor(Colors.red)
+        .setThumbnail(Icons.mute)
         .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
         .setTitle(`Você está prestes a Mutar um usuário!`)
         .setDescription(
@@ -82,8 +86,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setTitle(`Eu não tenho permissão para mutar o usuário`)
               .setDescription(
                 `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`
@@ -98,8 +102,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setTitle(`O usuário é administrador`)
               .setDescription(
                 `O usuário ${user} tem um cargo de administrador, o comando mute não funcionará com ele`
@@ -114,8 +118,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setDescription(
                 `Ative a permissão de manusear cargos para mim, para que você possa usar o comando mute`
               )
@@ -136,8 +140,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setTitle(`Você não tem permissão para mutar o usuário`)
               .setDescription(
                 `O usuário ${user} está acima ou no mesmo cargo que você, peça a um administrador elevar seu cargo`
@@ -212,6 +216,8 @@ export default {
         )}:F>`;
         message.channel.send(`data para desmutar: ${dataForMessage}`);
       }
+    } else {
+      await messageAnt.delete();
     }
   },
 };

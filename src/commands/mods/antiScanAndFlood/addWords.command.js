@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'addwords',
@@ -22,7 +23,7 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(
             `${message.author.tag}O seu servidor não possui um chat log para usar esse recurso!`
@@ -38,8 +39,8 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setColor(Colors.pink_red)
+          .setThumbnail('https://i.imgur.com/3TiZboO.png')
           .setTitle(
             `${message.author.tag} As Palavras ou Links foram adicionados ao banco com sucesso!`
           )

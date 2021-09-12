@@ -1,4 +1,5 @@
 import Discord from 'discord.js';
+import Colors from '../../utils/layoutEmbed/colors.js';
 
 export function setIntervalRemoveMute(client) {
   const tableMuted = new client.Database.table(`tableMuted`);
@@ -38,8 +39,8 @@ export function setIntervalRemoveMute(client) {
                 user.displayAvatarURL({ dynamic: true })
               )
               .setDescription(`**Descrição:**\`\`\`${userMuted.reason}\`\`\``)
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-              .setColor('#ff8997')
+              .setThumbnail('https://i.imgur.com/Jut1wGO.png')
+              .setColor(Colors.pink_red)
               .setFooter(`ID do usuário : ${user.id}`)
           );
         }

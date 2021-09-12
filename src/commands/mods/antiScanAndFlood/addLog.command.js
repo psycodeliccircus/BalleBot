@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'addLog',
@@ -9,6 +11,11 @@ export default {
   aliases: ['addChannelLog', 'setlog'],
   category: 'AntiSpam ⚠️',
   run: ({ message, client, args }) => {
+    if (!args[0]) {
+      const [command] = message.content.slice(prefix.length).split(/ +/);
+      helpWithASpecificCommand(client.Commands.get(command), message, client);
+      return;
+    }
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );
@@ -25,8 +32,8 @@ export default {
     message.channel.send(
       message.author,
       new Discord.MessageEmbed()
-        .setColor('#ff8997')
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+        .setColor(Colors.pink_red)
+        .setThumbnail('https://i.imgur.com/gfDpssU.png')
         .setTitle(
           `${message.author.tag} O Chat Log foi atualizado com sucesso: `
         )

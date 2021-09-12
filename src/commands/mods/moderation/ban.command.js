@@ -3,6 +3,8 @@ import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { confirmMessage } from './confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'ban',
@@ -10,6 +12,7 @@ export default {
   permissions: ['mods'],
   aliases: ['banir'],
   category: 'Moderação ⚔️',
+  dm: false,
   run: async ({ message, client, args }) => {
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
@@ -24,8 +27,8 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+            .setColor(Colors.pink_red)
+            .setThumbnail(Icons.erro)
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
               `**Tente usar**\`\`\`${prefix}ban @usuário <motivo>\`\`\``
@@ -40,7 +43,8 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
+            .setThumbnail(Icons.erro)
             .setTitle(`Hey, você não pode me banir e isso não é legal :(`)
             .setTimestamp()
         )
@@ -55,8 +59,8 @@ export default {
 
     const messageAnt = await message.channel.send(
       new Discord.MessageEmbed()
-        .setColor('#FF0000')
-        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+        .setColor(Colors.red)
+        .setThumbnail(Icons.sledgehammer)
         .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
         .setTitle(`Você está prestes a Banir um usuário!`)
         .setDescription(
@@ -79,8 +83,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setTitle(`Eu não tenho permissão para banir o usuário`)
               .setDescription(
                 `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`
@@ -93,8 +97,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setDescription(
                 `Ative a permissão de banir para mim, para que você possa usar o comando`
               )
@@ -114,8 +118,8 @@ export default {
           .send(
             message.author,
             new Discord.MessageEmbed()
-              .setColor('#ff8997')
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setColor(Colors.pink_red)
+              .setThumbnail(Icons.erro)
               .setTitle(`Você não tem permissão para banir o usuário`)
               .setDescription(
                 `O usuário ${user} está acima ou no mesmo cargo que você, por isso não você não pode banir do servidor`
@@ -148,8 +152,8 @@ export default {
               const dateForMessage = `<t:${dataConvert}:F>`;
 
               return new Discord.MessageEmbed()
-                .setColor('#ff8997')
-                .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                .setColor(Colors.pink_red)
+                .setThumbnail(Icons.sucess)
                 .setTitle(`O usuário ${user.tag} foi banido!`)
                 .setDescription(
                   `**Data: ${dateForMessage}**\n**Motivo: **\`\`\`${reason}\`\`\``
@@ -168,7 +172,7 @@ export default {
             user
               .send(
                 new Discord.MessageEmbed()
-                  .setColor('#ff8997')
+                  .setColor(Colors.pink_red)
                   .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                   .setTitle(
                     `Você foi banido do servidor **${message.guild.name}**`
@@ -184,8 +188,8 @@ export default {
                   .send(
                     message.author,
                     new Discord.MessageEmbed()
-                      .setColor('#ff8997')
-                      .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                      .setColor(Colors.pink_red)
+                      .setThumbnail(Icons.erro)
                       .setDescription(
                         `O usuário ${user} possui a DM fechada, por isso não pude avisá-lo`
                       )

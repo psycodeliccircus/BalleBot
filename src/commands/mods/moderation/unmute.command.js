@@ -2,12 +2,14 @@ import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'unmute',
   description: `${prefix}unmute <userId> ou ${prefix}unmute @usuário ou ${prefix}unmute <userTag>`,
   permissions: ['mods'],
-  aliases: ['tirarmute', 'desmutar'],
+  aliases: ['tirarmute', 'desmutar', 'desmute'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args }) => {
     if (!args[0]) {
@@ -22,7 +24,7 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
@@ -38,7 +40,7 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setDescription(`Você não tem permissão para desmutar o usuário`)
             .setTitle(`Peça para um cargo maior desmutar o membro`)
@@ -55,7 +57,7 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))
             .setDescription(
               `O usuário ${user} não está mutado no servidor, para mutar user ${prefix}mute <idUser> <motivo> <tempo>`
@@ -89,8 +91,8 @@ export default {
       return new Discord.MessageEmbed()
         .setTitle(`Usuário desmutado com sucesso`)
         .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
-        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-        .setColor('#ff8997');
+        .setThumbnail(Icons.unmute)
+        .setColor(Colors.pink_red);
     }
     if (channelLog) {
       channelLog.send(message.author, messageInviteLog());

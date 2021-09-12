@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'removewords',
@@ -30,21 +31,22 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setColor(Colors.pink_red)
+          .setThumbnail('https://i.imgur.com/9UyP0xw.png')
           .setTitle(
             `${message.author.tag} As Palavras ou Links foram removidos do banco com sucesso! `
           )
           .setDescription(
-            `**Essas foram as palavras ou links removidos:** \n\`\`\`
-            ${deleteRegexList.join(' | ')}\`\`\``
+            `**Essas foram as palavras ou links removidos:** \n\`\`\`${deleteRegexList.join(
+              ' | '
+            )}\`\`\``
           )
       );
     } else {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(
             `${message.author.tag} O seu servidor não possui um banco para excluir palavras e links proibidos`

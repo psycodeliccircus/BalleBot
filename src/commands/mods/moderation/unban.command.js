@@ -1,12 +1,13 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'unban',
   description: `${prefix}unban <idUser> ou ${prefix}unban @user para desbanir um usuário`,
   permissions: ['mods'],
-  aliases: ['removeban', 'removerban', 'retirarban'],
+  aliases: ['removeban', 'removerban', 'retirarban', 'desban'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args }) => {
     if (!args[0]) {
@@ -25,7 +26,7 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(`**Tente usar**\`\`\`${prefix}unban <idUser>\`\`\``)
@@ -46,7 +47,7 @@ export default {
               member.displayAvatarURL({ dynamic: true })
             )
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
         )
         .then((msg) => msg.delete({ timeout: 15000 }));
 
@@ -60,7 +61,7 @@ export default {
             'Você não tem permissão de desbanir usuário, fale com um administrador'
           )
           .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
       );
 
       return;
@@ -72,8 +73,8 @@ export default {
       return new Discord.MessageEmbed()
         .setTitle(`O usuário foi desbanido com sucesso!`)
         .setAuthor(`${member.tag}`, member.displayAvatarURL({ dynamic: true }))
-        .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-        .setColor('#ff8997');
+        .setThumbnail('https://i.imgur.com/5RlHK76.png')
+        .setColor(Colors.pink_red);
     }
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`

@@ -2,6 +2,7 @@ import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'baninfo',
@@ -25,7 +26,7 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Não encontrei o usuário!`)
           .setDescription(
@@ -56,7 +57,7 @@ export default {
     message.channel.send(
       message.author,
       new Discord.MessageEmbed()
-        .setColor('#ff8997')
+        .setColor(Colors.pink_red)
         .setThumbnail(userBanned.user.displayAvatarURL({ dynamic: true }))
         .setTitle(
           `Informações sobre o banimento do usuário: ${`${userBanned.user.username}#${userBanned.user.discriminator}`} `

@@ -3,12 +3,13 @@ import { prefix } from '../../../assets/prefix.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'unwarn',
   description: `${prefix}unwarn <idUser> <aviso1> ou ${prefix}unwarn @user <aviso1> ou ${prefix}unwarn <tagUser> <aviso1>`,
   permissions: ['mods'],
-  aliases: ['removewarn', 'removerwarn', 'retirarwarn'],
+  aliases: ['removewarn', 'removerwarn', 'retirarwarn', 'deswarn'],
   category: 'Moderação ⚔️',
   run: ({ message, client, args }) => {
     if (!args[0]) {
@@ -26,7 +27,7 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Não encontrei o usuário!`)
           .setDescription(
@@ -47,7 +48,7 @@ export default {
         .send(
           message.author,
           new Discord.MessageEmbed()
-            .setColor('#ff8997')
+            .setColor(Colors.pink_red)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setTitle(`Você não tem permissão para remover o aviso do usuário`)
             .setDescription(
@@ -79,7 +80,7 @@ export default {
               .send(
                 message.author,
                 new Discord.MessageEmbed()
-                  .setColor('#ff8997')
+                  .setColor(Colors.pink_red)
                   .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                   .setTitle(
                     `Todos os avisos foram removidos do usuário ${user.tag}`
@@ -127,7 +128,7 @@ export default {
             channelLog.send(
               message.author,
               new Discord.MessageEmbed()
-                .setColor('#ff8997')
+                .setColor(Colors.pink_red)
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                 .setDescription(
                   `O usuário ${user.tag} teve um aviso removido! \n
@@ -145,7 +146,7 @@ export default {
               .send(
                 message.author,
                 new Discord.MessageEmbed()
-                  .setColor('#ff8997')
+                  .setColor(Colors.pink_red)
                   .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                   .setDescription(
                     `O usuário ${user.tag} teve um aviso removido! \n

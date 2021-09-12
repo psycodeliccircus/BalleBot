@@ -1,8 +1,9 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
-  name: 'Ping',
+  name: 'ping',
   description: `comando de ping para saber a latência, para usar digite ${prefix}ping`,
   permissions: ['everyone'],
   aliases: ['pong', 'peng'],
@@ -14,9 +15,10 @@ export default {
       msg.edit(
         '',
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setTitle('🏓Pong!')
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+
+          .setThumbnail('https://i.imgur.com/gfDpssU.png')
           .setDescription(
             ` Latency is ${timestampDiff}ms. API latency is ${Math.round(
               client.ws.ping

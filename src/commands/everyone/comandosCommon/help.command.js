@@ -1,11 +1,15 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 function getMessageCommands(listTempleteCategories, namesCategories) {
   return listTempleteCategories.reduce((prev, _arr, index) => {
-    return `${prev}**${listTempleteCategories[index]}** \n ${namesCategories[
+    return `${prev}**${
       listTempleteCategories[index]
-    ].namesCommands.join(' | ')}\n\n`;
+    }** \n ${`> ${namesCategories[
+      listTempleteCategories[index]
+    ].namesCommands.join(' **|** ')}`}\n\n`;
   }, '');
 }
 
@@ -27,7 +31,7 @@ export function helpWithASpecificCommand(fullCommand, message, client) {
     .send(
       message.author,
       new Discord.MessageEmbed()
-        .setColor('#ff8997')
+        .setColor(Colors.pink_red)
         .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(
           `Informações sobre o comando \`${prefix}${fullCommand.name}\`:`
@@ -37,7 +41,8 @@ export function helpWithASpecificCommand(fullCommand, message, client) {
     \n**• Como usar:**\n\`\` ${description}\`\` \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
             ' | '
           )}\n**• Sinônimos: **\n${
-            markedAliases.join(' | ') || '`<Este comando não possui sinônimos>`'
+            markedAliases.join('**|**') ||
+            '`<Este comando não possui sinônimos>`'
           }`
         )
     )
@@ -94,13 +99,13 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setAuthor(
-            'Balle Bot',
+            'Balle Bot • Ballerini',
             client.user.displayAvatarURL({ dynamic: true }),
             'https://discord.gg/ballerini'
           )
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+          .setThumbnail(Icons.interrogation)
           .setTitle(`Ajuda Sobre Comandos e Funções:`)
           .setDescription(
             `**Essas são as categorias e comandos que podem ser usados: **\n\n${getMessageCommands(

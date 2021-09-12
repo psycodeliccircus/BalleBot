@@ -1,5 +1,6 @@
 import Discord from 'discord.js';
 import { prefix } from '../../../assets/prefix.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 function bouncer(array) {
   const filterArray = array.filter((item) => {
@@ -27,18 +28,18 @@ export default {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
+          .setThumbnail('https://i.imgur.com/gcW4DRj.png')
           .setTitle(
             `${message.author.tag} Aqui está todas as palavras do banco de dados: `
           )
           .setDescription(`\`\`\`${listOfWords.join(' | ')}\`\`\``)
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
       );
     } else {
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
-          .setColor('#ff8997')
+          .setColor(Colors.pink_red)
           .setTitle(`${message.author.tag} Seu servidor não foi encontrado: `)
           .setDescription(
             `Para ativar o sistema de words primeiro adicione palavras com ${prefix}addwords <palavra1> <palavra2> <palavra3> etc...
