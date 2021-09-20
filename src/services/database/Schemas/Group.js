@@ -6,6 +6,7 @@ const Group = new mongoose.Schema({
   lider: String,
   liderDisc: String,
   liderGH: String,
+  repo: String,
   crew: [String],
   status: String,
 });

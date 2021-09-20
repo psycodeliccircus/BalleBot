@@ -94,6 +94,17 @@ class UserRepository {
     ]);
     return result;
   }
+
+  async clear() {
+    await this.repository.updateMany(
+      { hasGroup: true },
+      {
+        $set: {
+          hasGroup: false,
+        },
+      }
+    );
+  }
 }
 
 export default UserRepository;

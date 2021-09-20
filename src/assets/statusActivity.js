@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 export function statusActivity(client) {
   const status = [
     `❤️Rafaella Ballerini on Youtube!❤️`,

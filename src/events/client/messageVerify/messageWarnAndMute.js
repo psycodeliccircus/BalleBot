@@ -74,7 +74,7 @@ export function messageWarnAndMute(message, client, messageMarked) {
           .setTimestamp()
           .setAuthor(message.author.tag)
           .setFooter(`usuário: ${message.author.id}`)
-          .setDescription(`*Essa foi a mensagem:*\n ${messageMarked}`)
+          .setDescription(`*Essa foi a mensagem:* \n ${messageMarked}`)
           .addFields({
             name: 'Mensagem enviada no canal:',
             value: message.channel,
