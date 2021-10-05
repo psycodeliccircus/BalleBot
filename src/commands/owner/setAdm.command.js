@@ -1,22 +1,21 @@
 import Discord from 'discord.js';
-import { prefix } from '../../assets/prefix.js';
 import { messageErro } from '../../utils/Embeds/error.template.js';
 import { helpWithASpecificCommand } from '../everyone/comandosCommon/help.command.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'setAdm',
-  description: `Para adionar os cargos de administração use ${prefix}addRolesAdm <idPadawan> <idModeradores> <idStaff>`,
+  description: `Para adionar os cargos de administração use <prefix>addRolesAdm <idPadawan> <idModeradores> <idStaff>`,
   permissions: ['owner'],
   aliases: ['addAdm', 'addRolesAdm'],
   category: 'Owner 🗡️',
-  run: ({ message, client, args }) => {
+  run: ({ message, client, args, prefix }) => {
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message, client);
+      helpWithASpecificCommand(client.Commands.get(command), message);
       return;
     }
     if (!args[2]) {

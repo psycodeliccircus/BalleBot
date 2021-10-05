@@ -2,8 +2,10 @@ import Discord from 'discord.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
 export function setIntervalRemoveMute(client) {
-  const tableMuted = new client.Database.table(`tableMuted`);
-  const myList = tableMuted.all();
+  const tableTemporarilyMutated = new client.Database.table(
+    `tableTemporarilyMutated`
+  );
+  const myList = tableTemporarilyMutated.all();
 
   myList.forEach((element) => {
     const userMuted = JSON.parse(element.data);
@@ -29,22 +31,20 @@ export function setIntervalRemoveMute(client) {
 
         if (channelLog) {
           channelLog.send(
-            userMember.user,
             new Discord.MessageEmbed()
-              .setTitle(
-                `Usuário foi desmutado após o tempo limite : ${user.tag}`
-              )
+              .setTitle(`Usuário foi desmutado após o tempo limite!`)
               .setAuthor(
                 `${user.tag}`,
                 user.displayAvatarURL({ dynamic: true })
               )
               .setDescription(`**Descrição:**\`\`\`${userMuted.reason}\`\`\``)
-              .setThumbnail('https://i.imgur.com/Jut1wGO.png')
+              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
               .setColor(Colors.pink_red)
               .setFooter(`ID do usuário : ${user.id}`)
+              .setTimestamp()
           );
         }
-        tableMuted.delete(
+        tableTemporarilyMutated.delete(
           `guild_id_${userMuted.guildId}_user_id_${userMuted.id}`
         );
       }

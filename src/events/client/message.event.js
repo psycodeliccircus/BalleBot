@@ -1,8 +1,7 @@
 import Discord from 'discord.js';
 import { verifyBannedWords } from './messageVerify/messageVerifyWords.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
-
-const { prefix } = process.env;
+import Icons from '../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'message',
@@ -12,12 +11,31 @@ export default {
 
     if (verifyBannedWords(client, message)) return;
 
+    const guildIdDatabase = new client.Database.table(
+      `guild_id_${message.guild.id}`
+    );
+
+    let { prefix } = process.env;
+    if (guildIdDatabase.has(`prefix`)) {
+      prefix = guildIdDatabase.get(`prefix`);
+    }
+
     if (
       message.mentions.users.first() &&
       message.mentions.users.first().id === message.guild.me.id &&
       message.content === `<@!${message.guild.me.id}>`
     ) {
-      message.channel.send(`my prefix ${prefix}`);
+      message.channel.send(
+        message.author,
+        new Discord.MessageEmbed()
+          .setColor(Colors.pink_red)
+          .setTitle(`Meu prefixo no servidor é **\`${prefix}\`**`)
+          .setFooter(
+            `${message.author.tag}`,
+            `${message.author.displayAvatarURL({ dynamic: true })}`
+          )
+          .setTimestamp()
+      );
       return;
     }
 
@@ -31,14 +49,11 @@ export default {
         const dmTrueOrFalse = commandToBeExecuted.dm;
         if (message.channel.type === 'dm') {
           if (dmTrueOrFalse) {
-            return commandToBeExecuted.run({ client, message, args });
+            return commandToBeExecuted.run({ client, message, args, prefix });
           }
           return;
         }
 
-        const guildIdDatabase = new client.Database.table(
-          `guild_id_${message.guild.id}`
-        );
         const rolesPermissions = guildIdDatabase.get('admIds') || {
           owner: message.guild.ownerID,
         };
@@ -51,8 +66,8 @@ export default {
         const userHasPermission = commandToBeExecuted.permissions.find(
           (permissionName) =>
             rolesUser.includes(rolesPermissions[permissionName]) ||
-            message.guild.ownerID === message.author.id
-          // ||message.author.id === '760275647016206347'
+            message.guild.ownerID === message.author.id ||
+            message.author.id === '760275647016206347'
         );
 
         if (
@@ -78,20 +93,20 @@ export default {
           return;
         }
         if (userHasPermission) {
-          commandToBeExecuted.run({ client, message, args });
+          commandToBeExecuted.run({ client, message, args, prefix });
         } else {
           message.channel
             .send(
               message.author,
               new Discord.MessageEmbed()
                 .setColor(Colors.pink_red)
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(Icons.erro)
                 .setTitle(
                   `${message.author.tag} Hey, você não tem permissão :(`
                 )
                 .setDescription(
                   `Apenas ${commandToBeExecuted.permissions.join(
-                    ' | '
+                    ' **|** '
                   )} possuem permissão para usar esse comando`
                 )
             )

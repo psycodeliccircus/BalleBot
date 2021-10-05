@@ -1,7 +1,6 @@
 import Discord from 'discord.js';
-import { prefix } from '../../../assets/prefix.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 function getMessageCommands(listTempleteCategories, namesCategories) {
   return listTempleteCategories.reduce((prev, _arr, index) => {
@@ -13,49 +12,48 @@ function getMessageCommands(listTempleteCategories, namesCategories) {
   }, '');
 }
 
-export function helpWithASpecificCommand(fullCommand, message, client) {
-  const markedAliases = [];
-  const markedPermissions = [];
+export function helpWithASpecificCommand(fullCommand, message) {
+  const stringMarkedAliases = [];
+  const stringMarkedPermissions = [];
 
   if (fullCommand.aliases) {
     for (let i = 0; i < fullCommand.aliases.length; i++) {
-      markedAliases[i] = `\`${prefix + fullCommand.aliases[i]}\``;
+      stringMarkedAliases[i] = `\`${fullCommand.aliases[i]}\``;
     }
   }
   for (let i = 0; i < fullCommand.permissions.length; i++) {
-    markedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
+    stringMarkedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
   }
 
   const { category, description } = fullCommand;
-  message.channel
-    .send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(
-          `Informações sobre o comando \`${prefix}${fullCommand.name}\`:`
-        )
-        .setDescription(
-          `**• Categoria: ${category || 'Sem Categoria'}**
-    \n**• Como usar:**\n\`\` ${description}\`\` \n**• Cargos necessários para usá-lo: **\n${markedPermissions.join(
-            ' | '
-          )}\n**• Sinônimos: **\n${
-            markedAliases.join('**|**') ||
-            '`<Este comando não possui sinônimos>`'
-          }`
-        )
-    )
-    .then((msg) => msg.delete({ timeout: 15000 }));
+  message.channel.send(
+    message.author,
+    new Discord.MessageEmbed()
+      .setColor(Colors.pink_red)
+      .setThumbnail(Icons.interrogation)
+      .setTitle(`Informações sobre o comando \`${fullCommand.name}\`:`)
+      .setDescription(
+        `**📝 Categoria: ${
+          category || 'Sem Categoria'
+        }**\n\n**Sobre o Comando:**\n> \`\`${
+          description || `Não especificado`
+        }\`\`\n**Cargos necessários para utilizar o comando: **\n> ${
+          stringMarkedPermissions.join(' | ') || '`Não especificado`'
+        }\n**Sinônimos: **\n> ${
+          stringMarkedAliases.join(' **|** ') ||
+          '`<Este comando não possui sinônimos>`'
+        }`
+      )
+  );
 }
 
 export default {
   name: 'help',
-  description: `${prefix}help <comando> `,
+  description: `<prefix>help <comando> `,
   permissions: ['everyone'],
-  aliases: ['help2', 'help3'],
+  aliases: ['ajuda', 'h'],
   category: 'Utility ⛏️',
-  run: ({ message, client, args }) => {
+  run: ({ message, client, args, prefix }) => {
     const commandsDatabase = new client.Database.table('commandsDatabase');
 
     const helpCommand = args[0]?.replace(prefix, '').toLowerCase();
@@ -105,13 +103,22 @@ export default {
             client.user.displayAvatarURL({ dynamic: true }),
             'https://discord.gg/ballerini'
           )
-          .setThumbnail(Icons.interrogation)
+          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Ajuda Sobre Comandos e Funções:`)
           .setDescription(
-            `**Essas são as categorias e comandos que podem ser usados: **\n\n${getMessageCommands(
-              listTempleteCategories,
-              namesCategories
-            )}`
+            `
+            Hey ${
+              message.author
+            }, muito prazer! eu sou a Bot do servidor Ballerini (pode me chamar de Balle).\n
+            Fui criada para várias funções dentro de um servidor,\n
+            Entre elas: Moderação, Cargos, AntiSpam, Forbidden Words, Welcome, Eventos Especiais, Diversão, Economia, e muito mais!\n
+            Meus criadores me criaram para ser um bot completo com praticamente tudo que é necessário para um servidor e um pouquinho a mais,
+            trazendo segurança e diversão para o seu servidor!\n
+            Caso queira suporte com nossos desenvolvedores entre em contato com a equipe responsável no servidor Ballerini:\n
+            > **Ballerini:** https://discord.gg/ballerini \n
+
+            **Essas são as categorias e comandos que podem ser usados: **\n
+            ${getMessageCommands(listTempleteCategories, namesCategories)}`
           )
           .setFooter(
             `• Para saber as informações de um comando específico, use ${prefix}help <comando>`
@@ -120,6 +127,6 @@ export default {
 
       return;
     }
-    helpWithASpecificCommand(fullCommand, message, client);
+    helpWithASpecificCommand(fullCommand, message);
   },
 };

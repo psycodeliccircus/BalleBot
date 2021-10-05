@@ -1,8 +1,8 @@
 import Discord from 'discord.js';
-import { prefix } from '../../../assets/prefix.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
-function bouncer(array) {
+function removeWordsNull(array) {
   const filterArray = array.filter((item) => {
     return Boolean(item);
   });
@@ -12,42 +12,60 @@ function bouncer(array) {
 
 export default {
   name: 'words',
-  description: `${prefix}words para ver mensagens proibidas no servidor`,
+  description: `<prefix>words para ver mensagens proibidas no servidor`,
   permissions: ['mods'],
-  aliases: ['viewwords', 'words?', 'wordsremove'],
+  aliases: ['viewwords', 'words?'],
   dm: true,
   category: 'AntiSpam ⚠️',
-  run: ({ message, client }) => {
+  run: ({ message, client, prefix }) => {
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
     );
 
-    if (guildIdDatabase.has('wordsBanned')) {
-      const listOfWords = bouncer(guildIdDatabase.get('wordsBanned')).sort();
+    if (guildIdDatabase.has('listOfWordsBanned')) {
+      const listOfWords = removeWordsNull(
+        guildIdDatabase.get('listOfWordsBanned')
+      ).sort();
 
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail('https://i.imgur.com/gcW4DRj.png')
-          .setTitle(
-            `${message.author.tag} Aqui está todas as palavras do banco de dados: `
-          )
-          .setDescription(`\`\`\`${listOfWords.join(' | ')}\`\`\``)
-      );
-    } else {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setTitle(`${message.author.tag} Seu servidor não foi encontrado: `)
-          .setDescription(
-            `Para ativar o sistema de words primeiro adicione palavras com ${prefix}addwords <palavra1> <palavra2> <palavra3> etc...
-            \nPara configurar onde os reports irão ser mandados
-            \nPara mais detalhes consulte o comando addlog no ${prefix}help addwords`
-          )
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-      );
+      if (listOfWords.length > 0) {
+        message.channel.send(
+          message.author,
+          new Discord.MessageEmbed()
+            .setColor(Colors.pink_red)
+            .setThumbnail(Icons.sucess)
+            .setTitle('Banco encontrado!')
+            .setDescription(
+              `**Aqui está todas as palavras do banco de dados:**\n> \`\`${listOfWords.join(
+                '|'
+              )}\`\`\n**Caso queira adicionar ou remover alguma palavra use os comandos de addWords e removeWords**`
+            )
+            .setFooter(
+              `${message.author.tag}`,
+              `${message.author.displayAvatarURL({ dynamic: true })}`
+            )
+            .setTimestamp()
+        );
+
+        return;
+      }
     }
+
+    message.channel.send(
+      message.author,
+      new Discord.MessageEmbed()
+        .setColor(Colors.pink_red)
+        .setTitle(`Seu servidor não foi encontrado: `)
+        .setDescription(
+          `**Para ativar o sistema de Forbbiden Words primeiro adicione palavras com o comando:**\n> \`${prefix}addwords <palavra1> <palavra2> <palavra3> etc...\`
+            \n**Para configurar onde os report's irão ser mandados:**\n> \`${prefix}addlog <#chat/ID>\`
+            \n**Para mais detalhes consulte o comando addwords:** \n> \`${prefix}help addwords\``
+        )
+        .setThumbnail(Icons.erro)
+        .setFooter(
+          `${message.author.tag}`,
+          `${message.author.displayAvatarURL({ dynamic: true })}`
+        )
+        .setTimestamp()
+    );
   },
 };
