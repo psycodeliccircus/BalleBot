@@ -88,11 +88,9 @@ export default {
             const positionUser = dic[userHasPermissionOf];
             const positionPermissionCommand = dic[permissionName];
 
-            if (positionUser > positionPermissionCommand) return true;
+            if (positionUser >= positionPermissionCommand) return true;
             return false;
           });
-
-        console.log(userHasPermissionToExecuteCommand);
 
         if (
           (!userHasPermissionToExecuteCommand ||
