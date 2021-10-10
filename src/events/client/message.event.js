@@ -54,24 +54,48 @@ export default {
           return;
         }
 
-        const rolesPermissions = guildIdDatabase.get('admIds') || {
-          owner: message.guild.ownerID,
-        };
+        const rolesPermissions = guildIdDatabase.get('admIds') || {};
+        rolesPermissions.owner = message.guild.ownerID;
 
         const rolesUser = client.guilds.cache
           .get(message.guild.id)
           .members.cache.get(message.author.id)
           .roles.cache.map((role) => role.id);
 
-        const userHasPermission = commandToBeExecuted.permissions.find(
-          (permissionName) =>
-            rolesUser.includes(rolesPermissions[permissionName]) ||
-            message.guild.ownerID === message.author.id ||
-            message.author.id === '760275647016206347'
-        );
+        const namesOfRoles = Object.keys(rolesPermissions).reverse();
+
+        const userHasPermissionOf = namesOfRoles.find((nameRole) => {
+          if (rolesPermissions[nameRole]) {
+            if (
+              rolesUser.indexOf(rolesPermissions[nameRole]) > -1 ||
+              message.author.id === rolesPermissions.owner
+            ) {
+              return nameRole;
+            }
+          }
+          return false;
+        });
+
+        const userHasPermissionToExecuteCommand =
+          commandToBeExecuted.permissions.some((permissionName) => {
+            const dic = {
+              owner: 4,
+              staff: 3,
+              mods: 2,
+              padawans: 1,
+              everyone: 0,
+            };
+            const positionUser = dic[userHasPermissionOf];
+            const positionPermissionCommand = dic[permissionName];
+
+            if (positionUser > positionPermissionCommand) return true;
+            return false;
+          });
+
+        console.log(userHasPermissionToExecuteCommand);
 
         if (
-          (!userHasPermission ||
+          (!userHasPermissionToExecuteCommand ||
             commandToBeExecuted.name.toLowerCase() !== 'setadm') &&
           !rolesPermissions.staff
         ) {
@@ -92,7 +116,7 @@ export default {
           );
           return;
         }
-        if (userHasPermission) {
+        if (userHasPermissionToExecuteCommand) {
           commandToBeExecuted.run({ client, message, args, prefix });
         } else {
           message.channel
