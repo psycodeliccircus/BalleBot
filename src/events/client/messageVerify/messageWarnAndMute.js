@@ -9,7 +9,7 @@ export function messageWarnAndMute(message, client, messageMarked) {
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Você enviou uma mensagem suspeita:`)
           .setDescription(
-            `**Espere um moderador rever seu caso, por hora você está silenciado do servidor!**
+            `**Espere um moderador rever seu caso!**
             \n**Essa foi a mensagem:**
             \n ${messageMarked}`
           )

@@ -7,7 +7,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'baninfo',
-  description: `<prefix>baninfo @usuário/TAG/ID para saber o motivo de membros terem sidos banidos`,
+  description: `<prefix>baninfo @usuários/TAGs/IDs para saber o motivo de membros terem sidos banidos`,
   permissions: ['mods'],
   aliases: ['verban', 'viewban', 'banuser', 'infoban'],
   category: 'Moderação ⚔️',
@@ -36,7 +36,7 @@ export default {
             .setThumbnail(Icons.erro)
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}baninfo <@usuário/TAG/ID>\`\`\``
+              `**Tente usar**\`\`\`${prefix}baninfo <@usuários/TAGs/IDs>\`\`\``
             )
             .setFooter(
               `${message.author.tag}`,

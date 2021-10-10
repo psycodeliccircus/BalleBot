@@ -5,7 +5,7 @@ import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'unmute',
-  description: `<prefix>unmute @usuário/TAG/ID para desmutar usuários`,
+  description: `<prefix>unmute @usuários/TAGs/IDs para desmutar usuários`,
   permissions: ['mods'],
   aliases: ['tirarmute', 'desmutar', 'desmute'],
   category: 'Moderação ⚔️',
@@ -71,7 +71,7 @@ export default {
                 message.author.displayAvatarURL({ dynamic: true })
               )
               .setDescription(
-                `O usuário ${user} não está mutado no servidor, para mutar use ${prefix}mute @usuário/TAG/ID <motivo> <tempo/2d 5h 30m 12s>`
+                `O usuário ${user} não está mutado no servidor, para mutar use ${prefix}mute @usuários/TAGs/IDs <motivo> <tempo/2d 5h 30m 12s>`
               )
               .setTitle(`Usuário não está mutado`)
               .setFooter(`ID do usuário : ${user.id}`)

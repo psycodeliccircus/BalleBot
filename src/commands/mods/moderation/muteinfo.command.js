@@ -7,7 +7,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'muteinfo',
-  description: `<prefix>muteinfo @usuário/TAG/ID para saber o motivo de membros terem sidos banidos`,
+  description: `<prefix>muteinfo @usuários/TAGs/IDs para saber o motivo de membros terem sidos banidos`,
   permissions: ['mods'],
   aliases: ['vermute', 'viewmute', 'muteuser', 'infomute'],
   category: 'Moderação ⚔️',
@@ -32,7 +32,7 @@ export default {
             )
             .setTitle(`Não encontrei o usuário !`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}muteinfo @usuário/TAG/ID\`\`\``
+              `**Tente usar**\`\`\`${prefix}muteinfo @usuários/TAGs/IDs\`\`\``
             )
             .setTimestamp()
         )

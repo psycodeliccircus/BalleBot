@@ -6,7 +6,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'unban',
-  description: `<prefix>unban @usuário/TAG/ID para desbanir usuários`,
+  description: `<prefix>unban @usuários/TAGs/IDs para desbanir usuários`,
   permissions: ['mods'],
   aliases: ['removeban', 'removerban', 'retirarban', 'desban'],
   category: 'Moderação ⚔️',
@@ -49,7 +49,7 @@ export default {
             )
             .setTitle(`Não encontrei os usuários!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}unban <@usuário/TAG/ID>\`\`\``
+              `**Tente usar**\`\`\`${prefix}unban <@usuários/TAGs/IDs>\`\`\``
             )
             .setTimestamp()
         )
@@ -81,7 +81,7 @@ export default {
 
       function messageInviteLog() {
         return new Discord.MessageEmbed()
-          .setTitle(`O usuário ${member} foi desbanido!`)
+          .setTitle(`O usuário ${member.tag} foi desbanido!`)
           .setDescription(`**Pelo usuário: ${message.author}**`)
           .setAuthor(
             message.author.tag,

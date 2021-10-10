@@ -8,7 +8,7 @@ import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'ban',
-  description: `<prefix>ban @usuário/TAG/ID <motivo> para banir membros`,
+  description: `<prefix>ban @usuários/TAGs/IDs <motivo> para banir membros`,
   permissions: ['mods'],
   aliases: ['banir'],
   category: 'Moderação ⚔️',
@@ -22,7 +22,7 @@ export default {
 
     const { users, restOfMessage } = getUserOfCommand(client, message, prefix);
 
-    if (!users) {
+    if (!users || users.length === 0) {
       message.channel
         .send(
           message.author,
@@ -31,7 +31,7 @@ export default {
             .setThumbnail(Icons.erro)
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}ban @usuário/TAG/ID <motivo>\`\`\``
+              `**Tente usar**\`\`\`${prefix}ban @usuários/TAGs/IDs <motivo>\`\`\``
             )
             .setFooter(
               `${message.author.tag}`,
@@ -57,60 +57,18 @@ export default {
         .setDescription(
           `**Usuários: ${users.join(
             '|'
-          )}** \n**Pelo Motivo de:**\`\`\`${reason}\`\`\` \nPara confirmar clique em ✅\n para cancelar clique em ❎`
+          )}**\n**Pelo Motivo de: **\n\n\`\`\`${reason}\`\`\`
+          ✅ Para confirmar
+          ❎ Para cancelar
+          🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
         )
         .setTimestamp()
     );
-
-    if (await confirmMessage(message, messageAnt)) {
+    await confirmMessage(message, messageAnt).then(async (res) => {
       await messageAnt.delete();
-      if (!message.guild.me.hasPermission('BAN_MEMBERS')) {
-        message.channel
-          .send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(Icons.erro)
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setDescription(
-                `Ative a permissão de banir para mim, para que você possa usar o comando`
-              )
-              .setTitle(`Eu não tenho permissão para banir usuários`)
-              .setFooter(
-                `A permissão pode ser ativada no cargo do bot em configurações`
-              )
-              .setFooter(
-                `${message.author.tag}`,
-                `${message.author.displayAvatarURL({ dynamic: true })}`
-              )
-              .setTimestamp()
-          )
-          .then((msg) => msg.delete({ timeout: 15000 }));
-      }
 
-      if (!message.member.hasPermission('BAN_MEMBERS')) {
-        message.channel
-          .send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(Icons.erro)
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setTitle(`Você não tem permissão para banir os usuários`)
-              .setDescription(`Você não pode banir usuários nesse servidor`)
-              .setTimestamp()
-          )
-          .then((msg) => msg.delete({ timeout: 15000 }));
-      }
-
-      users.forEach(async (user) => {
-        if (user.id === message.guild.me.id) {
+      if (res) {
+        if (!message.guild.me.hasPermission('BAN_MEMBERS')) {
           message.channel
             .send(
               message.author,
@@ -120,41 +78,88 @@ export default {
                 .setAuthor(
                   message.author.tag,
                   message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setTitle(`Hey, você não pode me banir e isso não é legal :(`)
-                .setTimestamp()
-            )
-            .then((msg) => msg.delete({ timeout: 15000 }));
-          return;
-        }
-
-        const memberUser = client.guilds.cache
-          .get(message.guild.id)
-          .members.cache.get(user.id);
-        if (
-          memberUser.roles.highest.position >=
-          message.guild.me.roles.highest.position
-        ) {
-          message.channel
-            .send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setThumbnail(Icons.erro)
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setTitle(
-                  `Eu não tenho permissão para banir o usuário ${user.tag}`
                 )
                 .setDescription(
-                  `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`
+                  `Ative a permissão de banir para mim, para que você possa usar o comando`
+                )
+                .setTitle(`Eu não tenho permissão para banir usuários`)
+                .setFooter(
+                  `A permissão pode ser ativada no cargo do bot em configurações`
+                )
+                .setFooter(
+                  `${message.author.tag}`,
+                  `${message.author.displayAvatarURL({ dynamic: true })}`
                 )
                 .setTimestamp()
             )
             .then((msg) => msg.delete({ timeout: 15000 }));
-        } else {
+        }
+
+        if (!message.member.hasPermission('BAN_MEMBERS')) {
+          message.channel
+            .send(
+              message.author,
+              new Discord.MessageEmbed()
+                .setColor(Colors.pink_red)
+                .setThumbnail(Icons.erro)
+                .setAuthor(
+                  message.author.tag,
+                  message.author.displayAvatarURL({ dynamic: true })
+                )
+                .setTitle(`Você não tem permissão para banir os usuários`)
+                .setDescription(`Você não pode banir usuários nesse servidor`)
+                .setTimestamp()
+            )
+            .then((msg) => msg.delete({ timeout: 15000 }));
+        }
+
+        users.forEach(async (user) => {
+          if (user.id === message.guild.me.id) {
+            message.channel
+              .send(
+                message.author,
+                new Discord.MessageEmbed()
+                  .setColor(Colors.pink_red)
+                  .setThumbnail(Icons.erro)
+                  .setAuthor(
+                    message.author.tag,
+                    message.author.displayAvatarURL({ dynamic: true })
+                  )
+                  .setTitle(`Hey, você não pode me banir e isso não é legal :(`)
+                  .setTimestamp()
+              )
+              .then((msg) => msg.delete({ timeout: 15000 }));
+            return;
+          }
+
+          const memberUser = client.guilds.cache
+            .get(message.guild.id)
+            .members.cache.get(user.id);
+          if (
+            memberUser.roles.highest.position >=
+            message.guild.me.roles.highest.position
+          ) {
+            message.channel
+              .send(
+                message.author,
+                new Discord.MessageEmbed()
+                  .setColor(Colors.pink_red)
+                  .setThumbnail(Icons.erro)
+                  .setAuthor(
+                    message.author.tag,
+                    message.author.displayAvatarURL({ dynamic: true })
+                  )
+                  .setTitle(
+                    `Eu não tenho permissão para banir o usuário ${user.tag}`
+                  )
+                  .setDescription(
+                    `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`
+                  )
+                  .setTimestamp()
+              )
+              .then((msg) => msg.delete({ timeout: 15000 }));
+            return;
+          }
           await message.guild.members
             .ban(user, {
               reason: `Punido por ${message.author.tag} | ${
@@ -192,7 +197,8 @@ export default {
                   .send(message.author, messageForChannelLog())
                   .then((msg) => msg.delete({ timeout: 15000 }));
               }
-
+              const inviteDmAutor =
+                res === 'anonimo' ? 'a administração' : message.author;
               user
                 .send(
                   new Discord.MessageEmbed()
@@ -204,7 +210,7 @@ export default {
                       `Você foi banido do servidor **${message.guild.name}**`
                     )
                     .setDescription(
-                      `**Motivo: **\n\`\`\`${reason}\`\`\`\nCaso ache que o banimento foi injusto, **fale com ${message.author}**`
+                      `**Motivo: **\n\`\`\`${reason}\`\`\`\nCaso ache que o banimento foi injusto, **fale com ${inviteDmAutor}**`
                     )
                     .setFooter(`ID do usuário: ${user.id}`)
                     .setTimestamp()
@@ -228,10 +234,8 @@ export default {
                     .then((msg) => msg.delete({ timeout: 15000 }))
                 );
             });
-        }
-      });
-    } else {
-      await messageAnt.delete();
-    }
+        });
+      }
+    });
   },
 };

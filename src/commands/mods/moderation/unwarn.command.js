@@ -7,7 +7,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'unwarn',
-  description: `<prefix>unwarn @usuário/TAG/ID <aviso1/ 1 / aviso 1> para remover um aviso de usuários`,
+  description: `<prefix>unwarn @usuários/TAGs/IDs <aviso1/ 1 / aviso 1> para remover um aviso de usuários`,
   permissions: ['mods'],
   aliases: ['removewarn', 'removerwarn', 'retirarwarn', 'deswarn'],
   category: 'Moderação ⚔️',
@@ -35,7 +35,7 @@ export default {
           .setThumbnail(Icons.erro)
           .setTitle(`Não encontrei os usuários!`)
           .setDescription(
-            `**Tente usar**\`\`\`${prefix}unwarn @usuário/TAG/ID <aviso 1>\`\`\``
+            `**Tente usar**\`\`\`${prefix}unwarn @usuários/TAGs/IDs <aviso 1>\`\`\``
           )
           .setTimestamp()
       );
@@ -51,7 +51,7 @@ export default {
         )
         .setTitle(`Selecione um aviso`)
         .setDescription(
-          `Você pode usar ${prefix}unwarn @usuário/TAG/ID aviso 1`
+          `Você pode usar ${prefix}unwarn @usuários/TAGs/IDs aviso 1`
         )
         .setTimestamp();
     }

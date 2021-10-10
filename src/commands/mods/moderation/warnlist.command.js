@@ -7,7 +7,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'warnlist',
-  description: `<prefix>warnlist @usuário/TAG/ID para ver os warns de um usuários`,
+  description: `<prefix>warnlist @usuários/TAGs/IDs para ver os warns de um usuários`,
   permissions: ['everyone'],
   aliases: ['warns'],
   category: 'Moderação ⚔️',
@@ -36,7 +36,7 @@ export default {
             .setThumbnail(Icons.erro)
             .setTitle(`Não encontrei os usuários!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}warnlist @usuário/TAG/ID\`\`\``
+              `**Tente usar**\`\`\`${prefix}warnlist @usuários/TAGs/IDs\`\`\``
             )
             .setTimestamp()
         )
@@ -71,6 +71,7 @@ export default {
               .setTitle(`Lista de warns do usuário ${user.tag}`)
               .setDescription(messageCommands)
               .setFooter(`ID do usuário: ${user.id}`)
+              .setTimestamp()
           );
           return;
         }
