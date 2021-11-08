@@ -61,16 +61,19 @@ export default {
           );
 
           if (messageCommands.length >= 4096) {
-            const removeAsterisk = /\*\*([^**]+(?=\*\*))\*\*/g;
+            const removeAsteriskMessage = /\*\*([^**]+(?=\*\*))\*\*/gi;
 
             const buffer = Buffer.from(
-              messageCommands.replace(removeAsterisk, '$1')
+              messageCommands.replace(removeAsteriskMessage, '$1')
             );
             const attachment = new Discord.MessageAttachment(
               buffer,
               `warnlist_of_${user.tag}.txt`
             );
-            message.channel.send(message.author, attachment);
+            message.channel.send(
+              `${message.author} O usuário possui muitos aviso e tive que mandar um arquivo para você ver todos eles`,
+              attachment
+            );
           } else {
             message.channel.send(
               message.author,
