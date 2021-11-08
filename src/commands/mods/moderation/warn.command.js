@@ -4,23 +4,28 @@ import { confirmMessage } from './confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
+import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
 
 export default {
   name: 'warn',
-  description: `<prefix>warn @usuários/TAGs/IDs <motivo> para alertar e punir usuários`,
+  description: `<prefix>warn @Usuários/TAGs/Nomes/IDs/Citações <motivo> para alertar e punir usuários`,
   permissions: ['mods'],
   aliases: ['addwarn', 'advertencia', 'avisar'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {
-    if (!args[0]) {
+    const { users, restOfMessage } = await getUserOfCommand(
+      client,
+      message,
+      prefix
+    );
+
+    if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
       helpWithASpecificCommand(client.Commands.get(command), message);
       return;
     }
 
-    const { users, restOfMessage } = getUserOfCommand(client, message, prefix);
-
-    if (!users || users.length === 0) {
+    if (users === undefined) {
       message.channel
         .send(
           message.author,
@@ -33,7 +38,7 @@ export default {
             )
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}warn @usuários/TAGs/IDs <motivo>\`\`\``
+              `**Tente usar**\`\`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`\``
             )
             .setTimestamp()
         )
@@ -41,7 +46,12 @@ export default {
       return;
     }
 
-    const reason = restOfMessage || '<Motivo não especificado>';
+    let reason = `${restOfMessage}` || '<Motivo não especificado>';
+    const anexo = message.attachments.find((anex) => anex.url);
+
+    if (anexo) {
+      reason += `\n**Arquivo anexado**: ${anexo.url}`;
+    }
 
     const messageAnt = await message.channel.send(
       new Discord.MessageEmbed()
@@ -53,9 +63,7 @@ export default {
         )
         .setTitle(`Você está preste a avisar os Usuários:`)
         .setDescription(
-          `**Usuários: ${users.join(
-            '|'
-          )}**\n**Pelo Motivo de: **\n\n\`\`\`${reason}\`\`\`
+          `**Usuários: ${users.join('|')} \nPelo Motivo de: **${reason}\n
           ✅ Para confirmar
           ❎ Para cancelar
           🕵️‍♀️ Para confirmar e não avisa na DM do usuário`
@@ -66,7 +74,6 @@ export default {
 
     await confirmMessage(message, messageAnt).then(async (res) => {
       await messageAnt.delete();
-
       if (res) {
         const inviteDm = res !== 'anonimo';
         const guildIdDatabase = new client.Database.table(
@@ -76,6 +83,7 @@ export default {
         const channelLog = client.channels.cache.get(
           guildIdDatabase.get('channel_log')
         );
+
         users.forEach(async (user) => {
           const memberUser = client.guilds.cache
             .get(message.guild.id)
@@ -122,6 +130,7 @@ export default {
               .then((msg) => msg.delete({ timeout: 15000 }));
             return;
           }
+
           function messageSucess() {
             return new Discord.MessageEmbed()
               .setColor(Colors.pink_red)
@@ -131,16 +140,7 @@ export default {
                 message.author.displayAvatarURL({ dynamic: true })
               )
               .setTitle(`O usuário ${user.tag} foi avisado!`)
-              .addFields(
-                {
-                  name: '**Motivo: **',
-                  value: `\n\n\`\`\`${reason}\`\`\``,
-                },
-                {
-                  name: '**Aplicadado por:**',
-                  value: `${message.author} - ${message.author.id}`,
-                }
-              )
+              .setDescription(`**Pelo Motivo de: **\n${reason}`)
               .setFooter(`ID do usuário avisado: ${user.id}`)
               .setTimestamp();
           }
@@ -156,7 +156,7 @@ export default {
               .send(
                 new Discord.MessageEmbed()
                   .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.warn)
+                  .setThumbnail(message.guild.iconURL())
                   .setTitle(
                     `Você recebeu um warn do servidor **${message.guild}**`
                   )
@@ -167,28 +167,32 @@ export default {
                   .setTimestamp()
               )
               .catch(() =>
-                message.channel
-                  .send(
-                    message.author,
-                    new Discord.MessageEmbed()
-                      .setAuthor(
-                        message.author.tag,
-                        message.author.displayAvatarURL({ dynamic: true })
-                      )
-                      .setColor(Colors.pink_red)
-                      .setThumbnail(Icons.erro)
-                      .setDescription(
-                        `O usuário ${user} possui a DM fechada, por isso não pude avisá-lo`
-                      )
-                      .setTitle(`Não foi possível avisar na DM do usuário!`)
-                      .setTimestamp()
-                  )
-                  .then((msg) => msg.delete({ timeout: 15000 }))
+                message.channel.send(
+                  message.author,
+                  new Discord.MessageEmbed()
+                    .setAuthor(
+                      message.author.tag,
+                      message.author.displayAvatarURL({ dynamic: true })
+                    )
+                    .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                    .setColor(Colors.pink_red)
+                    .setTitle(
+                      `Não foi possível avisar na DM do usuário ${user.tag}!`
+                    )
+                )
               );
+          }
+
+          let reasonOfWarn = `${restOfMessage}` || '<Motivo não especificado>';
+          if (message.attachments.some((anex) => anex.url)) {
+            const urlUpload = await uploadImage(message);
+            if (urlUpload) {
+              reasonOfWarn += `\n**Arquivo anexado**: ${urlUpload}`;
+            }
           }
           if (guildIdDatabase.has(`user_id_${user.id}`)) {
             guildIdDatabase.push(`user_id_${user.id}.autor`, message.author.id);
-            guildIdDatabase.push(`user_id_${user.id}.reasons`, reason);
+            guildIdDatabase.push(`user_id_${user.id}.reasons`, reasonOfWarn);
             guildIdDatabase.push(
               `user_id_${user.id}.dataReasonsWarns`,
               new Date()
@@ -196,7 +200,7 @@ export default {
           } else {
             guildIdDatabase.set(`user_id_${user.id}`, {
               id: user.id,
-              reasons: [reason],
+              reasons: [reasonOfWarn],
               autor: [message.author.id],
               dataReasonsWarns: [new Date()],
             });
