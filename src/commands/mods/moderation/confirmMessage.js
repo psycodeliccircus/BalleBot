@@ -2,7 +2,13 @@ export const confirmMessage = (message, messageAnt) =>
   new Promise((resolve) => {
     const reactions = ['✅', '❎', '🕵️‍♀️'];
 
-    reactions.forEach((emojiReact) => messageAnt.react(`${emojiReact}`));
+    reactions.forEach((emojiReact) =>
+      messageAnt.react(`${emojiReact}`).catch(() => {
+        // the react function is asynchronous in nature, so a warning is thrown
+        // after the user reacts faster and erases the old message
+        // (which is the message to be reacted) and this ignores the warning.
+      })
+    );
 
     const filter = (reaction) => reactions.includes(reaction.emoji.name);
 
