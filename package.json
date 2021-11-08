@@ -28,6 +28,8 @@
   "dependencies": {
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
+    "imgur": "^1.0.2",
+    "imgur-upload": "^0.1.2",
     "mongoose": "^5.12.14",
     "quick.db": "^7.1.3"
   },
