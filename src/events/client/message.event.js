@@ -1,7 +1,6 @@
 import Discord from 'discord.js';
 import { verifyBannedWords } from './messageVerify/messageVerifyWords.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
-import Icons from '../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'message',
@@ -122,14 +121,11 @@ export default {
               message.author,
               new Discord.MessageEmbed()
                 .setColor(Colors.pink_red)
-                .setThumbnail(Icons.erro)
-                .setTitle(
-                  `${message.author.tag} Hey, você não tem permissão :(`
-                )
+                .setTitle(`Hey, você não tem permissão :(`)
                 .setDescription(
-                  `Apenas ${commandToBeExecuted.permissions.join(
+                  `**Apenas ${commandToBeExecuted.permissions.join(
                     ' **|** '
-                  )} possuem permissão para usar esse comando`
+                  )} possuem permissão para usar esse comando**`
                 )
             )
             .then((msg) => {

@@ -8,13 +8,18 @@ import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'mute',
-  description: `<prefix>mute @usuários/TAGs/IDs <motivo> <tempo/2d 5h 30m 12s> para mutar usuários`,
+  description: `<prefix>mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s> para mutar usuários`,
   permissions: ['mods'],
   aliases: ['mutar', 'silenciar'],
   category: 'Moderação ⚔️',
   dm: false,
   run: async ({ message, client, args, prefix }) => {
-    if (!args[0]) {
+    const { users, restOfMessage } = await getUserOfCommand(
+      client,
+      message,
+      prefix
+    );
+    if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
       helpWithASpecificCommand(client.Commands.get(command), message);
       return;
@@ -73,9 +78,7 @@ export default {
       return;
     }
 
-    const { users, restOfMessage } = getUserOfCommand(client, message, prefix);
-
-    if (!users || users.length === 0) {
+    if (users === undefined) {
       message.channel
         .send(
           message.author,
@@ -88,7 +91,7 @@ export default {
             )
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}mute @usuários/TAGs/IDs <motivo> <tempo/2d 5h 30m 12s>\`\`\``
+              `**Tente usar**\`\`\`${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>\`\`\``
             )
             .setTimestamp()
         )
@@ -334,7 +337,7 @@ export default {
               .send(
                 new Discord.MessageEmbed()
                   .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.mute)
+                  .setThumbnail(message.guild.iconURL())
                   .setTitle(
                     `Você foi mutado no servidor **${message.guild.name}**`
                   )
@@ -351,11 +354,12 @@ export default {
                     new Discord.MessageEmbed()
                       .setColor(Colors.pink_red)
                       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                      .setDescription(
-                        `O usuário ${user} possui a DM fechada, por isso não pude avisá-lo`
+                      .setAuthor(
+                        message.author.tag,
+                        message.author.displayAvatarURL({ dynamic: true })
                       )
                       .setTitle(
-                        `Não foi possível avisar na DM do usuário mutado!`
+                        `Não foi possível avisar na DM do usuário mutado ${user.tag}!`
                       )
                       .setFooter(`ID do usuário: ${user.id}`)
                       .setTimestamp()
