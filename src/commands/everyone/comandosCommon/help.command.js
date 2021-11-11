@@ -4,27 +4,25 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 function getMessageCommands(listTempleteCategories, namesCategories) {
   return listTempleteCategories.reduce((prev, _arr, index) => {
-    return `${prev}**${
-      listTempleteCategories[index]
-    }** \n ${`> ${namesCategories[
-      listTempleteCategories[index]
-    ].namesCommands.join(' **|** ')}`}\n\n`;
+    return `${prev}**${listTempleteCategories[index]}**
+> ${namesCategories[listTempleteCategories[index]].namesCommands.join(
+      ' **|** '
+    )}\n\n`;
   }, '');
 }
 
-export function helpWithASpecificCommand(fullCommand, message) {
+export function helpWithASpecificCommand(nameCommand, client, message) {
+  const fullCommand = client.Commands.get(nameCommand.toLowerCase());
   const stringMarkedAliases = [];
   const stringMarkedPermissions = [];
+  const nullAlias = '`<Este comando não possui sinônimos>`';
 
-  if (fullCommand.aliases) {
-    for (let i = 0; i < fullCommand.aliases.length; i++) {
-      stringMarkedAliases[i] = `\`${fullCommand.aliases[i]}\``;
-    }
-  }
-  for (let i = 0; i < fullCommand.permissions.length; i++) {
+  fullCommand.aliases?.forEach((_alias, i) => {
+    stringMarkedAliases[i] = `\`${fullCommand.aliases[i]}\``;
+  });
+  fullCommand.permissions?.forEach((_perm, i) => {
     stringMarkedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
-  }
-
+  });
   const { category, description } = fullCommand;
   message.channel.send(
     message.author,
@@ -33,16 +31,13 @@ export function helpWithASpecificCommand(fullCommand, message) {
       .setThumbnail(Icons.interrogation)
       .setTitle(`Informações sobre o comando \`${fullCommand.name}\`:`)
       .setDescription(
-        `**📝 Categoria: ${
-          category || 'Sem Categoria'
-        }**\n\n**Sobre o Comando:**\n> \`\`${
-          description || `Não especificado`
-        }\`\`\n**Cargos necessários para utilizar o comando: **\n> ${
-          stringMarkedPermissions.join(' | ') || '`Não especificado`'
-        }\n**Sinônimos: **\n> ${
-          stringMarkedAliases.join('**|**') ||
-          '`<Este comando não possui sinônimos>`'
-        }`
+        `**📝 Categoria: ${category || 'Sem Categoria'}**
+\n**Sobre o Comando:**
+> \`\`${description || `<Sem Descrição>`}\`\`
+**Cargos necessários para utilizar o comando: **
+> ${stringMarkedPermissions.join(' | ') || '`<Não especificado>`'}
+**Sinônimos: **
+> ${stringMarkedAliases.join(' **|** ') || nullAlias}`
       )
   );
 }
@@ -94,6 +89,19 @@ export default {
         Object.getOwnPropertyNames(namesCategories).sort();
 
       getNamesCommands.sort();
+
+      const descriptInviteInMessage = `
+Hey ${message.author}, muito prazer!
+Eu sou a Bot do servidor Ballerini (pode me chamar de Balle).
+Fui criada para várias funções dentro de um servidor,\n
+Entre elas: Moderação, Cargos, AntiSpam, Forbidden Words, Welcome, Eventos Especiais, Diversão, Economia, e muito mais!\n
+Meus criadores me criaram para ser um bot completo com praticamente tudo que é necessário para um servidor e um pouquinho a mais,
+trazendo segurança e diversão para o seu servidor!\n
+Caso queira suporte com nossos desenvolvedores entre em contato com a equipe responsável no servidor Ballerini:\n
+> **Ballerini:** https://discord.gg/ballerini \n
+**Essas são as categorias e comandos que podem ser usados: **\n
+${getMessageCommands(listTempleteCategories, namesCategories)}`;
+
       message.channel.send(
         message.author,
         new Discord.MessageEmbed()
@@ -105,21 +113,7 @@ export default {
           )
           .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Ajuda Sobre Comandos e Funções:`)
-          .setDescription(
-            `
-            Hey ${
-              message.author
-            }, muito prazer! eu sou a Bot do servidor Ballerini (pode me chamar de Balle).\n
-            Fui criada para várias funções dentro de um servidor,\n
-            Entre elas: Moderação, Cargos, AntiSpam, Forbidden Words, Welcome, Eventos Especiais, Diversão, Economia, e muito mais!\n
-            Meus criadores me criaram para ser um bot completo com praticamente tudo que é necessário para um servidor e um pouquinho a mais,
-            trazendo segurança e diversão para o seu servidor!\n
-            Caso queira suporte com nossos desenvolvedores entre em contato com a equipe responsável no servidor Ballerini:\n
-            > **Ballerini:** https://discord.gg/ballerini \n
-
-            **Essas são as categorias e comandos que podem ser usados: **\n
-            ${getMessageCommands(listTempleteCategories, namesCategories)}`
-          )
+          .setDescription(descriptInviteInMessage)
           .setFooter(
             `• Para saber as informações de um comando específico, use ${prefix}help <comando>`
           )
@@ -127,6 +121,6 @@ export default {
 
       return;
     }
-    helpWithASpecificCommand(fullCommand, message);
+    helpWithASpecificCommand(helpCommand, client, message);
   },
 };

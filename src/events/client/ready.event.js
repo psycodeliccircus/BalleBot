@@ -3,7 +3,7 @@ import { setIntervalRemoveMute } from '../../services/setTimeoutMute/setTimeOutM
 
 export default {
   name: 'ready',
-  once: true,
+  once: false,
   run: (client) => {
     setInterval(async () => {
       setIntervalRemoveMute(client);

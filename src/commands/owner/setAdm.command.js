@@ -15,7 +15,7 @@ export default {
     );
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
     if (!args[2]) {
@@ -55,10 +55,10 @@ export default {
         .setTitle(`Os Cargos Administrativos foram setados!:`)
         .setDescription(
           `**• Esses são os cargos que foram setados:**
-          *Padawan:* <@&${loadsToBeConsidered[0]}>
-          *Mods:* <@&${loadsToBeConsidered[1]}>
-          *Staff:* <@&${loadsToBeConsidered[2]}>
-          **• Todos os membros que possuem esses cargos vão ter acesso ao comandos respectivos que podem ser vistos em ${prefix}help ** `
+**Padawan:** <@&${loadsToBeConsidered[0]}>
+**Mods:** <@&${loadsToBeConsidered[1]}>
+**Staff:** <@&${loadsToBeConsidered[2]}>
+**• Todos os membros que possuem esses cargos vão ter acesso ao comandos respectivos que podem ser vistos em ${prefix}help ** `
         )
     );
   },
