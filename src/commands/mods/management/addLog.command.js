@@ -12,7 +12,7 @@ export default {
   run: ({ message, client, args, prefix }) => {
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
     const guildIdDatabase = new client.Database.table(
@@ -49,7 +49,7 @@ export default {
         .setThumbnail(Icons.sucess)
         .setTitle(`O Chat Log foi atualizado com sucesso: `)
         .setDescription(
-          `Caso queira modificar basta usar o comando novamente com **outro chat!**\n> **Chat setado:** ${channel}`
+          `**Caso queira modificar basta usar o comando novamente com outro chat!**\n> **Chat setado:** ${channel}`
         )
         .setFooter(
           `${message.author.tag}`,

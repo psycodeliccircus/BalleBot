@@ -38,13 +38,15 @@ export function verifyBannedWords(client, message) {
 
       const messageLowerCase = message.content.toLowerCase();
 
-      if (listOfWordsBannedGuild.length !== 0) {
+      if (
+        listOfWordsBannedGuild.length !== 0 &&
+        listOfWordsBannedGuild[0] !== null
+      ) {
         const wordsRegex = new RegExp(
           listOfWordsBannedGuild.filter((word) => word).join('|'),
           'g'
         );
-
-        if (wordsRegex.test(messageLowerCase)) {
+        if (wordsRegex.test(messageLowerCase) && wordsRegex !== false) {
           let messageMarked = messageLowerCase.replace(wordsRegex, '-->$&<--');
           const anexo = message.attachments.map((anex) => anex.url);
 

@@ -37,7 +37,7 @@ export function setIntervalRemoveMute(client) {
                 `${user.tag}`,
                 user.displayAvatarURL({ dynamic: true })
               )
-              .setDescription(`**Descrição:**\`\`\`${userMuted.reason}\`\`\``)
+              .setDescription(`**Descrição:**\n${userMuted.reason}`)
               .setThumbnail(user.displayAvatarURL({ dynamic: true }))
               .setColor(Colors.pink_red)
               .setFooter(`ID do usuário : ${user.id}`)

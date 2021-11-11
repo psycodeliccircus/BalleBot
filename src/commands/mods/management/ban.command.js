@@ -21,7 +21,7 @@ export default {
     );
     if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 
@@ -63,10 +63,13 @@ export default {
         )
         .setTitle(`Você está prestes a Banir os usuários:`)
         .setDescription(
-          `**Usuários: ${users.join('|')}**\n**Pelo Motivo de: **\n${reason}\n
-          ✅ Para confirmar
-          ❎ Para cancelar
-          🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
+          `**Usuários: ${users.join('|')}**
+**Pelo Motivo de: **
+${reason}
+
+✅ Para confirmar
+❎ Para cancelar
+🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
         )
         .setTimestamp()
     );

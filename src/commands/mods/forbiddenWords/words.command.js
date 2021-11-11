@@ -35,9 +35,9 @@ export default {
             .setThumbnail(Icons.sucess)
             .setTitle('Banco encontrado!')
             .setDescription(
-              `**Aqui está todas as palavras do banco de dados:**\n> \`\`${listOfWords.join(
-                '|'
-              )}\`\`\n**Caso queira adicionar ou remover alguma palavra use os comandos de addWords e removeWords**`
+              `**Aqui está todas as palavras do banco de dados:**\n> \`${listOfWords.join(
+                ' | '
+              )}\`\n**Caso queira adicionar ou remover alguma palavra use os comandos de addWords e removeWords**`
             )
             .setFooter(
               `${message.author.tag}`,
@@ -56,9 +56,14 @@ export default {
         .setColor(Colors.pink_red)
         .setTitle(`Seu servidor não foi encontrado: `)
         .setDescription(
-          `**Para ativar o sistema de Forbbiden Words primeiro adicione palavras com o comando:**\n> \`${prefix}addwords <palavra1> <palavra2> <palavra3> etc...\`
-            \n**Para configurar onde os report's irão ser mandados:**\n> \`${prefix}addlog <#chat/ID>\`
-            \n**Para mais detalhes consulte o comando addwords:** \n> \`${prefix}help addwords\``
+          `**Para ativar o sistema de Forbbiden Words primeiro adicione palavras com o comando:**
+> \`${prefix}addwords <palavra1> <palavra2> <palavra3> etc...\`
+
+**Para configurar onde os report's irão ser mandados:**
+> \`${prefix}addlog <#chat/ID>\`
+
+**Para mais detalhes consulte o comando addwords:**
+> \`${prefix}help addwords\``
         )
         .setThumbnail(Icons.erro)
         .setFooter(

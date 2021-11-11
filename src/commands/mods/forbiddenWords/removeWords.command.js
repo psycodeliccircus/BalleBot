@@ -16,7 +16,7 @@ export default {
   run: ({ message, client, args, prefix }) => {
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 
@@ -47,9 +47,9 @@ export default {
             .setThumbnail(Icons.subwords)
             .setTitle(`As Palavras ou Links foram **removidos** do banco! `)
             .setDescription(
-              `**Essas foram as palavras ou links removidos:** \n> ${deleteRegexList.join(
-                ' **|** '
-              )}`
+              `**Essas foram as palavras ou links removidos:** \n> \`${deleteRegexList.join(
+                ' | '
+              )}\``
             )
             .setFooter(
               `${message.author.tag}`,

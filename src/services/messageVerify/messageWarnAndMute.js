@@ -1,4 +1,5 @@
 import Discord from 'discord.js';
+import { verifyWarnCountUser } from '../../utils/verifyWarnCountUser/verifyWarnCountUser.js';
 
 export async function messageWarnAndMute(message, client, messageMarked) {
   function messageDmAlert() {
@@ -9,7 +10,7 @@ export async function messageWarnAndMute(message, client, messageMarked) {
           .setThumbnail(message.guild.iconURL())
           .setTitle(`Você enviou uma mensagem suspeita em ${message.guild}:`)
           .setDescription(
-            `**Um moderador irá rever seu caso!**
+            `**Um moderador irá rever seu caso! Por hora você está mutado**
             \n**Essa foi a mensagem:**
             ${messageMarked}`
           )
@@ -88,6 +89,8 @@ export async function messageWarnAndMute(message, client, messageMarked) {
       );
     }
   }
+  verifyWarnCountUser(client, message, message.author.id);
+
   await message.delete();
   messageDmAlert();
 }

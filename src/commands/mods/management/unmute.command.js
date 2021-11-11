@@ -14,7 +14,7 @@ export default {
 
     if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
     if (!message.member.hasPermission('MANAGE_ROLES')) {

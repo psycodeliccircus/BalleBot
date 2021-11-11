@@ -5,6 +5,7 @@ import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.com
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
+import { verifyWarnCountUser } from '../../../utils/verifyWarnCountUser/verifyWarnCountUser.js';
 
 export default {
   name: 'warn',
@@ -21,7 +22,7 @@ export default {
 
     if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 
@@ -63,10 +64,13 @@ export default {
         )
         .setTitle(`Você está preste a avisar os Usuários:`)
         .setDescription(
-          `**Usuários: ${users.join('|')} \nPelo Motivo de: **${reason}\n
-          ✅ Para confirmar
-          ❎ Para cancelar
-          🕵️‍♀️ Para confirmar e não avisa na DM do usuário`
+          `**Usuários: ${users.join('|')}**
+**Pelo Motivo de: **
+${reason}
+
+✅ Para confirmar
+❎ Para cancelar
+🕵️‍♀️ Para confirmar e não avisa na DM do usuário`
         )
 
         .setTimestamp()
@@ -88,6 +92,7 @@ export default {
           const memberUser = client.guilds.cache
             .get(message.guild.id)
             .members.cache.get(user.id);
+
           if (user.id === message.guild.me.id) {
             message.channel
               .send(
@@ -161,25 +166,29 @@ export default {
                     `Você recebeu um warn do servidor **${message.guild}**`
                   )
                   .setDescription(
-                    `**Descrição: **\n\`\`\`${reason}\`\`\`\n**Para rever seu caso fale com: ${message.author}**`
+                    `**Descrição: **
+${reason}
+**Para rever seu caso fale com: ${message.author}**`
                   )
                   .setFooter(`ID do usuário: ${user.id}`)
                   .setTimestamp()
               )
               .catch(() =>
-                message.channel.send(
-                  message.author,
-                  new Discord.MessageEmbed()
-                    .setAuthor(
-                      message.author.tag,
-                      message.author.displayAvatarURL({ dynamic: true })
-                    )
-                    .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                    .setColor(Colors.pink_red)
-                    .setTitle(
-                      `Não foi possível avisar na DM do usuário ${user.tag}!`
-                    )
-                )
+                message.channel
+                  .send(
+                    message.author,
+                    new Discord.MessageEmbed()
+                      .setAuthor(
+                        message.author.tag,
+                        message.author.displayAvatarURL({ dynamic: true })
+                      )
+                      .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                      .setColor(Colors.pink_red)
+                      .setTitle(
+                        `Não foi possível avisar na DM do usuário ${user.tag}!`
+                      )
+                  )
+                  .then((msg) => msg.delete({ timeout: 15000 }))
               );
           }
 
@@ -205,6 +214,7 @@ export default {
               dataReasonsWarns: [new Date()],
             });
           }
+          verifyWarnCountUser(client, message, user.id);
         });
       }
     });

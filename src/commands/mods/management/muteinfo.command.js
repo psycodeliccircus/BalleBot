@@ -16,7 +16,7 @@ export default {
 
     if (!args[0] && users.length === 0) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 

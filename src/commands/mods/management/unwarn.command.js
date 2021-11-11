@@ -16,7 +16,7 @@ export default {
 
     if (!args[0] && users.length === 0) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 
@@ -161,15 +161,13 @@ export default {
                   message.author.displayAvatarURL({ dynamic: true })
                 )
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+                .setTitle(`Aviso ${warnRemove + 1} foi removido do usuário`)
                 .setDescription(
                   `O usuário ${user.tag} teve um aviso removido! \n
-                    **Punido por**: ${autorDeleted}\n
-                    **Data:** ${parseDateForDiscord(dataDeleted)}
-                    **Motivo:**\n ${avisoDeleted}
+**Punido por**: <@${autorDeleted}>
+**Data:** ${parseDateForDiscord(dataDeleted)}
+**Motivo:**\n ${avisoDeleted}
                     `
-                )
-                .setTitle(
-                  `Aviso ${warnRemove + 1} foi removido do usuário ${user.tag}`
                 )
                 .setTimestamp()
             );
@@ -184,17 +182,13 @@ export default {
                     message.author.tag,
                     message.author.displayAvatarURL({ dynamic: true })
                   )
+                  .setTitle(`Aviso ${warnRemove + 1} foi removido do usuário`)
                   .setDescription(
                     `O usuário ${user.tag} teve um aviso removido! \n
-                    **Punido por**: ${autorDeleted}\n
-                    **Data:** ${parseDateForDiscord(dataDeleted)}
-                    **Motivo** ${avisoDeleted}
+**Punido por**: <@${autorDeleted}>
+**Data:** ${parseDateForDiscord(dataDeleted)}
+**Motivo** ${avisoDeleted}
                     `
-                  )
-                  .setTitle(
-                    `Aviso ${warnRemove + 1} foi removido do usuário ${
-                      user.tag
-                    }`
                   )
                   .setTimestamp()
               )
@@ -213,7 +207,8 @@ export default {
             message.author.displayAvatarURL({ dynamic: true })
           )
           .setDescription(
-            `**Para avisar alguém, use o comando \n\`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`**`
+            `**Para avisar alguém, use o comando:**
+> \`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\``
           )
           .setTitle(`O Usuário ${user.tag} não possui avisos`)
           .setTimestamp()

@@ -6,6 +6,114 @@ import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDa
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 
+export async function roleMuted(event) {
+  let muterole = event.guild.roles.cache.find(
+    (muteroleObj) => muteroleObj.name === 'muted'
+  );
+  if (!muterole) {
+    muterole = await event.guild.roles.create({
+      data: {
+        name: 'muted',
+        color: 'ligth_brown',
+        permissions: [],
+      },
+    });
+
+    event.guild.channels.cache.forEach(async (channel) => {
+      await channel.overwritePermissions([
+        {
+          id: muterole.id,
+          deny: ['SEND_MESSAGES', 'ADD_REACTIONS'],
+        },
+      ]);
+    });
+  }
+
+  return muterole;
+}
+
+export async function muteUserInDatabase(client, event, reason, userMutated) {
+  const user = userMutated || event.user;
+  const guildIdDatabase = new client.Database.table(
+    `guild_id_${event.guild.id}`
+  );
+
+  const textMessage = reason || '<Motivo não especificado>';
+  const timeValidation = /(\d+d)|(\d+h)|(\d+m)|(\d+s)/gi;
+  const timeArray = textMessage.match(timeValidation);
+  const reasonMuted =
+    `${textMessage.replace(timeValidation, '').trim()}` || '<invalido>';
+
+  let timeInMiliSeconds = 0;
+
+  let dateForDatabase = 'indefinido';
+  if (timeArray) {
+    const stringOfTime = {
+      d: 1000 * 60 * 60 * 24,
+      h: 1000 * 60 * 60,
+      m: 1000 * 60,
+      s: 1000,
+    };
+
+    timeArray.forEach((element) => {
+      timeInMiliSeconds +=
+        stringOfTime[element.slice(-1)] * element.slice(0, -1);
+    });
+
+    dateForDatabase = new Date().setMilliseconds(
+      new Date().getMilliseconds() + timeInMiliSeconds
+    );
+  }
+
+  const muterole = await roleMuted(event);
+  guildIdDatabase.set('roleMutedId', muterole.id);
+
+  const tableTemporarilyMutated = new client.Database.table(
+    `tableTemporarilyMutated`
+  );
+  const userReasonFullMuted = {
+    id: user.id,
+    dateMuted: new Date(dateForDatabase),
+    guildId: event.guild.id,
+    roleId: muterole.id,
+    reason: `Punido por ${event.author.tag || client.user.tag}
+ | ${event.author.id || client.user.id} — Motivo: ${reasonMuted}`,
+  };
+
+  const guildUndefinedMutated = new client.Database.table(
+    `guild_users_mutated_${event.guild.id}`
+  );
+
+  if (guildUndefinedMutated.has(`user_id_${user.id}`)) {
+    guildUndefinedMutated.delete(`user_id_${user.id}`);
+  } else if (
+    tableTemporarilyMutated.has(`guild_id_${event.guild.id}_user_id_${user.id}`)
+  ) {
+    tableTemporarilyMutated.delete(
+      `guild_id_${event.guild.id}_user_id_${user.id}`
+    );
+  }
+
+  if (dateForDatabase === 'indefinido') {
+    guildUndefinedMutated.set(`user_id_${user.id}`, userReasonFullMuted);
+  } else {
+    tableTemporarilyMutated.set(
+      `guild_id_${event.guild.id}_user_id_${user.id}`,
+      userReasonFullMuted
+    );
+  }
+  const userMember = client.guilds.cache
+    .get(event.guild.id)
+    .members.cache.get(user.id);
+
+  await userMember.roles.add(muterole.id);
+  const inviteMessageDate =
+    dateForDatabase !== 'indefinido'
+      ? parseDateForDiscord(dateForDatabase)
+      : '`indefinido`';
+  return { userReasonFullMuted, inviteMessageDate };
+}
+
 export default {
   name: 'mute',
   description: `<prefix>mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s> para mutar usuários`,
@@ -21,7 +129,7 @@ export default {
     );
     if (!args[0] && !users) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
 
@@ -98,7 +206,6 @@ export default {
         .then((msg) => msg.delete({ timeout: 15000 }));
       return;
     }
-
     const textMessage = restOfMessage || '<Motivo não especificado>';
     const timeValidation = /(\d+d)|(\d+h)|(\d+m)|(\d+s)/gi;
     const reasonMuted =
@@ -114,12 +221,13 @@ export default {
         )
         .setTitle(`Você está prestes a Mutar os usuários:`)
         .setDescription(
-          `**Usuários: ${users.join(
-            '|'
-          )}**\n**Pelo Motivo de: **\n\n\`\`\`${reasonMuted}\`\`\`
-          ✅ Para confirmar
-          ❎ Para cancelar
-          🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
+          `**Usuários: ${users.join('|')}**
+**Pelo Motivo de: **
+${reasonMuted}
+
+✅ Para confirmar
+❎ Para cancelar
+🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
         )
         .setTimestamp()
     );
@@ -218,102 +326,8 @@ export default {
               )
               .then((msg) => msg.delete({ timeout: 15000 }));
           } else {
-            const guildIdDatabase = new client.Database.table(
-              `guild_id_${message.guild.id}`
-            );
-
-            const timeArray = textMessage.match(timeValidation);
-
-            let timeInMiliSeconds = 0;
-
-            let dateForDatabase = 'indefinido';
-            if (timeArray) {
-              const stringOfTime = {
-                d: 1000 * 60 * 60 * 24,
-                h: 1000 * 60 * 60,
-                m: 1000 * 60,
-                s: 1000,
-              };
-
-              timeArray.forEach((element) => {
-                timeInMiliSeconds +=
-                  stringOfTime[element.slice(-1)] * element.slice(0, -1);
-              });
-
-              dateForDatabase = new Date().setMilliseconds(
-                new Date().getMilliseconds() + timeInMiliSeconds
-              );
-            }
-
-            let muterole = message.guild.roles.cache.find(
-              (muteroleObj) => muteroleObj.name === 'muted'
-            );
-            if (!muterole) {
-              muterole = await message.guild.roles.create({
-                data: {
-                  name: 'muted',
-                  color: 'ligth_brown',
-                  permissions: [],
-                },
-              });
-
-              message.guild.channels.cache.forEach(async (channel) => {
-                await channel.overwritePermissions([
-                  {
-                    id: muterole.id,
-                    deny: ['SEND_MESSAGES', 'ADD_REACTIONS'],
-                  },
-                ]);
-              });
-            }
-            guildIdDatabase.set('roleMutedId', muterole.id);
-
-            const tableTemporarilyMutated = new client.Database.table(
-              `tableTemporarilyMutated`
-            );
-            const userReasonFullMuted = {
-              id: user.id,
-              dateMuted: new Date(dateForDatabase),
-              guildId: message.guild.id,
-              roleId: muterole.id,
-              reason: `Punido por ${message.author.tag} | ${message.author.id} — Motivo: ${reasonMuted}`,
-            };
-            const guildUndefinedMutated = new client.Database.table(
-              `guild_users_mutated_${message.guild.id}`
-            );
-            if (guildUndefinedMutated.has(`user_id_${user.id}`)) {
-              guildUndefinedMutated.delete(`user_id_${user.id}`);
-            } else if (
-              tableTemporarilyMutated.has(
-                `guild_id_${message.guild.id}_user_id_${user.id}`
-              )
-            ) {
-              tableTemporarilyMutated.delete(
-                `guild_id_${message.guild.id}_user_id_${user.id}`
-              );
-            }
-
-            if (dateForDatabase === 'indefinido') {
-              guildUndefinedMutated.set(
-                `user_id_${user.id}`,
-                userReasonFullMuted
-              );
-            } else {
-              tableTemporarilyMutated.set(
-                `guild_id_${message.guild.id}_user_id_${user.id}`,
-                userReasonFullMuted
-              );
-            }
-
-            const userMember = client.guilds.cache
-              .get(message.guild.id)
-              .members.cache.get(user.id);
-
-            await userMember.roles.add(muterole.id);
-            const inviteMessageDate =
-              dateForDatabase !== 'indefinido'
-                ? parseDateForDiscord(dateForDatabase)
-                : '`indefinido`';
+            const { userReasonFullMuted, inviteMessageDate } =
+              await muteUserInDatabase(client, message, restOfMessage, user);
 
             message.channel.send(
               message.author,
@@ -326,7 +340,9 @@ export default {
                 )
                 .setTitle(`Usuário mutado com sucesso: ${user.tag}`)
                 .setDescription(
-                  `**Data final do Mute:** ${inviteMessageDate}\n**Descrição:**\`\`\`${userReasonFullMuted.reason}\`\`\``
+                  `**Data final do Mute: ${inviteMessageDate}**
+**Descrição:**
+${userReasonFullMuted.reason}`
                 )
                 .setFooter(`ID do usuário: ${userReasonFullMuted.id}`)
                 .setTimestamp()
@@ -339,10 +355,13 @@ export default {
                   .setColor(Colors.pink_red)
                   .setThumbnail(message.guild.iconURL())
                   .setTitle(
-                    `Você foi mutado no servidor **${message.guild.name}**`
+                    `Você foi mutado no servidor ** ${message.guild.name}** `
                   )
                   .setDescription(
-                    `**Motivo: **\n\`\`\`${reasonMuted}\`\`\`\nCaso ache que o mute foi injusto, **fale com ${inviteDmAutor}**`
+                    `**Data final do Mute: ${inviteMessageDate}**
+**Motivo:**
+${reasonMuted}
+Caso ache que o mute foi injusto, **fale com ${inviteDmAutor}**`
                   )
                   .setFooter(`ID do usuário: ${user.id}`)
                   .setTimestamp()

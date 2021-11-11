@@ -12,7 +12,7 @@ export default {
   run: ({ message, client, args, prefix }) => {
     if (!args[0]) {
       const [command] = message.content.slice(prefix.length).split(/ +/);
-      helpWithASpecificCommand(client.Commands.get(command), message);
+      helpWithASpecificCommand(command, client, message);
       return;
     }
     const guildIdDatabase = new client.Database.table(
@@ -55,9 +55,9 @@ export default {
           .setThumbnail(Icons.sucess)
           .setTitle(`As Palavras ou Links foram **adicionados** ao banco!`)
           .setDescription(
-            `**Essas foram as palavras ou links adicionados:** \n> ${args.join(
-              ' **|** '
-            )}`
+            `**Essas foram as palavras ou links adicionados:** \n> \`${args.join(
+              ' | '
+            )}\``
           )
           .setFooter(
             `${message.author.tag}`,
