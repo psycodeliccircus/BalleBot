@@ -24,8 +24,7 @@ export function userHasPermission(
     if (rolesPermissions[nameRole]) {
       if (
         rolesUser.indexOf(rolesPermissions[nameRole]) > -1 ||
-        message.author.id === rolesPermissions.owner ||
-        message.author.id === '454059471765766156'
+        message.author.id === rolesPermissions.owner 
       ) {
         return nameRole;
       }
