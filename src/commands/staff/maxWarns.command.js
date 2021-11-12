@@ -5,9 +5,9 @@ import Colors from '../../utils/layoutEmbed/colors.js';
 export default {
   name: 'maxWarns',
   description: `comando setar uma quantidade de warn para banir um usuário do seu servidor, para isso use <prefix>setCountWarns <quantidade/2/3>`,
-  permissions: ['owner'],
+  permissions: ['staff'],
   aliases: ['setCountWarns', 'setWarnsCount', 'setCountWarnsToBan'],
-  category: 'Owner 🗡️',
+  category: 'Moderação ⚔️',
   run: ({ message, client, args, prefix }) => {
     function isNumber(n) {
       return /^-?[\d.]+(?:e-?\d+)?$/.test(n);

@@ -5,7 +5,7 @@ import Colors from '../../utils/layoutEmbed/colors.js';
 export default {
   name: 'setPrefix',
   description: `comando setar um prefixo customizado para seu servidor, para isso use <prefix>setPrefix <novo prefix>`,
-  permissions: ['everyone'],
+  permissions: ['staff'],
   aliases: ['prefix', 'addPrefix'],
   category: 'Acessórios ✨',
   run: ({ message, client, args, prefix }) => {

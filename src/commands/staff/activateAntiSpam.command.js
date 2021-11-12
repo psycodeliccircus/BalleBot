@@ -5,9 +5,9 @@ import Icons from '../../utils/layoutEmbed/iconsMessage.js';
 export default {
   name: 'activateAntiSpam',
   description: `Ative ou Desative sistema de AntiSpam e AntiFlood nos canais que o BalleBot tem acesso apenas mandando esse comando`,
-  permissions: ['owner'],
+  permissions: ['staff'],
   aliases: ['antiSpam', 'disableAntiSpam', 'activeAntiSpam'],
-  category: 'Owner 🗡️',
+  category: 'AntiSpam ⚠️',
   run: ({ message, client }) => {
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`

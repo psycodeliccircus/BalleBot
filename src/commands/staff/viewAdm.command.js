@@ -4,9 +4,9 @@ import Colors from '../../utils/layoutEmbed/colors.js';
 export default {
   name: 'viewAdm',
   description: `Para ver os cargos administrativos do seu servidor digite <prefix>viewAdm`,
-  permissions: ['owner'],
+  permissions: ['staff'],
   aliases: ['verAdm', 'adm'],
-  category: 'Owner 🗡️',
+  category: 'Moderação ⚔️',
   run: ({ message, client, prefix }) => {
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
