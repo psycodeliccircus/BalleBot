@@ -92,7 +92,11 @@ ${reason}
           const memberUser = client.guilds.cache
             .get(message.guild.id)
             .members.cache.get(user.id);
-
+          if (!memberUser) {
+            return message.channel.send(
+              'não encontrei o usuário no servidor, talvez ele não esteja entre nós'
+            );
+          }
           if (user.id === message.guild.me.id) {
             message.channel
               .send(
