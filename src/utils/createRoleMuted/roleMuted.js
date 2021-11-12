@@ -15,6 +15,7 @@ export async function roleMuted(event) {
       channel.updateOverwrite(muterole, {
         VIEW_MESSAGES: false,
         SEND_MESSAGES: false,
+        VIEW_CHANNEL: false,
       });
     });
   }
