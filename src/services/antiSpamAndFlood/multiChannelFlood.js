@@ -118,6 +118,10 @@ ${it[idUser].content}
                 {
                   name: 'Enviada no 3° canal :',
                   value: `#${listChannelsName[2]}`,
+                },
+                {
+                  name: 'Enviada no 4° canal :',
+                  value: `#${listChannelsName[3]}`,
                 }
               )
               .setFooter(`ID do usuário: ${message.author.id}`)
