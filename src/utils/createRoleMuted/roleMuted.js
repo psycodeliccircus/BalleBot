@@ -12,12 +12,10 @@ export async function roleMuted(event) {
     });
 
     event.guild.channels.cache.forEach(async (channel) => {
-      await channel.overwritePermissions([
-        {
-          id: muterole.id,
-          deny: ['SEND_MESSAGES', 'ADD_REACTIONS'],
-        },
-      ]);
+      channel.updateOverwrite(muterole, {
+        VIEW_MESSAGES: false,
+        SEND_MESSAGES: false,
+      });
     });
   }
 
