@@ -14,6 +14,6 @@ export function statusActivity(client) {
       client.user.setActivity(`${status[i++ % status.length]}`, {
         type: 'WATCHING',
       }),
-    5000
+    10000
   );
 }
