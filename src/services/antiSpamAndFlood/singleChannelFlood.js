@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import { muteUserInDatabase } from '../../commands/mods/management/mute.command.js';
+import { muteUserInDatabase } from '../../utils/createRoleMuted/roleMutedUserInDatabase.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
 export async function singleChannelFlood(client, message, it) {

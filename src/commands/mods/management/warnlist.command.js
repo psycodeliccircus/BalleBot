@@ -3,7 +3,7 @@ import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand
 import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
-import { userHasPermission } from '../../../events/client/message.event.js';
+import { userHasPermission } from '../../../utils/userHasPermission/userHasPermission.js';
 
 export default {
   name: 'warnlist',

@@ -1,4 +1,4 @@
-import { roleMuted } from '../../commands/mods/management/mute.command.js';
+import { roleMuted } from '../../utils/createRoleMuted/roleMuted.js';
 
 export async function checkIfItIsMutated(client, memberAdd) {
   const guildUndefinedMutated = new client.Database.table(
