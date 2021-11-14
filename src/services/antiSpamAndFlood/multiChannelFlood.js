@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
-export async function multiChannelFlood(client, message, it) {
+export async function multiChannelFlood(client, message, it, maxMessageRep) {
   const idUser = message.author.id;
 
   if (it[idUser]) {
@@ -34,7 +34,7 @@ export async function multiChannelFlood(client, message, it) {
               `**Usuário ${message.author.tag} mandou uma suspeita de Scam por enviar um Flood/Scam em VÁRIOS canais!**`
             )
             .setDescription(
-              `**O usuário enviou a seguinte mensagem 3 vezes em <#${it[idUser].lastChannel}>:**
+              `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
   ${it[idUser].content}
   **Eu não tenho permissão de banir o usuário, verifique antes que seja tarde e me dê permissão!`
             )
@@ -68,27 +68,13 @@ export async function multiChannelFlood(client, message, it) {
                 `**Usuário ${message.author.tag} Banido por enviar um Flood/Scam em VÁRIOS canais!**`
               )
               .setDescription(
-                `**O usuário enviou a seguinte mensagem 3 vezes em 3 chats:**
+                `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em ${maxMessageRep} chats:**
 ${it[idUser].content}`
               )
-              .addFields(
-                {
-                  name: 'Enviada no 1° canal :',
-                  value: `<#${it[idUser].idChannelRaid[0]}>`,
-                },
-                {
-                  name: 'Enviada no 2° canal :',
-                  value: `<#${it[idUser].idChannelRaid[1]}>`,
-                },
-                {
-                  name: 'Enviada no 3° canal :',
-                  value: `<#${it[idUser].idChannelRaid[2]}>`,
-                },
-                {
-                  name: 'Enviada no 4° canal :',
-                  value: `<#${it[idUser].idChannelRaid[3]}>`,
-                }
-              )
+              .addFields({
+                name: 'Enviada nos canais respectivos:',
+                value: `${it[idUser].idChannelRaid.join(' **|** ')}`,
+              })
               .setFooter(`ID do usuário: ${message.author.id}`)
               .setTimestamp()
           );
@@ -110,24 +96,10 @@ ${it[idUser].content}`
 ${it[idUser].content}
 \n**Fale com a administração do servidor para ser desbanido caso ache injusto**`
               )
-              .addFields(
-                {
-                  name: 'Enviada no 1° canal :',
-                  value: `#${listChannelsName[0]}`,
-                },
-                {
-                  name: 'Enviada no 2° canal :',
-                  value: `#${listChannelsName[1]}`,
-                },
-                {
-                  name: 'Enviada no 3° canal :',
-                  value: `#${listChannelsName[2]}`,
-                },
-                {
-                  name: 'Enviada no 4° canal :',
-                  value: `#${listChannelsName[3]}`,
-                }
-              )
+              .addFields({
+                name: 'Enviada nos canais respectivos:',
+                value: `${listChannelsName.join(' **|** ')}`,
+              })
               .setFooter(`ID do usuário: ${message.author.id}`)
               .setTimestamp()
           )
