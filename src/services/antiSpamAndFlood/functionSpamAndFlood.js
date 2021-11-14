@@ -2,7 +2,7 @@ import { multiChannelFlood } from './multiChannelFlood.js';
 import { singleChannelFlood } from './singleChannelFlood.js';
 
 const it = {};
-
+const maxMessageRep = 3;
 export async function antiSpamAndFlood(client, message) {
   const messageDate = new Date();
   const valueMaxTimeInSeconds = 15;
@@ -27,8 +27,8 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].idMessageRaid.push(message.id);
       it[idUser].countRaid++;
 
-      if (it[idUser].countRaid > 3) {
-        await multiChannelFlood(client, message, it);
+      if (it[idUser].countRaid > maxMessageRep) {
+        await multiChannelFlood(client, message, it, maxMessageRep);
 
         delete it[idUser];
         return;
@@ -47,8 +47,8 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].idFlood.push(message.id);
       it[idUser].countFlood++;
 
-      if (it[idUser].countFlood > 3) {
-        await singleChannelFlood(client, message, it);
+      if (it[idUser].countFlood > maxMessageRep) {
+        await singleChannelFlood(client, message, it, maxMessageRep);
 
         delete it[idUser];
       }

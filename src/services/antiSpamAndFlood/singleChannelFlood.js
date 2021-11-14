@@ -2,7 +2,7 @@ import Discord from 'discord.js';
 import { muteUserInDatabase } from '../../utils/createRoleMuted/roleMutedUserInDatabase.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
-export async function singleChannelFlood(client, message, it) {
+export async function singleChannelFlood(client, message, it, maxMessageRep) {
   const idUser = message.author.id;
   const reason = `Flood em Canais, supeita de spam pela mensagem:
 ${message.content}
@@ -42,7 +42,7 @@ ${message.content}
             `**Usuário ${message.author.tag} mutado por enviar um flood em UM canal!**`
           )
           .setDescription(
-            `**O usuário enviou a seguinte mensagem 3 vezes em <#${it[idUser].lastChannel}>:**
+            `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
 ${it[idUser].content}
 **Data final do Mute: ${inviteMessageDate}**`
           )
