@@ -91,7 +91,7 @@ export default {
             )
             .setTitle(`Não encontrei o usuário!`)
             .setDescription(
-              `**Tente usar**\`\`\`${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>\`\`\``
+              `**Tente usar**\n\`\`${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>\`\``
             )
             .setTimestamp()
         )

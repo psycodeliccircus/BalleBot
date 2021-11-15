@@ -28,7 +28,7 @@ export default {
           .setThumbnail(Icons.erro)
           .setTitle(`Não encontrei o usuário!`)
           .setDescription(
-            `**Tente usar**\`\`\`${prefix}baninfo <@Usuários/TAGs/Nomes/IDs/Citações>\`\`\``
+            `**Tente usar**\n\`\`${prefix}baninfo <@Usuários/TAGs/Nomes/IDs/Citações>\`\``
           )
           .setFooter(
             `${message.author.tag}`,
@@ -78,7 +78,7 @@ export default {
           .setThumbnail(user.displayAvatarURL({ dynamic: true }))
           .setTitle(`Informações sobre o banimento do usuário: ${user.tag} `)
           .setDescription(
-            `**Data: ** ${userDataBanned}\n**Descrição: ** \n${descriptionBan} \n`
+            `**Data: ${userDataBanned}**\n**Descrição: ** \n${descriptionBan} \n`
           )
           .setFooter(`ID do usuário: ${user.id}`)
           .setTimestamp()

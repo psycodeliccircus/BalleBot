@@ -27,11 +27,7 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].idMessageRaid.push(message.id);
       it[idUser].countRaid++;
 
-<<<<<<< HEAD
-      if (it[idUser].countRaid > maxMessageRep) {
-=======
-      if (it[idUser].countRaid > 3) {
->>>>>>> 04989e072c4acd55f45478f42097c060f6db6fbf
+      if (it[idUser].countRaid >= maxMessageRep) {
         await multiChannelFlood(client, message, it, maxMessageRep);
 
         delete it[idUser];
@@ -51,11 +47,7 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].idFlood.push(message.id);
       it[idUser].countFlood++;
 
-<<<<<<< HEAD
-      if (it[idUser].countFlood > maxMessageRep) {
-=======
-      if (it[idUser].countFlood > 3) {
->>>>>>> 04989e072c4acd55f45478f42097c060f6db6fbf
+      if (it[idUser].countFlood >= maxMessageRep) {
         await singleChannelFlood(client, message, it, maxMessageRep);
 
         delete it[idUser];
