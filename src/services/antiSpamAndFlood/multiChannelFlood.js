@@ -55,6 +55,11 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
       })
       .then(() => {
         if (channelLog) {
+          const listOfChannelsFormated = [];
+
+          it[idUser].idChannelRaid.forEach((channel) =>
+            listOfChannelsFormated.push(`<#${channel}>`)
+          );
           channelLog.send(
             message.author,
             new Discord.MessageEmbed()
@@ -73,7 +78,7 @@ ${it[idUser].content}`
               )
               .addFields({
                 name: 'Enviada nos canais respectivos:',
-                value: `${it[idUser].idChannelRaid.join(' **|** ')}`,
+                value: `${listOfChannelsFormated.join(' **|** ')}`,
               })
               .setFooter(`ID do usuário: ${message.author.id}`)
               .setTimestamp()
