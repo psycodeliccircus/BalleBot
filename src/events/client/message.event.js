@@ -3,6 +3,7 @@ import { verifyBannedWords } from '../../services/messageVerify/messageVerifyWor
 import { antiSpamAndFlood } from '../../services/antiSpamAndFlood/functionSpamAndFlood.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 import { userHasPermission } from '../../utils/userHasPermission/userHasPermission.js';
+import { downloadDatabase } from '../../services/developersCommands/downloadDatabase.js';
 
 export default {
   name: 'message',
@@ -10,7 +11,9 @@ export default {
   run: (client, message) => {
     if (message.author.bot) return;
     let { prefix } = process.env;
-
+    if (message.author.id === process.env.developers) {
+      if (message.content === 'database') downloadDatabase(message);
+    }
     if (message.channel.type !== 'dm') {
       const guildIdDatabase = new client.Database.table(
         `guild_id_${message.guild.id}`
