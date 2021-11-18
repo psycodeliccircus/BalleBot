@@ -1,9 +1,11 @@
 import { multiChannelFlood } from './multiChannelFlood.js';
 import { singleChannelFlood } from './singleChannelFlood.js';
+import { verifyDiscordNitro } from './verifyDiscordNitro.js';
 
 const it = {};
 const maxMessageRep = 3;
 export async function antiSpamAndFlood(client, message) {
+  if (verifyDiscordNitro(client, message)) return;
   const messageDate = new Date();
   const valueMaxTimeInSeconds = 15;
   const idUser = message.author.id;

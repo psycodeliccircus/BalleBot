@@ -32,7 +32,7 @@ export default {
           .setThumbnail(Icons.erro)
           .setTitle(`Não encontrei os usuários!`)
           .setDescription(
-            `**Tente usar**\`\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações <aviso 1>\`\`\``
+            `**Tente usar:\n\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações <aviso 1>\`\`**`
           )
           .setTimestamp()
       );
