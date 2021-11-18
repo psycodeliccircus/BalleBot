@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { confirmMessage } from './confirmMessage.js';
+import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
 import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';

@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { confirmMessage } from './confirmMessage.js';
+import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
@@ -9,7 +9,7 @@ import { muteUserInDatabase } from '../../../utils/createRoleMuted/roleMutedUser
 export default {
   name: 'mute',
   description: `<prefix>mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s> para mutar usuários`,
-  permissions: ['mods'],
+  permissions: ['padawans'],
   aliases: ['mutar', 'silenciar'],
   category: 'Moderação ⚔️',
   dm: false,

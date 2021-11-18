@@ -6,7 +6,7 @@ import Colors from '../../../utils/layoutEmbed/colors.js';
 export default {
   name: 'unmute',
   description: `<prefix>unmute @Usuários/TAGs/Nomes/IDs/Citações para desmutar usuários`,
-  permissions: ['mods'],
+  permissions: ['padawans'],
   aliases: ['tirarmute', 'desmutar', 'desmute'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {

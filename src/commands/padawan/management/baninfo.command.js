@@ -8,7 +8,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 export default {
   name: 'baninfo',
   description: `<prefix>baninfo @Usuários/TAGs/Nomes/IDs/Citações para saber o motivo de membros terem sidos banidos`,
-  permissions: ['mods'],
+  permissions: ['padawans'],
   aliases: ['verban', 'viewban', 'banuser', 'infoban'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {

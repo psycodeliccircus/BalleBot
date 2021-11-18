@@ -8,7 +8,7 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 export default {
   name: 'muteinfo',
   description: `<prefix>muteinfo @Usuários/TAGs/Nomes/IDs/Citações para saber o motivo de membros terem sidos banidos`,
-  permissions: ['mods'],
+  permissions: ['padawans'],
   aliases: ['vermute', 'viewmute', 'muteuser', 'infomute'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {

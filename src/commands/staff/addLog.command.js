@@ -1,12 +1,12 @@
 import Discord from 'discord.js';
-import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import { helpWithASpecificCommand } from '../everyone/comandosCommon/help.command.js';
+import Colors from '../../utils/layoutEmbed/colors.js';
+import Icons from '../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'addLog',
   description: `<prefix>addLog para adicionar o chat de report do bot`,
-  permissions: ['mods'],
+  permissions: ['staff'],
   aliases: ['addChannelLog', 'setlog', 'channellog'],
   category: 'AntiSpam ⚠️',
   run: ({ message, client, args, prefix }) => {

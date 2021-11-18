@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { confirmMessage } from './confirmMessage.js';
+import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
@@ -10,7 +10,7 @@ import { verifyWarnCountUser } from '../../../utils/verifyWarnCountUser/verifyWa
 export default {
   name: 'warn',
   description: `<prefix>warn @Usuários/TAGs/Nomes/IDs/Citações <motivo> para alertar e punir usuários`,
-  permissions: ['mods'],
+  permissions: ['padawans'],
   aliases: ['addwarn', 'advertencia', 'avisar'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {
