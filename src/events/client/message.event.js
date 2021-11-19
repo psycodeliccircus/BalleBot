@@ -47,7 +47,8 @@ export default {
     if (
       message.mentions.users.first() &&
       message.mentions.users.first().id === message.guild.me.id &&
-      message.content === `<@!${message.guild.me.id}>`
+      (message.content === `<@!${message.guild.me.id}>` ||
+        message.content === `<@${message.guild.me.id}>`)
     ) {
       message.channel.send(
         message.author,
