@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'viewAdm',

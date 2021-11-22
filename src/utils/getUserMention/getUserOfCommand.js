@@ -3,7 +3,7 @@ export async function getUserOfCommand(client, message, prefix) {
   const usersInMessage = [];
   const usersRegexRemoveMessage = [];
   const regexForRemoveMention =
-    /(<@!(?=[0-9]{18}))|(<@(?=[0-9]{18}))|((?<=[0-9]{18})>)|(<(?=[0-9]{18}))/g;
+    /(<@(!?)(?=[0-9]{18}))|((?<=[0-9]{18})>)|(<(?=[0-9]{18}))/g;
 
   const [, ...args] = message.content.split(/ +/);
   const usersBanneds = await message.guild.fetchBans();
@@ -75,7 +75,7 @@ export async function getUserOfCommand(client, message, prefix) {
         message.content.length
       );
   const removeUsersOfMessageRegex =
-    /(<@![0-9]{18}>)|(<@[0-9]{18}>)|(<[0-9]{18}>)/g;
+    /(<@(!?)[0-9]{18}>)|(<[0-9]{18}>)/g;
   const messageInvite = text
     .replace(removeUsersOfMessageRegex, '')
     .replace(regexUsers, '')

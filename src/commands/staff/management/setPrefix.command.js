@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
-import { helpWithASpecificCommand } from '../everyone/comandosCommon/help.command.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
+import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
   name: 'setPrefix',

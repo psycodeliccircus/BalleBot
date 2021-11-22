@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
-import Icons from '../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'activateAntiSpam',

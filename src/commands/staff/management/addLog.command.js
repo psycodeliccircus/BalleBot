@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
-import { helpWithASpecificCommand } from '../everyone/comandosCommon/help.command.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
-import Icons from '../../utils/layoutEmbed/iconsMessage.js';
+import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
+import Colors from '../../../utils/layoutEmbed/colors.js';
+import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'addLog',
@@ -19,7 +19,7 @@ export default {
       `guild_id_${message.guild.id}`
     );
 
-    const idChannelLog = args[0].replace('<#', '').replace('>', '');
+    const idChannelLog = args[0].replace(/(<#)|(>)/g, '');
 
     const channel = client.channels.cache.get(idChannelLog);
     if (!channel) {
