@@ -1,11 +1,11 @@
 export async function roleMuted(event) {
   let muterole = event.guild.roles.cache.find(
-    (muteroleObj) => muteroleObj.name === 'muted'
+    (muteroleObj) => muteroleObj.name === 'MutedBallebot'
   );
   if (!muterole) {
     muterole = await event.guild.roles.create({
       data: {
-        name: 'muted',
+        name: 'MutedBallebot',
         color: 'ligth_brown',
         permissions: [],
       },

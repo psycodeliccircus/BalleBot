@@ -73,7 +73,7 @@ export default {
         return;
       }
       const muterole = message.guild.roles.cache.find(
-        (muteroleObj) => muteroleObj.name === 'muted'
+        (muteroleObj) => muteroleObj.name === 'MutedBallebot'
       );
       const userHasRoleMuted = client.guilds.cache
         .get(message.guild.id)
