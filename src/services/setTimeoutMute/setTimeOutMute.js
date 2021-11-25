@@ -29,21 +29,17 @@ export function setIntervalRemoveMute(client) {
           guildIdDatabase.get('channel_log')
         );
 
-        if (channelLog) {
-          channelLog.send(
-            new Discord.MessageEmbed()
-              .setTitle(`Usuário foi desmutado após o tempo limite!`)
-              .setAuthor(
-                `${user.tag}`,
-                user.displayAvatarURL({ dynamic: true })
-              )
-              .setDescription(`**Descrição:**\n${userMuted.reason}`)
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-              .setColor(Colors.pink_red)
-              .setFooter(`ID do usuário : ${user.id}`)
-              .setTimestamp()
-          );
-        }
+        channelLog?.send(
+          new Discord.MessageEmbed()
+            .setTitle(`Usuário foi desmutado após o tempo limite!`)
+            .setAuthor(`${user.tag}`, user.displayAvatarURL({ dynamic: true }))
+            .setDescription(`**Descrição:**\n${userMuted.reason}`)
+            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setColor(Colors.pink_red)
+            .setFooter(`ID do usuário : ${user.id}`)
+            .setTimestamp()
+        );
+
         tableTemporarilyMutated.delete(
           `guild_id_${userMuted.guildId}_user_id_${userMuted.id}`
         );

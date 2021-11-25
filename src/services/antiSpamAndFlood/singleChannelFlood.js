@@ -28,28 +28,28 @@ ${message.content}
     const channelLog = client.channels.cache.get(
       guildIdDatabase.get('channel_log')
     );
-    if (channelLog) {
-      channelLog.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setTitle(
-            `**Usuário ${message.author.tag} mutado por enviar um flood em UM canal!**`
-          )
-          .setDescription(
-            `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
+
+    channelLog?.send(
+      message.author,
+      new Discord.MessageEmbed()
+        .setColor(Colors.pink_red)
+        .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+        .setAuthor(
+          message.author.tag,
+          message.author.displayAvatarURL({ dynamic: true })
+        )
+        .setTitle(
+          `**Usuário ${message.author.tag} mutado por enviar um flood em UM canal!**`
+        )
+        .setDescription(
+          `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
 ${it[idUser].content}
 **Data final do Mute: ${inviteMessageDate}**`
-          )
-          .setFooter(`ID do usuário: ${message.author.id}`)
-          .setTimestamp()
-      );
-    }
+        )
+        .setFooter(`ID do usuário: ${message.author.id}`)
+        .setTimestamp()
+    );
+
     message.author
       .send(
         new Discord.MessageEmbed()
@@ -67,23 +67,21 @@ ${it[idUser].content}
           .setTimestamp()
       )
       .catch(() => {
-        if (channelLog) {
-          channelLog.send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setTitle(
-                `Não foi possível avisar na DM do usuário mutado ${message.author.tag}!`
-              )
-              .setFooter(`ID do usuário: ${message.author.id}`)
-              .setTimestamp()
-          );
-        }
+        channelLog?.send(
+          message.author,
+          new Discord.MessageEmbed()
+            .setColor(Colors.pink_red)
+            .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+            .setAuthor(
+              message.author.tag,
+              message.author.displayAvatarURL({ dynamic: true })
+            )
+            .setTitle(
+              `Não foi possível avisar na DM do usuário mutado ${message.author.tag}!`
+            )
+            .setFooter(`ID do usuário: ${message.author.id}`)
+            .setTimestamp()
+        );
       });
   }
 }
