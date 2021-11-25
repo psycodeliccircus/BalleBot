@@ -31,7 +31,7 @@ export async function recaptcha(client, memberAdd) {
 
     await userMember.roles.add(noobrole.id);
 
-    const channelName = `Recaptcha_${memberAdd.user.tag}`;
+    const channelName = `Verifique aqui!`;
     const channel = await memberAdd.guild.channels.create(channelName, {
       type: 'text',
       permissionOverwrites: [
