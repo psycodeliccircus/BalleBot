@@ -1,7 +1,6 @@
 import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
-import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
@@ -175,36 +174,6 @@ ${reason}
                — Data: ${message.createdAt.toISOString()} — Motivo: ${reason}`,
             })
             .then(() => {
-              const guildIdDatabase = new client.Database.table(
-                `guild_id_${message.guild.id}`
-              );
-
-              function messageForChannelLog() {
-                const dateMessage = message.createdAt.toISOString();
-                const dataConvert = parseDateForDiscord(dateMessage);
-
-                const dateForMessage = `${dataConvert}`;
-
-                return new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.sucess)
-                  .setTitle(`O usuário ${user.tag} foi banido!`)
-                  .setDescription(
-                    `**Punido por: ${message.author}**\n**Data: ${dateForMessage}**\n**Motivo: **\n${reason}`
-                  )
-                  .setFooter(`ID do usuário: ${user.id}`)
-                  .setTimestamp();
-              }
-              const channelLog = client.channels.cache.get(
-                guildIdDatabase.get('channel_log')
-              );
-              if (channelLog) {
-                channelLog.send(message.author, messageForChannelLog());
-              } else {
-                message.channel
-                  .send(message.author, messageForChannelLog())
-                  .then((msg) => msg.delete({ timeout: 15000 }));
-              }
               const inviteDmAutor =
                 res === 'anonimo' ? 'a administração' : message.author;
               user
@@ -236,6 +205,11 @@ ${reason}
                       )
                   )
                 );
+            })
+            .catch(() => {
+              message.channel.send(
+                'Dê um motivo que tenha menos de 512 caracteres'
+              );
             });
         });
       }

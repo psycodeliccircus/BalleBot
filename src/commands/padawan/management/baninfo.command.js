@@ -71,18 +71,30 @@ export default {
         ? userBanned.reason.replace(' — Data: ', '').replace(dataValidation, '')
         : '<Descrição ou motivo não especificado>';
 
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-          .setTitle(`Informações sobre o banimento do usuário: ${user.tag} `)
-          .setDescription(
-            `**Data: ${userDataBanned}**\n**Descrição: ** \n${descriptionBan} \n`
-          )
-          .setFooter(`ID do usuário: ${user.id}`)
-          .setTimestamp()
-      );
+      message.channel
+        .send(
+          message.author,
+          new Discord.MessageEmbed()
+            .setColor(Colors.pink_red)
+            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setTitle(`Informações sobre o banimento do usuário: ${user.tag} `)
+            .setDescription(
+              `**Data: ${userDataBanned}**\n**Descrição: ** \n${descriptionBan} \n`
+            )
+            .setFooter(`ID do usuário: ${user.id}`)
+            .setTimestamp()
+        )
+        .catch(() => {
+          const buffer = Buffer.from(textDataTest);
+          const attachment = new Discord.MessageAttachment(
+            buffer,
+            `ban_of_${user.tag}.txt`
+          );
+          message.channel.send(
+            `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+            attachment
+          );
+        });
     });
   },
 };

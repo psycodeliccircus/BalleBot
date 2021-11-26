@@ -154,7 +154,17 @@ ${reason}
               .setTimestamp();
           }
           if (channelLog) {
-            channelLog.send(message.author, messageSucess());
+            channelLog.send(message.author, messageSucess()).catch(() => {
+              const buffer = Buffer.from(reason);
+              const attachment = new Discord.MessageAttachment(
+                buffer,
+                `ban_of_${user.tag}.txt`
+              );
+              message.channel.send(
+                `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+                attachment
+              );
+            });
           } else {
             message.channel
               .send(message.author, messageSucess())

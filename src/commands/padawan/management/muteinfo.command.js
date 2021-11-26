@@ -85,22 +85,34 @@ export default {
           ? parseDateForDiscord(userMuted.dateMuted)
           : '`<indefinida>`';
 
-        message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(`Informações sobre o mute do usuário: ${user.tag} `)
-            .setDescription(
-              `**Data final do Mute:** ${dataForMessage}\n**Descrição:**\`\`\`${userMuted.reason}\`\`\``
-            )
-            .setFooter(`ID do usuário: ${userMuted.id}`)
-            .setTimestamp()
-        );
+        message.channel
+          .send(
+            message.author,
+            new Discord.MessageEmbed()
+              .setColor(Colors.pink_red)
+              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+              .setAuthor(
+                message.author.tag,
+                message.author.displayAvatarURL({ dynamic: true })
+              )
+              .setTitle(`Informações sobre o mute do usuário: ${user.tag} `)
+              .setDescription(
+                `**Data final do Mute:** ${dataForMessage}\n**Descrição:**\`\`\`${userMuted.reason}\`\`\``
+              )
+              .setFooter(`ID do usuário: ${userMuted.id}`)
+              .setTimestamp()
+          )
+          .catch(() => {
+            const buffer = Buffer.from(userMuted.reason);
+            const attachment = new Discord.MessageAttachment(
+              buffer,
+              `ban_of_${user.tag}.txt`
+            );
+            message.channel.send(
+              `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+              attachment
+            );
+          });
         return;
       }
       if (guildUndefinedMutated.has(`user_id_${user.id}`)) {
