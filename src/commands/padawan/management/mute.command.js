@@ -6,6 +6,8 @@ import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import { muteUserInDatabase } from '../../../utils/createRoleMuted/roleMutedUserInDatabase.js';
 
+import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
+
 export default {
   name: 'mute',
   description: `<prefix>mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s> para mutar usuários`,
@@ -100,8 +102,15 @@ export default {
     }
     const textMessage = restOfMessage || '<Motivo não especificado>';
     const timeValidation = /(\d+d)|(\d+h)|(\d+m)|(\d+s)/gi;
-    const reasonMuted =
-      `${textMessage.replace(timeValidation, '').trim()}` || '<invalido>';
+    let reasonMuted =
+      `${textMessage.replace(timeValidation, '').trim()}` ||
+      '<Motivo não especificado>';
+
+    const anexo = message.attachments.map((anex) => anex.url);
+
+    if (anexo.length > 0) {
+      reasonMuted += `\n**Arquivo anexado:** ${anexo}`;
+    }
 
     const messageAnt = await message.channel.send(
       new Discord.MessageEmbed()
@@ -218,9 +227,26 @@ ${reasonMuted}
               )
               .then((msg) => msg.delete({ timeout: 15000 }));
           } else {
-            const { userReasonFullMuted, inviteMessageDate } =
-              await muteUserInDatabase(client, message, restOfMessage, user);
+            let messageReasonMuted =
+              restOfMessage || '<Motivo não especificado>';
+            if (message.attachments.some((anex) => anex.url)) {
+              const urlUpload = await uploadImage(message);
+              if (urlUpload) {
+                messageReasonMuted += `\n**Arquivo anexado**: ${urlUpload}`;
+              }
+            }
 
+            const { userReasonFullMuted, inviteMessageDate } =
+              await muteUserInDatabase(
+                client,
+                message,
+                messageReasonMuted,
+                user
+              );
+            const description = userReasonFullMuted.reason.replace(
+              /((Punido por )(.*)\n)|(— Motivo: )/g,
+              ''
+            );
             message.channel.send(
               message.author,
               new Discord.MessageEmbed()
@@ -233,8 +259,8 @@ ${reasonMuted}
                 .setTitle(`Usuário mutado com sucesso: ${user.tag}`)
                 .setDescription(
                   `**Data final do Mute: ${inviteMessageDate}**
-**Descrição:**
-${userReasonFullMuted.reason}`
+**Punido por:** ${message.author}
+**Descrição**: ${description}`
                 )
                 .setFooter(`ID do usuário: ${userReasonFullMuted.id}`)
                 .setTimestamp()

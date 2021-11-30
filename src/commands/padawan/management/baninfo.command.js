@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
@@ -60,15 +61,27 @@ export default {
       const userBanned = usersBanneds.find((x) => x.user.id === user.id);
       const dataValidation =
         /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z/;
+      const autorValidation = /(Punido por )(.*)\n/;
 
-      const textDataTest = userBanned.reason;
+      const reasonFull = userBanned.reason;
 
-      const userDataBanned = dataValidation.test(textDataTest)
-        ? parseDateForDiscord(textDataTest.match(dataValidation)[0])
+      const userDataBanned = dataValidation.test(reasonFull)
+        ? parseDateForDiscord(reasonFull.match(dataValidation)[0])
         : '`<Data não especificada, utilize o ballebot sempre que for banir para ter essa função>`';
 
+      const userAutorBanned = autorValidation.test(reasonFull)
+        ? reasonFull
+          .match(autorValidation)[0]
+          .replace(/(Punido por )|(\n)/g, '')
+          .replace(/(\d{18})/, `<@$1>`)
+        : `<sem autor>`;
+
       const descriptionBan = userBanned.reason
-        ? userBanned.reason.replace(' — Data: ', '').replace(dataValidation, '')
+        ? userBanned.reason
+          .replace(' — Data: ', '')
+          .replace(dataValidation, '')
+          .replace(autorValidation, '')
+          .replace('— Motivo: ', '')
         : '<Descrição ou motivo não especificado>';
 
       message.channel
@@ -79,13 +92,13 @@ export default {
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))
             .setTitle(`Informações sobre o banimento do usuário: ${user.tag} `)
             .setDescription(
-              `**Data: ${userDataBanned}**\n**Descrição: ** \n${descriptionBan} \n`
+              `**Data: ${userDataBanned}**\n**Punido por: ${userAutorBanned}**\n**Motivo: **${descriptionBan} \n`
             )
             .setFooter(`ID do usuário: ${user.id}`)
             .setTimestamp()
         )
         .catch(() => {
-          const buffer = Buffer.from(textDataTest);
+          const buffer = Buffer.from(reasonFull);
           const attachment = new Discord.MessageAttachment(
             buffer,
             `ban_of_${user.tag}.txt`

@@ -20,7 +20,7 @@ export default {
       return;
     }
 
-    if (users === undefined) {
+    if (!users) {
       message.channel
         .send(
           message.author,
@@ -83,8 +83,23 @@ export default {
       if (userHasRoleMuted) {
         const dataForMessage = userMuted.dateMuted
           ? parseDateForDiscord(userMuted.dateMuted)
-          : '`<indefinida>`';
+          : '`<indefinido>`';
 
+        const authorValidation = /(Punido por )(.*)\n/;
+        const authorOfMute = authorValidation.test(userMuted.reason)
+          ? userMuted.reason
+            .match(authorValidation)[0]
+            .replace(/(Punido por )|(\n)/g, '')
+            .replace(/(\d{18})/, `<@$1>`)
+          : `<sem autor>`;
+
+        const descriptionMute = userMuted.reason
+          ? userMuted.reason
+            .replace(authorValidation, '')
+            .replace('— Motivo: ', '')
+          : '<Descrição ou motivo não especificado>';
+
+        const inviteMessage = `**Data final do mute: ${dataForMessage}**\n**Punido por: ${authorOfMute}**\n**Motivo: **${descriptionMute} \n`;
         message.channel
           .send(
             message.author,
@@ -96,14 +111,12 @@ export default {
                 message.author.displayAvatarURL({ dynamic: true })
               )
               .setTitle(`Informações sobre o mute do usuário: ${user.tag} `)
-              .setDescription(
-                `**Data final do Mute:** ${dataForMessage}\n**Descrição:**\`\`\`${userMuted.reason}\`\`\``
-              )
+              .setDescription(inviteMessage)
               .setFooter(`ID do usuário: ${userMuted.id}`)
               .setTimestamp()
           )
           .catch(() => {
-            const buffer = Buffer.from(userMuted.reason);
+            const buffer = Buffer.from(inviteMessage);
             const attachment = new Discord.MessageAttachment(
               buffer,
               `ban_of_${user.tag}.txt`

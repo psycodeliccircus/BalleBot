@@ -4,6 +4,7 @@ import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js'
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
+import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
 
 export default {
   name: 'ban',
@@ -144,7 +145,7 @@ ${reason}
             .get(message.guild.id)
             .members.cache.get(user.id);
           if (
-            memberUser.roles.highest.position >=
+            memberUser?.roles.highest.position >=
             message.guild.me.roles.highest.position
           ) {
             message.channel
@@ -168,10 +169,18 @@ ${reason}
               .then((msg) => msg.delete({ timeout: 15000 }));
             return;
           }
+          let reasonOfBan = `${restOfMessage}` || '<Motivo não especificado>';
+          if (message.attachments.some((anex) => anex.url)) {
+            const urlUpload = await uploadImage(message);
+            if (urlUpload) {
+              reasonOfBan += `\n**Arquivo anexado**: ${urlUpload}`;
+            }
+          }
+
           await message.guild.members
             .ban(user, {
               reason: `Punido por ${message.author.tag} | ${message.author.id}
-               — Data: ${message.createdAt.toISOString()} — Motivo: ${reason}`,
+               — Data: ${message.createdAt.toISOString()} — Motivo: ${reasonOfBan}`,
             })
             .then(() => {
               const inviteDmAutor =
@@ -185,7 +194,7 @@ ${reason}
                       `Você foi banido do servidor **${message.guild.name}**`
                     )
                     .setDescription(
-                      `**Motivo: **\n${reason}\nCaso ache que o banimento foi injusto, **fale com ${inviteDmAutor}**`
+                      `**Motivo: **\n${reason}\nCaso ache que o banimento foi injusto, **fale com ${inviteDmAutor.tag}**`
                     )
                     .setFooter(`ID do usuário: ${user.id}`)
                     .setTimestamp()
