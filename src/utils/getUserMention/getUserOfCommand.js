@@ -28,18 +28,20 @@ export async function getUserOfCommand(client, message, prefix) {
       let userPush;
       try {
         userPush =
-          client.users.cache.find(
-            (u) =>
-              u.tag === stringSearchUser[0] ||
-              u.id === stringSearchUser[0] ||
-              u.username === stringSearchUser[0]
-          ) ||
+          client.guilds.cache
+            .get(message.guild.id)
+            .members.cache.find(
+              (u) => u.user.tag === stringSearchUser[0] ||
+                u.user.id === stringSearchUser[0] ||
+                u.user.username === stringSearchUser[0]
+
+            )?.user ||
           usersBanneds.find(
             (userbanned) =>
               userbanned.user.tag === stringSearchUser[0] ||
               userbanned.user.id === stringSearchUser[0] ||
               userbanned.user.username === stringSearchUser[0]
-          ).user;
+          )?.user;
         // eslint-disable-next-line no-empty
       } catch (e) { }
 
