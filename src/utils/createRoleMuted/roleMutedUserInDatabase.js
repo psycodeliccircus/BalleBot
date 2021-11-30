@@ -34,7 +34,7 @@ export async function muteUserInDatabase(client, event, reason, userMutated) {
     );
   }
 
-  const muterole = await roleMuted(event);
+  const muterole = await roleMuted(event, 'MutedBallebot');
   guildIdDatabase.set('roleMutedId', muterole.id);
 
   const tableTemporarilyMutated = new client.Database.table(

@@ -10,7 +10,7 @@ export async function checkIfItIsMutated(client, memberAdd) {
   const tableTemporarilyMutated = new client.Database.table(
     `tableTemporarilyMutated`
   );
-  const muterole = await roleMuted(memberAdd);
+  const muterole = await roleMuted(memberAdd, 'MutedBallebot');
   guildIdDatabase.set('roleMutedId', muterole.id);
 
   guildIdDatabase.set('roleMutedId', muterole.id);

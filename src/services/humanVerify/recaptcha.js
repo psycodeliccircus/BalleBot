@@ -23,7 +23,7 @@ export async function recaptcha(client, memberAdd) {
 
   const activeRecaptcha = guildIdDatabase.get('recaptcha');
   if (activeRecaptcha) {
-    const noobrole = await roleMuted(memberAdd);
+    const noobrole = await roleMuted(memberAdd, 'notVerified');
 
     const userMember = client.guilds.cache
       .get(memberAdd.guild.id)
