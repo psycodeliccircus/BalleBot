@@ -18,7 +18,7 @@ export function setIntervalRemoveMute(client) {
         const userMember = client.guilds.cache
           .get(userMuted.guildId)
           .members.cache.get(userMuted.id);
-        userMember.roles.remove(userMuted.roleId);
+        userMember?.roles.remove(userMuted.roleId);
 
         const user = client.users.cache.get(userMuted.id);
         const guildIdDatabase = new client.Database.table(
