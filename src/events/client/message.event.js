@@ -10,6 +10,7 @@ export default {
   once: false,
   run: (client, message) => {
     if (message.author.bot) return;
+    if (message.content === '') return;
     let { prefix } = process.env;
     if (message.author.id === process.env.developers) {
       if (message.content === 'database') downloadDatabase(message);
