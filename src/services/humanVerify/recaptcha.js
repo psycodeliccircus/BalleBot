@@ -65,7 +65,7 @@ export async function recaptcha(client, memberAdd) {
             color: Colors.pink_red,
             title: `Escreva o código de 5 caracteres abaixo no chat para confirmar que você é um humano! :eyes:`,
             timestamp: new Date(),
-            image: 'attachment://image.png',
+            image: { url: 'attachment://image.png' },
           },
         ],
         files: [
