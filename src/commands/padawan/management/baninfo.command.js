@@ -22,41 +22,38 @@ export default {
     }
 
     if (users === undefined) {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(Icons.erro)
-          .setTitle(`Não encontrei o usuário!`)
-          .setDescription(
-            `**Tente usar**\n\`\`${prefix}baninfo <@Usuários/TAGs/Nomes/IDs/Citações>\`\``
-          )
-          .setFooter(
-            `${message.author.tag}`,
-            `${message.author.displayAvatarURL({ dynamic: true })}`
-          )
-          .setTimestamp()
-      );
-      return;
+      return message.channel.send({
+        content: `${message.author}`,
+        embeds: [{
+          color: Colors.pink_red,
+          thumbnail: Icons.erro,
+          title: `Não encontrei o usuário!`,
+          description: `**Tente usar**\n\`\`${prefix}baninfo <@Usuários/TAGs/Nomes/IDs/Citações>\`\``,
+          footer: {
+            text: message.author.tag,
+            icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`
+          },
+          timestamp: new Date()
+        }]
+      });
     }
+
     const usersBanneds = await message.guild.fetchBans();
     users.forEach(async (user) => {
       if (!usersBanneds.some((x) => x.user.id === user.id)) {
-        message.channel.send(
-          new Discord.MessageEmbed()
-            .setTitle(`O usuário ${user.tag} não está banido!`)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setColor(Colors.pink_red)
-            .setDescription(
-              `**Para banir usuários use:\n\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`**`
-            )
-            .setTimestamp()
-        );
-        return;
+        return message.channel.send({
+          embeds: [{
+            title: `O usuário ${user.tag} não está banido!`,
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true })
+            },
+            thumbnail: user.displayAvatarURL({ dynamic: true }),
+            color: Colors.pink_red,
+            description: `**Para banir usuários use:\n\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`**`,
+            timestamp: new Date()
+          }]
+        });
       }
       const userBanned = usersBanneds.find((x) => x.user.id === user.id);
       const dataValidation =
@@ -85,28 +82,27 @@ export default {
         : '<Descrição ou motivo não especificado>';
 
       message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setTitle(`Informações sobre o banimento do usuário: ${user.tag} `)
-            .setDescription(
-              `**Data: ${userDataBanned}**\n**Punido por: ${userAutorBanned}**\n**Motivo: **${descriptionBan} \n`
-            )
-            .setFooter(`ID do usuário: ${user.id}`)
-            .setTimestamp()
-        )
+        .send({
+          content: `${message.author}`,
+          embeds: [{
+            color: Colors.pink_red,
+            thumbnail: user.displayAvatarURL({ dynamic: true }),
+            title: `Informações sobre o banimento do usuário: ${user.tag} `,
+            description: `**Data: ${userDataBanned}**\n**Punido por: ${userAutorBanned}**\n**Motivo: **${descriptionBan} \n`,
+            footer: { text: `ID do usuário: ${user.id}` },
+            timestamp: new Date()
+          }]
+        })
         .catch(() => {
           const buffer = Buffer.from(reasonFull);
           const attachment = new Discord.MessageAttachment(
             buffer,
             `ban_of_${user.tag}.txt`
           );
-          message.channel.send(
-            `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
-            attachment
-          );
+          message.channel.send({
+            content: `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+            files: [attachment]
+          });
         });
     });
   },

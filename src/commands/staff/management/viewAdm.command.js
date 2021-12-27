@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 
 export default {
@@ -20,22 +19,23 @@ export default {
       permissions[role] = serverMember.roles.cache.get(permissions[role]);
     }
 
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Esses são os cargos Administrativos:`)
-        .setTimestamp()
-        .setDescription(
-          `**Para atualizar os cargos use ${prefix}setAdm @padawan @mods @staff.**
-            \nCada cargo possui acesso a comandos de acordo com sua hierarquia, para saber se um cargo pode usar um comando use ${prefix}help <comando>`
-        )
-        .addFields(
-          { name: 'Padawan', value: permissions.padawans, inline: true },
-          { name: 'Mods', value: permissions.mods, inline: true },
-          { name: 'Staff', value: permissions.staff, inline: true }
-        )
-    );
+    message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.pink_red,
+          thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+          title: `Esses são os cargos Administrativos:`,
+          timestamp: new Date(),
+          description: `**Para atualizar os cargos use ${prefix}setAdm @padawan @mods @staff.**
+            \nCada cargo possui acesso a comandos de acordo com sua hierarquia, para saber se um cargo pode usar um comando use ${prefix}help <comando>`,
+          fields: [
+            { name: 'Padawan', value: permissions.padawans, inline: true },
+            { name: 'Mods', value: permissions.mods, inline: true },
+            { name: 'Staff', value: permissions.staff, inline: true },
+          ],
+        },
+      ],
+    });
   },
 };

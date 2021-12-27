@@ -16,24 +16,24 @@ export default {
     users = !users && !args[0] ? [message.author] : users;
 
     if (!users) {
-      message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setThumbnail(Icons.erro)
-            .setTitle(`Não encontrei os usuários!`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}warnlist @Usuários/TAGs/Nomes/IDs/Citações\`\`\``
-            )
-            .setTimestamp()
-        )
+      return message.channel
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              thumbnail: Icons.erro,
+              title: `Não encontrei os usuários!`,
+              description: `**Tente usar**\`\`\`${prefix}warnlist @Usuários/TAGs/Nomes/IDs/Citações\`\`\``,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
     const permissionRequired = 'mods';
     const { userHasPermissionOf } = userHasPermission(
@@ -74,56 +74,63 @@ ${current}\n\n`,
                 buffer,
                 `warnlist_of_${user.tag}.txt`
               );
-              message.channel.send(
-                `${message.author} O usuário possui muitos aviso e por esse motivo enviei um arquivo para você ver todos eles`,
-                attachment
-              );
+              message.channel.send({
+                content: `${message.author} O usuário possui muitos aviso e por esse motivo enviei um arquivo para você ver todos eles`,
+                files: [attachment],
+              });
             } else {
-              message.channel.send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setTitle(`Lista de warns do usuário ${user.tag}`)
-                  .setDescription(messageCommands)
-                  .setFooter(`ID do usuário: ${user.id}`)
-                  .setTimestamp()
-              );
+              message.channel.send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: user.displayAvatarURL({ dynamic: true }),
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    title: `Lista de warns do usuário ${user.tag}`,
+                    description: messageCommands,
+                    footer: { text: `ID do usuário: ${user.id}` },
+                    timestamp: new Date(),
+                  },
+                ],
+              });
             }
             return;
           }
         }
-        message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setFooter(`ID do usuário: ${user.id}`)
-            .setTitle(`O Usuário ${user.tag} não possui avisos`)
-            .setTimestamp()
-        );
+        message.channel.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              footer: { text: `ID do usuário: ${user.id}` },
+              title: `O Usuário ${user.tag} não possui avisos`,
+              timestamp: new Date(),
+            },
+          ],
+        });
       });
     } else {
       message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setTitle(
-              `Hey, você não tem permissão de ver avisos de outros membros :(`
-            )
-            .setDescription(
-              `**Apenas ${permissionRequired} possuem permissão para usar esse comando com outros membros**`
-            )
-        )
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              title: `Hey, você não tem permissão de ver avisos de outros membros :(`,
+              description: `**Apenas ${permissionRequired} possuem permissão para usar esse comando com outros membros**`,
+            },
+          ],
+        })
         .then((msg) => {
           msg.delete({ timeout: 15000 });
         });

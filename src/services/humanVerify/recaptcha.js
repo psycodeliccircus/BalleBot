@@ -1,5 +1,4 @@
 import jimp from 'jimp';
-import Discord from 'discord.js';
 import { roleMuted } from '../../utils/createRoleMuted/roleMuted.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
@@ -59,17 +58,23 @@ export async function recaptcha(client, memberAdd) {
       .composite(line, 0, 100);
 
     fundo.getBuffer(jimp.MIME_PNG, async (err, buffer) => {
-      await channel.send(
-        memberAdd.user,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setTitle(
-            `Escreva o código de 5 caracteres abaixo no chat para confirmar que você é um humano! :eyes:`
-          )
-          .attachFiles([{ name: 'image.png', attachment: buffer }])
-          .setTimestamp()
-          .setImage('attachment://image.png')
-      );
+      await channel.send({
+        content: `${memberAdd.user}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            title: `Escreva o código de 5 caracteres abaixo no chat para confirmar que você é um humano! :eyes:`,
+            timestamp: new Date(),
+            image: 'attachment://image.png',
+          },
+        ],
+        files: [
+          {
+            name: 'image.png',
+            attachment: buffer,
+          },
+        ],
+      });
     });
 
     const filter = (m) => m.author.id === memberAdd.user.id;
@@ -87,18 +92,19 @@ export async function recaptcha(client, memberAdd) {
         const channelLog = client.channels.cache.get(
           guildIdDatabase.get('channel_log')
         );
-        channelLog?.send(
-          userMember,
-          new Discord.MessageEmbed()
-            .setTitle(
-              `O usuário ${userMember.user.tag} confirmou que é um humano e entrou no servidor!`
-            )
-            .setDescription(`**Código verificado: ${idVerification}**`)
-            .setColor(Colors.pink_red)
-            .setThumbnail(userMember.user.displayAvatarURL({ dynamic: true }))
-            .setFooter(`ID do usuário: ${userMember.user.id}`)
-            .setTimestamp()
-        );
+        channelLog?.send({
+          content: `${userMember}`,
+          embeds: [
+            {
+              title: `O usuário ${userMember.user.tag} confirmou que é um humano e entrou no servidor!`,
+              description: `**Código verificado: ${idVerification}**`,
+              color: Colors.pink_red,
+              thumbnail: userMember.user.displayAvatarURL({ dynamic: true }),
+              footer: { text: `ID do usuário: ${userMember.user.id}` },
+              timestamp: new Date(),
+            },
+          ],
+        });
       }
     });
 

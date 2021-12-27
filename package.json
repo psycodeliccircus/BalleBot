@@ -1,10 +1,10 @@
 {
   "name": "ballebot",
-  "version": "0.0.1",
+  "version": "2.0.1",
   "main": "src/index.js",
   "type": "module",
   "repository": "https://github.com/Ballerini-Server/BalleBot.git",
-  "author": "rafaballerini <rafaella_ballerini@hotmail.com>",
+  "author": "Tauz tauasantops@gmail.com",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js",
@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.4.0",
     "dotenv": "^10.0.0",
     "imgur": "^1.0.2",
     "imgur-upload": "^0.1.2",

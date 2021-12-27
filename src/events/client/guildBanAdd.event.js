@@ -37,18 +37,17 @@ export default {
       : '<Descrição ou motivo não especificado>';
 
 
-    channelLog?.send(
-      user,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`Usuário ${user.tag} foi banido!`)
-        .setDescription(
-          `**Data: ${userDataBanned}**\n**Punido por: ${userAutorBanned}**\n**Motivo: **${descriptionBan} \n`
-        )
-        .setFooter(`ID do usuário: ${user.id}`)
-        .setTimestamp()
-    ).catch(() => {
+    channelLog?.send({
+      content: `${user}`,
+      embeds: [{
+        color: Colors.pink_red,
+        thumbnail: user.displayAvatarURL({ dynamic: true }),
+        title: `Usuário ${user.tag} foi banido!`,
+        description: `**Data: ${userDataBanned}**\n**Punido por: ${userAutorBanned}**\n**Motivo: **${descriptionBan} \n`,
+        footer: `ID do usuário: ${user.id}`,
+        timestamp: new Date()
+      }]
+    }).catch(() => {
 
       const buffer = Buffer.from(
         reasonFull
@@ -57,10 +56,10 @@ export default {
         buffer,
         `ban_of_${user.tag}.txt`
       );
-      channelLog?.send(
-        `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
-        attachment
-      );
+      channelLog?.send({
+        content: `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+        files: [attachment]
+      });
     });
 
   },

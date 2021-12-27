@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
@@ -20,23 +19,22 @@ export default {
     );
 
     if (!guildIdDatabase.has('channel_log')) {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(Icons.chat)
-          .setTitle(
-            `O seu servidor não possui um chat log para usar esse recurso!`
-          )
-          .setDescription(
-            `> Use **${prefix}addlog <#chat/ID>** para adicionar o canal de **configurações**!`
-          )
-          .setFooter(
-            `${message.author.tag}`,
-            `${message.author.displayAvatarURL({ dynamic: true })}`
-          )
-          .setTimestamp()
-      );
+      message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: Icons.chat,
+            title: `O seu servidor não possui um chat log para usar esse recurso!`,
+            description: `> Use **${prefix}addlog <#chat/ID>** para adicionar o canal de **configurações**!`,
+            footer: {
+              text: `${message.author.tag}`,
+              icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+            },
+            timestamp: new Date(),
+          },
+        ],
+      });
       return;
     }
 
@@ -48,23 +46,24 @@ export default {
     }
 
     function messageSucess() {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(Icons.sucess)
-          .setTitle(`As Palavras ou Links foram **adicionados** ao banco!`)
-          .setDescription(
-            `**Essas foram as palavras ou links adicionados:** \n> \`${args.join(
+      message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: Icons.sucess,
+            title: `As Palavras ou Links foram **adicionados** ao banco!`,
+            description: `**Essas foram as palavras ou links adicionados:** \n> \`${args.join(
               ' | '
-            )}\``
-          )
-          .setFooter(
-            `${message.author.tag}`,
-            `${message.author.displayAvatarURL({ dynamic: true })}`
-          )
-          .setTimestamp()
-      );
+            )}\``,
+            footer: {
+              text: `${message.author.tag}`,
+              icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+            },
+            timestamp: new Date(),
+          },
+        ],
+      });
     }
     if (guildIdDatabase.has('listOfWordsBanned')) {
       const listRegexInDatabase = guildIdDatabase.get('listOfWordsBanned');

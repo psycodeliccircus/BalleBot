@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
@@ -21,37 +20,36 @@ export default {
     }
 
     if (!users) {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setThumbnail(Icons.erro)
-          .setTitle(`Não encontrei os usuários!`)
-          .setDescription(
-            `**Tente usar:\n\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações <aviso 1>\`\`**`
-          )
-          .setTimestamp()
-      );
-      return;
+      return message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true }),
+            },
+            thumbnail: Icons.erro,
+            title: `Não encontrei os usuários!`,
+            description: `**Tente usar:\n\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações <aviso 1>\`\`**`,
+            timestamp: new Date(),
+          },
+        ],
+      });
     }
 
     function messageSelectWarn() {
-      return new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(Icons.erro)
-        .setAuthor(
-          message.author.tag,
-          message.author.displayAvatarURL({ dynamic: true })
-        )
-        .setTitle(`Selecione um aviso!`)
-        .setDescription(
-          `**Você pode usar:\n\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações aviso 1\`\`**`
-        )
-        .setTimestamp();
+      return {
+        color: Colors.pink_red,
+        thumbnail: Icons.erro,
+        author: {
+          name: message.author.tag,
+          icon_url: message.author.displayAvatarURL({ dynamic: true }),
+        },
+        title: `Selecione um aviso!`,
+        description: `**Você pode usar:\n\`\`${prefix}unwarn @Usuários/TAGs/Nomes/IDs/Citações aviso 1\`\`**`,
+        timestamp: new Date(),
+      };
     }
     const guildIdDatabase = new client.Database.table(
       `guild_id_${message.guild.id}`
@@ -64,26 +62,23 @@ export default {
         memberUser.roles.highest.position >=
         message.member.roles.highest.position
       ) {
-        message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(
-              `Você não tem permissão para remover o aviso do usuário ${user.tag}`
-            )
-            .setDescription(
-              `**Você não possui um cargo maior que o usuário ${user.tag} para remover os avisos dele, fale com um moderador maior**`
-            )
-            .setFooter(`ID do usuário: ${user.id}`)
-            .setTimestamp()
-        );
-
-        return;
+        return message.channel.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `Você não tem permissão para remover o aviso do usuário ${user.tag}`,
+              description: `**Você não possui um cargo maior que o usuário ${user.tag} para remover os avisos dele, fale com um moderador maior**`,
+              footer: `ID do usuário: ${user.id}`,
+              timestamp: new Date(),
+            },
+          ],
+        });
       }
       const warnRemove = isNaN(args[args.length - 1])
         ? args[args.length - 1]
@@ -91,34 +86,41 @@ export default {
 
       if (guildIdDatabase.has(`user_id_${user.id}`)) {
         if (!args[1]) {
-          return message.channel.send(message.author, messageSelectWarn());
+          return message.channel.send({
+            content: `${message.author}`,
+            embeds: [messageSelectWarn()],
+          });
         }
 
         if (isNaN(warnRemove)) {
           if (warnRemove.toLowerCase() === 'all') {
             guildIdDatabase.delete(`user_id_${user.id}`);
 
-            message.channel.send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setTitle(
-                  `Todos os avisos foram removidos do usuário ${user.tag}!`
-                )
-                .setDescription(`**O usuário não possui mais avisos**`)
-                .setFooter(`ID do usuário: ${user.id}`)
-                .setTimestamp()
-            );
-
-            return;
+            return message.channel.send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  author: {
+                    name: message.author.tag,
+                    icon_url: message.author.displayAvatarURL({
+                      dynamic: true,
+                    }),
+                  },
+                  thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+                  title: `Todos os avisos foram removidos do usuário ${user.tag}!`,
+                  description: `**O usuário não possui mais avisos**`,
+                  footer: { text: `ID do usuário: ${user.id}` },
+                  timestamp: new Date(),
+                },
+              ],
+            });
           }
 
-          return message.channel.send(message.author, messageSelectWarn());
+          return message.channel.send({
+            content: `${message.author}`,
+            embeds: [messageSelectWarn()],
+          });
         }
 
         const reasons = guildIdDatabase.get(`user_id_${user.id}.reasons`);
@@ -129,9 +131,9 @@ export default {
 
         if (reasons.length !== 0) {
           if (warnRemove > reasons.length) {
-            return message.channel.send(
-              `este usuário não possui o aviso ${warnRemove + 1}`
-            );
+            return message.channel.send({
+              content: `este usuário não possui o aviso ${warnRemove + 1}`,
+            });
           }
 
           const avisoDeleted = reasons[warnRemove];
@@ -152,67 +154,74 @@ export default {
             guildIdDatabase.get('channel_log')
           );
           if (channelLog) {
-            channelLog.send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setTitle(`Aviso ${warnRemove + 1} foi removido do usuário`)
-                .setDescription(
-                  `O usuário ${user.tag} teve um aviso removido! \n
+            channelLog.send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  author: {
+                    name: message.author.tag,
+                    icon_url: message.author.displayAvatarURL({
+                      dynamic: true,
+                    }),
+                  },
+                  thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+                  title: `Aviso ${warnRemove + 1} foi removido do usuário`,
+                  description: `O usuário ${user.tag} teve um aviso removido! \n
 **Punido por**: <@${autorDeleted}>
 **Data:** ${parseDateForDiscord(dataDeleted)}
-**Motivo:**\n ${avisoDeleted}
-                    `
-                )
-                .setTimestamp()
-            );
+**Motivo:**\n ${avisoDeleted}`,
+                  timestamp: new Date(),
+                },
+              ],
+            });
           } else {
             message.channel
-              .send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setTitle(`Aviso ${warnRemove + 1} foi removido do usuário`)
-                  .setDescription(
-                    `O usuário ${user.tag} teve um aviso removido! \n
+              .send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    title: `Aviso ${warnRemove + 1} foi removido do usuário`,
+                    description: `O usuário ${
+                      user.tag
+                    } teve um aviso removido! \n
 **Punido por**: <@${autorDeleted}>
 **Data:** ${parseDateForDiscord(dataDeleted)}
-**Motivo** ${avisoDeleted}
-                    `
-                  )
-                  .setTimestamp()
-              )
+**Motivo** ${avisoDeleted}`,
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .then((msg) => msg.delete({ timeout: 15000 }));
           }
           return;
         }
       }
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setDescription(
-            `**Para avisar alguém, use o comando:**
-> \`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\``
-          )
-          .setTitle(`O Usuário ${user.tag} não possui avisos`)
-          .setTimestamp()
-      );
+      message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: user.displayAvatarURL({ dynamic: true }),
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true }),
+            },
+            description: `**Para avisar alguém, use o comando:**
+> \`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\``,
+            title: `O Usuário ${user.tag} não possui avisos`,
+            timestamp: new Date(),
+          },
+        ],
+      });
     });
   },
 };

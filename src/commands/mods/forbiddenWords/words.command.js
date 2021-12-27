@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
@@ -28,49 +27,54 @@ export default {
       ).sort();
 
       if (listOfWords.length > 0) {
-        message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.sucess)
-            .setTitle('Banco encontrado!')
-            .setDescription(
-              `**Aqui está todas as palavras do banco de dados:**\n> \`${listOfWords.join(
+        message.channel.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.sucess,
+              title: 'Banco encontrado!',
+              description: `**Aqui está todas as palavras do banco de dados:**\n> \`${listOfWords.join(
                 ' | '
-              )}\`\n**Caso queira adicionar ou remover alguma palavra use os comandos de addWords e removeWords**`
-            )
-            .setFooter(
-              `${message.author.tag}`,
-              `${message.author.displayAvatarURL({ dynamic: true })}`
-            )
-            .setTimestamp()
-        );
+              )}\`\n**Caso queira adicionar ou remover alguma palavra use os comandos de addWords e removeWords**`,
+              footer: {
+                text: `${message.author.tag}`,
+                icon_url: `${message.author.displayAvatarURL({
+                  dynamic: true,
+                })}`,
+              },
+
+              timestamp: new Date(),
+            },
+          ],
+        });
 
         return;
       }
     }
 
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setTitle(`Seu servidor não foi encontrado: `)
-        .setDescription(
-          `**Para ativar o sistema de Forbbiden Words primeiro adicione palavras com o comando:**
+    message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.pink_red,
+          title: `Seu servidor não foi encontrado: `,
+          description: `** Para ativar o sistema de Forbbiden Words primeiro adicione palavras com o comando:**
 > \`${prefix}addwords <palavra1> <palavra2> <palavra3> etc...\`
 
 **Para configurar onde os report's irão ser mandados:**
 > \`${prefix}addlog <#chat/ID>\`
 
 **Para mais detalhes consulte o comando addwords:**
-> \`${prefix}help addwords\``
-        )
-        .setThumbnail(Icons.erro)
-        .setFooter(
-          `${message.author.tag}`,
-          `${message.author.displayAvatarURL({ dynamic: true })}`
-        )
-        .setTimestamp()
-    );
+> \`${prefix}help addwords\``,
+          thumbnail: Icons.erro,
+          footer: {
+            text: `${message.author.tag}`,
+            icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+          },
+          timestamp: new Date(),
+        },
+      ],
+    });
   },
 };

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { verifyBannedWords } from '../../services/messageVerify/messageVerifyWords.js';
 import { antiSpamAndFlood } from '../../services/antiSpamAndFlood/functionSpamAndFlood.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
@@ -6,7 +5,7 @@ import { userHasPermission } from '../../utils/userHasPermission/userHasPermissi
 import { downloadDatabase } from '../../services/developersCommands/downloadDatabase.js';
 
 export default {
-  name: 'message',
+  name: 'messageCreate',
   once: false,
   run: (client, message) => {
     if (message.author.bot) return;
@@ -22,7 +21,7 @@ export default {
       if (verifyBannedWords(client, message)) return;
 
       const { userHasPermissionOf } = userHasPermission(client, message);
-      if (!message.member.hasPermission('ADMINISTRATOR')) {
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
         const dic = {
           owner: 4,
           staff: 3,
@@ -51,17 +50,20 @@ export default {
       (message.content === `<@!${message.guild.me.id}>` ||
         message.content === `<@${message.guild.me.id}>`)
     ) {
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setTitle(`Meu prefixo no servidor é **\`${prefix}\`**`)
-          .setFooter(
-            `${message.author.tag}`,
-            `${message.author.displayAvatarURL({ dynamic: true })}`
-          )
-          .setTimestamp()
-      );
+      message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            title: `Meu prefixo no servidor é **\`${prefix}\`**`,
+            footer: {
+              text: `${message.author.tag}`,
+              icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+            },
+            timestamp: new Date(),
+          },
+        ],
+      });
       return;
     }
 
@@ -96,38 +98,41 @@ export default {
             commandToBeExecuted.name.toLowerCase() !== 'setadm') &&
           !rolesPermissions.staff
         ) {
-          message.channel.send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-              .setTitle(
-                `${message.author.tag} Olá! Fico muito feliz e agredecida por ter me adicionado!!!!`
-              )
-              .setDescription(`Primeiramente, nós do servidor Ballerini ficamos honrados por usar nosso bot. Isso é incrível! 🙀 😻
+          message.channel.send({
+            content: `${message.author}`,
+            embeds: [
+              {
+                color: Colors.pink_red,
+                thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+                title: `${message.author.tag} Olá! Fico muito feliz e agredecida por ter me adicionado!!!!`,
+                description: `Primeiramente, nós do servidor Ballerini ficamos honrados por usar nosso bot. Isso é incrível! 🙀 😻
 Para começar vamos definir os cargos administrativos:
 Eu ofereço 4 cargos de hierarquia, Everyone, Padawan, Moderadores e Staff.
 O único que poderá definir os cargos será o dono do servidor!
 Então mande a seguinte mensagem para definir os cargos repectivamente e saiba sobre os comandos com ${prefix}help!
-${prefix}setAdm @cargoPadawan @cargoModeradores @cargoStaff `)
-          );
+${prefix}setAdm @cargoPadawan @cargoModeradores @cargoStaff `,
+              },
+            ],
+          });
+
           return;
         }
         if (permissionIsTrueOrFalse) {
           commandToBeExecuted.run({ client, message, args, prefix });
         } else {
           message.channel
-            .send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setTitle(`Hey, você não tem permissão :(`)
-                .setDescription(
-                  `**Apenas ${commandToBeExecuted.permissions.join(
+            .send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  title: `Hey, você não tem permissão :(`,
+                  description: `**Apenas ${commandToBeExecuted.permissions.join(
                     ' **|** '
-                  )} possuem permissão para usar esse comando**`
-                )
-            )
+                  )} possuem permissão para usar esse comando**`,
+                },
+              ],
+            })
             .then((msg) => {
               msg.delete({ timeout: 10000 });
             });

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
@@ -24,22 +23,23 @@ export function helpWithASpecificCommand(nameCommand, client, message) {
     stringMarkedPermissions[i] = `\`${fullCommand.permissions[i]}\``;
   });
   const { category, description } = fullCommand;
-  message.channel.send(
-    message.author,
-    new Discord.MessageEmbed()
-      .setColor(Colors.pink_red)
-      .setThumbnail(Icons.interrogation)
-      .setTitle(`Informações sobre o comando \`${fullCommand.name}\`:`)
-      .setDescription(
-        `**📝 Categoria: ${category || 'Sem Categoria'}**
+  message.channel.send({
+    content: `${message.author}`,
+    embeds: [
+      {
+        color: Colors.pink_red,
+        thumbnail: Icons.interrogation,
+        title: `Informações sobre o comando \`${fullCommand.name}\`:`,
+        description: `**📝 Categoria: ${category || 'Sem Categoria'}**
 \n**Sobre o Comando:**
 > \`\`${description || `<Sem Descrição>`}\`\`
 **Cargos necessários para utilizar o comando: **
 > ${stringMarkedPermissions.join(' | ') || '`<Não especificado>`'}
 **Sinônimos: **
-> ${stringMarkedAliases.join(' **|** ') || nullAlias}`
-      )
-  );
+> ${stringMarkedAliases.join(' **|** ') || nullAlias}`,
+      },
+    ],
+  });
 }
 
 export default {
@@ -102,22 +102,23 @@ Caso queira suporte com nossos desenvolvedores entre em contato com a equipe res
 **Essas são as categorias e comandos que podem ser usados: **\n
 ${getMessageCommands(listTempleteCategories, namesCategories)}`;
 
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setAuthor(
-            'Balle Bot • Ballerini',
-            client.user.displayAvatarURL({ dynamic: true }),
-            'https://discord.gg/ballerini'
-          )
-          .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-          .setTitle(`Ajuda Sobre Comandos e Funções:`)
-          .setDescription(descriptInviteInMessage)
-          .setFooter(
-            `• Para saber as informações de um comando específico, use ${prefix}help <comando>`
-          )
-      );
+      message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            author: {
+              name: 'Balle Bot • Ballerini',
+              icon_url: client.user.displayAvatarURL({ dynamic: true }),
+              url: 'https://discord.gg/ballerini',
+            },
+            thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+            title: `Ajuda Sobre Comandos e Funções:`,
+            description: descriptInviteInMessage,
+            footer: `• Para saber as informações de um comando específico, use ${prefix}help <comando>`,
+          },
+        ],
+      });
 
       return;
     }

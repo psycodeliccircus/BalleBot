@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
@@ -10,25 +9,22 @@ export default {
   dm: true,
   category: 'Utility ⛏️',
   run: ({ message, client }) => {
-    message.channel.send('Loading').then((msg) => {
+    message.channel.send({ content: 'Loading' }).then((msg) => {
       const timestampDiff = msg.createdTimestamp - message.createdTimestamp;
-      msg.edit(
-        '',
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(Icons.wifi)
-          .setTitle(`🏓Pong!`)
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setDescription(
-            `A sua latência é ${timestampDiff}ms. A latência da API é ${Math.round(
+
+      msg.edit({
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: Icons.wifi,
+            title: `🏓Pong!`,
+            description: `A sua latência é ${timestampDiff}ms. A latência da API é ${Math.round(
               client.ws.ping
-            )}ms`
-          )
-          .setTimestamp()
-      );
+            )}ms`,
+            timestamp: new Date(),
+          },
+        ],
+      });
     });
   },
 };

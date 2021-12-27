@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
@@ -26,24 +25,26 @@ export default {
     }
 
     if (users === undefined) {
-      message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setTitle(`Não encontrei o usuário!`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`\``
-            )
-            .setFooter(
-              `${message.author.tag}`,
-              `${message.author.displayAvatarURL({ dynamic: true })}`
-            )
-            .setTimestamp()
-        )
+      return message.channel
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              title: `Não encontrei o usuário!`,
+              description: `** Tente usar **\`\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`\``,
+              footer: {
+                text: `${message.author.tag}`,
+                icon_url: `${message.author.displayAvatarURL({
+                  dynamic: true,
+                })}`,
+              },
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
 
     let reason = restOfMessage || '<Motivo não especificado>';
@@ -53,92 +54,107 @@ export default {
       reason += `\n**Arquivo anexado:** ${anexo}`;
     }
 
-    const messageAnt = await message.channel.send(
-      new Discord.MessageEmbed()
-        .setColor(Colors.red)
-        .setThumbnail(Icons.sledgehammer)
-        .setAuthor(
-          message.author.tag,
-          message.author.displayAvatarURL({ dynamic: true })
-        )
-        .setTitle(`Você está prestes a Banir os usuários:`)
-        .setDescription(
-          `**Usuários: ${users.join('|')}**
+    const messageAnt = await message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.red,
+          thumbnail: Icons.sledgehammer,
+          author: {
+            name: message.author.tag,
+            icon_url: message.author.displayAvatarURL({ dynamic: true }),
+          },
+          title: `Você está prestes a Banir os usuários:`,
+          description: `**Usuários: ${users.join('|')}**
 **Pelo Motivo de: **
 ${reason}
 
 ✅ Para confirmar
 ❎ Para cancelar
-🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`
-        )
-        .setTimestamp()
-    );
+🕵️‍♀️ Para confirmar e não avisar que foi você que aplicou`,
+          timestamp: new Date(),
+        },
+      ],
+    });
     await confirmMessage(message, messageAnt).then(async (res) => {
       await messageAnt.delete();
 
       if (res) {
-        if (!message.guild.me.hasPermission('BAN_MEMBERS')) {
+        if (!message.guild.me.permissions.has('BAN_MEMBERS')) {
           message.channel
-            .send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setThumbnail(Icons.erro)
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setDescription(
-                  `Ative a permissão de banir para mim, para que você possa usar o comando`
-                )
-                .setTitle(`Eu não tenho permissão para banir usuários`)
-                .setFooter(
-                  `A permissão pode ser ativada no cargo do bot em configurações`
-                )
-                .setFooter(
-                  `${message.author.tag}`,
-                  `${message.author.displayAvatarURL({ dynamic: true })}`
-                )
-                .setTimestamp()
-            )
+            .send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  thumbnail: Icons.erro,
+                  author: {
+                    name: message.author.tag,
+                    icon_url: message.author.displayAvatarURL({
+                      dynamic: true,
+                    }),
+                  },
+                  description: `Ative a permissão de banir para mim, para que você possa usar o comando`,
+                  title: `Eu não tenho permissão para banir usuários`,
+
+                  footer: {
+                    text: `A permissão pode ser ativada no cargo do bot em configurações ${message.author.tag}`,
+                    icon_url: `${message.author.displayAvatarURL({
+                      dynamic: true,
+                    })}`,
+                  },
+
+                  timestamp: new Date(),
+                },
+              ],
+            })
             .then((msg) => msg.delete({ timeout: 15000 }));
         }
 
-        if (!message.member.hasPermission('BAN_MEMBERS')) {
+        if (!message.member.permissions.has('BAN_MEMBERS')) {
           message.channel
-            .send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setThumbnail(Icons.erro)
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setTitle(`Você não tem permissão para banir os usuários`)
-                .setDescription(`Você não pode banir usuários nesse servidor`)
-                .setTimestamp()
-            )
+            .send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  thumbnail: Icons.erro,
+                  author: {
+                    name: message.author.tag,
+                    icon_url: message.author.displayAvatarURL({
+                      dynamic: true,
+                    }),
+                  },
+                  title: `Você não tem permissão para banir os usuários`,
+                  description: `Você não pode banir usuários nesse servidor`,
+                  timestamp: new Date(),
+                },
+              ],
+            })
             .then((msg) => msg.delete({ timeout: 15000 }));
         }
 
         users.forEach(async (user) => {
           if (user.id === message.guild.me.id) {
-            message.channel
-              .send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.erro)
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setTitle(`Hey, você não pode me banir e isso não é legal :(`)
-                  .setTimestamp()
-              )
+            return message.channel
+              .send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: Icons.erro,
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    title: `Hey, você não pode me banir e isso não é legal :(`,
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
 
           const memberUser = client.guilds.cache
@@ -148,26 +164,26 @@ ${reason}
             memberUser?.roles.highest.position >=
             message.guild.me.roles.highest.position
           ) {
-            message.channel
-              .send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.erro)
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setTitle(
-                    `Eu não tenho permissão para banir o usuário ${user.tag}`
-                  )
-                  .setDescription(
-                    `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`
-                  )
-                  .setTimestamp()
-              )
+            return message.channel
+              .send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: Icons.erro,
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    title: `Eu não tenho permissão para banir o usuário ${user.tag}`,
+                    description: `O usuário ${user} tem um cargo acima ou igual a mim, eleve meu cargo acima do dele`,
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
           let reasonOfBan = `${restOfMessage}` || '<Motivo não especificado>';
           if (message.attachments.some((anex) => anex.url)) {
@@ -186,39 +202,41 @@ ${reason}
               const inviteDmAutor =
                 res === 'anonimo' ? 'a administração' : message.author;
               user
-                .send(
-                  new Discord.MessageEmbed()
-                    .setColor(Colors.pink_red)
-                    .setThumbnail(message.guild.iconURL())
-                    .setTitle(
-                      `Você foi banido do servidor **${message.guild.name}**`
-                    )
-                    .setDescription(
-                      `**Motivo: **\n${reason}\nCaso ache que o banimento foi injusto, **fale com ${inviteDmAutor.tag}**`
-                    )
-                    .setFooter(`ID do usuário: ${user.id}`)
-                    .setTimestamp()
-                )
+                .send({
+                  embeds: [
+                    {
+                      color: Colors.pink_red,
+                      thumbnail: message.guild.iconURL(),
+                      title: `Você foi banido do servidor **${message.guild.name}**`,
+                      description: `**Motivo: **\n${reason}\nCaso ache que o banimento foi injusto, **fale com ${inviteDmAutor.tag}**`,
+                      footer: `ID do usuário: ${user.id}`,
+                      timestamp: new Date(),
+                    },
+                  ],
+                })
                 .catch(() =>
-                  message.channel.send(
-                    message.author,
-                    new Discord.MessageEmbed()
-                      .setAuthor(
-                        message.author.tag,
-                        message.author.displayAvatarURL({ dynamic: true })
-                      )
-                      .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                      .setColor(Colors.pink_red)
-                      .setTitle(
-                        `Não foi possível avisar na DM do usuário ${user.tag}!`
-                      )
-                  )
+                  message.channel.send({
+                    content: `${message.author}`,
+                    embeds: [
+                      {
+                        author: {
+                          name: message.author.tag,
+                          icon_url: message.author.displayAvatarURL({
+                            dynamic: true,
+                          }),
+                        },
+                        thumbnail: user.displayAvatarURL({ dynamic: true }),
+                        color: Colors.pink_red,
+                        title: `Não foi possível avisar na DM do usuário ${user.tag}!`,
+                      },
+                    ],
+                  })
                 );
             })
             .catch(() => {
-              message.channel.send(
-                'Dê um motivo que tenha menos de 512 caracteres'
-              );
+              message.channel.send({
+                content: 'Dê um motivo que tenha menos caracteres',
+              });
             });
         });
       }

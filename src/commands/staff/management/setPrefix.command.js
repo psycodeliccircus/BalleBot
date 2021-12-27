@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 
@@ -20,16 +19,19 @@ export default {
     );
 
     guildIdDatabase.set('prefix', args[0]);
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setTitle(`Prefixo salvo no servidor : **\`${args[0]}\`**`)
-        .setFooter(
-          `${message.author.tag}`,
-          `${message.author.displayAvatarURL({ dynamic: true })}`
-        )
-        .setTimestamp()
-    );
+    message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.pink_red,
+          title: `Prefixo salvo no servidor : **\`${args[0]}\`**`,
+          footer: {
+            text: `${message.author.tag}`,
+            icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+          },
+          timestamp: new Date(),
+        },
+      ],
+    });
   },
 };

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
@@ -17,35 +16,38 @@ export default {
       helpWithASpecificCommand(command, client, message);
       return;
     }
-    if (!message.member.hasPermission('MANAGE_ROLES')) {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
       message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`Você não tem permissão para desmutar usuários`)
-            .setTitle(`Peça para um cargo maior desmutar o membro`)
-
-            .setTimestamp()
-        )
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+              description: `Você não tem permissão para desmutar usuários`,
+              title: `Peça para um cargo maior desmutar o membro`,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
       return;
     }
 
     if (!users) {
       message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setTitle(`Não encontrei o usuário!`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}mute @usuário <motivo> <tempo>\`\`\``
-            )
-            .setTimestamp()
-        )
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+              title: `Não encontrei o usuário!`,
+              description: `**Tente usar**\`\`\`${prefix}mute @usuário <motivo> <tempo>\`\`\``,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
       return;
     }
@@ -63,22 +65,23 @@ export default {
 
       if (!userMuted) {
         message.channel
-          .send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setDescription(
-                `O usuário ${user} não está mutado no servidor, para mutar use ${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>`
-              )
-              .setTitle(`Usuário não está mutado`)
-              .setFooter(`ID do usuário : ${user.id}`)
-              .setTimestamp()
-          )
+          .send({
+            content: `${message.author}`,
+            embeds: [
+              {
+                color: Colors.pink_red,
+                thumbnail: user.displayAvatarURL({ dynamic: true }),
+                author: {
+                  name: message.author.tag,
+                  icon_url: message.author.displayAvatarURL({ dynamic: true }),
+                },
+                description: `O usuário ${user} não está mutado no servidor, para mutar use ${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>`,
+                title: `Usuário não está mutado`,
+                footer: { text: `ID do usuário : ${user.id}` },
+                timestamp: new Date(),
+              },
+            ],
+          })
           .then((msg) => msg.delete({ timeout: 15000 }));
         return;
       }
@@ -107,22 +110,26 @@ export default {
       );
 
       function messageInviteLog() {
-        return new Discord.MessageEmbed()
-          .setTitle(`Usuário ${userMember.user.tag} foi desmutado!`)
-          .setFooter(`ID do usuário: ${userMember.user.id}`)
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setThumbnail(userMember.user.displayAvatarURL({ dynamic: true }))
-          .setColor(Colors.pink_red)
-          .setTimestamp();
+        return {
+          title: `Usuário ${userMember.user.tag} foi desmutado!`,
+          footer: { text: `ID do usuário: ${userMember.user.id}` },
+          author: {
+            name: message.author.tag,
+            icon_url: message.author.displayAvatarURL({ dynamic: true }),
+          },
+          thumbnail: userMember.user.displayAvatarURL({ dynamic: true }),
+          color: Colors.pink_red,
+          timestamp: new Date(),
+        };
       }
       if (channelLog) {
-        channelLog.send(message.author, messageInviteLog());
+        channelLog.send({
+          content: `${message.author}`,
+          embeds: [messageInviteLog()],
+        });
       } else {
         message.channel
-          .send(message.author, messageInviteLog())
+          .send({ content: `${message.author}`, embeds: [messageInviteLog()] })
           .then((msg) => msg.delete({ timeout: 15000 }));
       }
     });

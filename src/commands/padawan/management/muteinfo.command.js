@@ -22,21 +22,22 @@ export default {
 
     if (!users) {
       message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(`Não encontrei o usuário !`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}muteinfo @Usuários/TAGs/Nomes/IDs/Citações\`\`\``
-            )
-            .setTimestamp()
-        )
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `Não encontrei o usuário !`,
+              description: `**Tente usar**\`\`\`${prefix}muteinfo @Usuários/TAGs/Nomes/IDs/Citações\`\`\``,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
       return;
     }
@@ -54,19 +55,22 @@ export default {
         ) || guildUndefinedMutated.get(`user_id_${user.id}`);
 
       function messageUserNotMutated() {
-        return message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(`Usuário ${user.tag} não está mutado!`)
-            .setFooter(`ID do usuário: ${user.id}`)
-            .setTimestamp()
-        );
+        return message.channel.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: user.displayAvatarURL({ dynamic: true }),
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `Usuário ${user.tag} não está mutado!`,
+              footer: { text: `ID do usuário: ${user.id}` },
+              timestamp: new Date(),
+            },
+          ],
+        });
       }
       if (!userMuted) {
         messageUserNotMutated();
@@ -101,30 +105,33 @@ export default {
 
         const inviteMessage = `**Data final do mute: ${dataForMessage}**\n**Punido por: ${authorOfMute}**\n**Motivo: **${descriptionMute} \n`;
         message.channel
-          .send(
-            message.author,
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setTitle(`Informações sobre o mute do usuário: ${user.tag} `)
-              .setDescription(inviteMessage)
-              .setFooter(`ID do usuário: ${userMuted.id}`)
-              .setTimestamp()
-          )
+          .send({
+            content: `${message.author}`,
+            embeds: [
+              {
+                color: Colors.pink_red,
+                thumbnail: user.displayAvatarURL({ dynamic: true }),
+                author: {
+                  name: message.author.tag,
+                  icon_url: message.author.displayAvatarURL({ dynamic: true }),
+                },
+                title: `Informações sobre o mute do usuário: ${user.tag} `,
+                description: inviteMessage,
+                footer: { text: `ID do usuário: ${userMuted.id}` },
+                timestamp: new Date(),
+              },
+            ],
+          })
           .catch(() => {
             const buffer = Buffer.from(inviteMessage);
             const attachment = new Discord.MessageAttachment(
               buffer,
               `ban_of_${user.tag}.txt`
             );
-            message.channel.send(
-              `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
-              attachment
-            );
+            message.channel.send({
+              content: `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+              files: [attachment],
+            });
           });
         return;
       }

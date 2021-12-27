@@ -1,6 +1,6 @@
 # Balle Bot
 
-Discord bot for the Rafaella Ballerini server.
+Discord bot for the Ballerini server.
 
 ## Table of contents
 
@@ -11,9 +11,8 @@ Discord bot for the Rafaella Ballerini server.
 To run this project you'll need `yarn` or `npm`, just follow the steps below.
 
 ```
-$ cd ../lorem
 $ npm install
-$ npm start
+$ npm run dev
 ```
 
 ## Como você pode adicioná-la?

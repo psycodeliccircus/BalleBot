@@ -25,7 +25,7 @@ export function userHasPermission(
       if (
         rolesUser.indexOf(rolesPermissions[nameRole]) > -1 ||
         message.author.id === rolesPermissions.owner ||
-        message.member.hasPermission('ADMINISTRATOR')
+        message.member.permissions.has('ADMINISTRATOR')
       ) {
         return nameRole;
       }

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../utils/layoutEmbed/colors.js';
 
 export async function multiChannelFlood(client, message, it, maxMessageRep) {
@@ -19,27 +18,26 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
         .then((mesg) => mesg.delete());
       i++;
     });
-    if (!message.guild.me.hasPermission('BAN_MEMBERS')) {
-      channelLog?.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setTitle(
-            `**Usuário ${message.author.tag} mandou uma suspeita de Scam por enviar um Flood/Scam em VÁRIOS canais!**`
-          )
-          .setDescription(
-            `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
+    if (!message.guild.me.permissions.has('BAN_MEMBERS')) {
+      channelLog?.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: message.author.displayAvatarURL({ dynamic: true }),
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true }),
+            },
+            title: `**Usuário ${message.author.tag} mandou uma suspeita de Scam por enviar um Flood/Scam em VÁRIOS canais!**`,
+            description: `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
   ${it[idUser].content}
-  **Eu não tenho permissão de banir o usuário, verifique antes que seja tarde e me dê permissão!`
-          )
-          .setFooter(`ID do usuário: ${message.author.id}`)
-          .setTimestamp()
-      );
+  **Eu não tenho permissão de banir o usuário, verifique antes que seja tarde e me dê permissão!`,
+            footer: { text: `ID do usuário: ${message.author.id}` },
+            timestamp: new Date(),
+          },
+        ],
+      });
 
       return;
     }
@@ -58,72 +56,75 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
         it[idUser].idChannelRaid.forEach((channel) =>
           listOfChannelsFormated.push(`<#${channel}>`)
         );
-        channelLog?.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(
-              `**Usuário ${message.author.tag} Banido por enviar um Flood/Scam em VÁRIOS canais!**`
-            )
-            .setDescription(
-              `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em ${maxMessageRep} chats:**
-${it[idUser].content}`
-            )
-            .addFields({
-              name: 'Enviada nos canais respectivos:',
-              value: `${listOfChannelsFormated.join(' **|** ')}`,
-            })
-            .setFooter(`ID do usuário: ${message.author.id}`)
-            .setTimestamp()
-        );
+        channelLog?.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: message.author.displayAvatarURL({ dynamic: true }),
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `**Usuário ${message.author.tag} Banido por enviar um Flood/Scam em VÁRIOS canais!**`,
+              description: `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em ${maxMessageRep} chats:**
+${it[idUser].content}`,
+              fields: [
+                {
+                  name: 'Enviada nos canais respectivos:',
+                  value: `${listOfChannelsFormated.join(' **|** ')}`,
+                },
+              ],
+              footer: { text: `ID do usuário: ${message.author.id}` },
+              timestamp: new Date(),
+            },
+          ],
+        });
 
         const listChannelsName = it[idUser].idChannelRaid.map(
           (channelId) => client.channels.cache.get(channelId).name
         );
         message.author
-          .send(
-            new Discord.MessageEmbed()
-              .setColor(Colors.red)
-              .setThumbnail(message.guild.iconURL())
-              .setTitle(
-                `Você foi banido no servidor ** ${message.guild.name}** `
-              )
-              .setDescription(
-                `**Motivo:**
+          .send({
+            embeds: [
+              {
+                color: Colors.red,
+                thumbnail: message.guild.iconURL(),
+                title: `Você foi banido no servidor ** ${message.guild.name}** `,
+                description: `**Motivo:**
 **Banido por enviar um Flood/Scam em VÁRIOS canais!**
 ${it[idUser].content}
-\n**Fale com a administração do servidor para ser desbanido caso ache injusto**`
-              )
-              .addFields({
-                name: 'Enviada nos canais respectivos:',
-                value: `${listChannelsName.join(' **|** ')}`,
-              })
-              .setFooter(`ID do usuário: ${message.author.id}`)
-              .setTimestamp()
-          )
+\n**Fale com a administração do servidor para ser desbanido caso ache injusto**`,
+                fields: [
+                  {
+                    name: 'Enviada nos canais respectivos:',
+                    value: `${listChannelsName.join(' **|** ')}`,
+                  },
+                ],
+                footer: { text: `ID do usuário: ${message.author.id}` },
+                timestamp: new Date(),
+              },
+            ],
+          })
           .catch(() => {
-            channelLog?.send(
-              message.author,
-              new Discord.MessageEmbed()
-                .setColor(Colors.pink_red)
-                .setThumbnail(
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setAuthor(
-                  message.author.tag,
-                  message.author.displayAvatarURL({ dynamic: true })
-                )
-                .setTitle(
-                  `Não foi possível avisar na DM do usuário banido ${message.author.tag}!`
-                )
-                .setFooter(`ID do usuário: ${message.author.id}`)
-                .setTimestamp()
-            );
+            channelLog?.send({
+              content: `${message.author}`,
+              embeds: [
+                {
+                  color: Colors.pink_red,
+                  thumbnail: message.author.displayAvatarURL({ dynamic: true }),
+                  author: {
+                    name: message.author.tag,
+                    icon_url: message.author.displayAvatarURL({
+                      dynamic: true,
+                    }),
+                  },
+                  title: `Não foi possível avisar na DM do usuário banido ${message.author.tag}!`,
+                  footer: { text: `ID do usuário: ${message.author.id}` },
+                  timestamp: new Date(),
+                },
+              ],
+            });
           });
       });
   }

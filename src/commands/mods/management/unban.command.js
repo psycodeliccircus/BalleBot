@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
@@ -20,80 +19,80 @@ export default {
       return;
     }
     if (!message.member.permissions.has('BAN_MEMBERS')) {
-      message.channel.send(
-        new Discord.MessageEmbed()
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setDescription(
-            'Você não tem permissão de desbanir usuários, fale com um administrador'
-          )
-          .setThumbnail(Icons.erro)
-          .setColor(Colors.pink_red)
-          .setTimestamp()
-      );
-
-      return;
+      return message.channel.send({
+        embeds: [
+          {
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true }),
+            },
+            description:
+              'Você não tem permissão de desbanir usuários, fale com um administrador',
+            thumbnail: Icons.erro,
+            color: Colors.pink_red,
+            timestamp: new Date(),
+          },
+        ],
+      });
     }
     if (!users) {
-      message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(`Não encontrei os usuários!`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}unban <@Usuários/TAGs/Nomes/IDs/Citações>\`\`\``
-            )
-            .setTimestamp()
-        )
+      return message.channel
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `Não encontrei os usuários!`,
+              description: `**Tente usar**\`\`\`${prefix}unban <@Usuários/TAGs/Nomes/IDs/Citações>\`\`\``,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
 
     users.forEach(async (userBanned) => {
       const member = await client.users.fetch(userBanned.id);
 
       if (!ban.get(member.id)) {
-        message.channel
-          .send(
-            new Discord.MessageEmbed()
-              .setTitle(`O usuário ${member.tag} não está banido!`)
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-              .setColor(Colors.pink_red)
-              .setDescription(
-                `**Para banir usuários use:\n\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`**`
-              )
-              .setTimestamp()
-          )
+        return message.channel
+          .send({
+            embeds: [
+              {
+                title: `O usuário ${member.tag} não está banido!`,
+                author: {
+                  name: message.author.tag,
+                  icon_url: message.author.displayAvatarURL({ dynamic: true }),
+                },
+                thumbnail: member.displayAvatarURL({ dynamic: true }),
+                color: Colors.pink_red,
+                description: `**Para banir usuários use:\n\`\`${prefix}ban @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`**`,
+                timestamp: new Date(),
+              },
+            ],
+          })
           .then((msg) => msg.delete({ timeout: 15000 }));
-
-        return;
       }
 
       message.guild.members.unban(member);
 
       function messageInviteLog() {
-        return new Discord.MessageEmbed()
-          .setTitle(`O usuário ${member.tag} foi desbanido!`)
-          .setDescription(`**Pelo usuário: ${message.author}**`)
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setFooter(`ID do usuário: ${member.id}`)
-          .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-          .setColor(Colors.pink_red);
+        return {
+          title: `O usuário ${member.tag} foi desbanido!`,
+          description: `**Pelo usuário: ${message.author}**`,
+          author: {
+            name: message.author.tag,
+            icon_url: message.author.displayAvatarURL({ dynamic: true }),
+          },
+          footer: `ID do usuário: ${member.id}`,
+          thumbnail: member.displayAvatarURL({ dynamic: true }),
+          color: Colors.pink_red,
+        };
       }
       const guildIdDatabase = new client.Database.table(
         `guild_id_${message.guild.id}`
@@ -103,10 +102,16 @@ export default {
       );
 
       if (channelLog) {
-        channelLog.send(message.author, messageInviteLog());
+        channelLog.send({
+          content: `${message.author}`,
+          embeds: [messageInviteLog()],
+        });
       } else {
         message.channel
-          .send(message.author, messageInviteLog())
+          .send({
+            content: `${message.author}`,
+            embeds: [messageInviteLog()],
+          })
           .then((msg) => msg.delete({ timeout: 15000 }));
       }
     });

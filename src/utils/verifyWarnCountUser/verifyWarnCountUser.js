@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { parseDateForDiscord } from '../TimeMessageConversor/parseDateForDiscord.js';
 import Colors from '../layoutEmbed/colors.js';
 import Icons from '../layoutEmbed/iconsMessage.js';
@@ -27,66 +26,77 @@ export async function verifyWarnCountUser(client, message, userId) {
 
           const dateForMessage = `${dataConvert}`;
 
-          return new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.sucess)
-            .setTitle(`O usuário ${user.tag} foi banido!`)
-            .setDescription(
-              `**Punido por receber ${maxWarns} warns**\n**Data: ${dateForMessage}**`
-            )
-            .setFooter(`ID do usuário: ${user.id}`)
-            .setTimestamp();
+          return {
+            color: Colors.pink_red,
+            thumbnail: Icons.sucess,
+            title: `O usuário ${user.tag} foi banido!`,
+            description: `**Punido por receber ${maxWarns} warns**\n**Data: ${dateForMessage}**`,
+            footer: { text: `ID do usuário: ${user.id}` },
+            timestamp: new Date(),
+          };
         }
         if (channelLog) {
-          channelLog.send(message.author, messageForChannelLog());
+          channelLog.send({
+            content: `${message.author}`,
+            embeds: [messageForChannelLog()],
+          });
         } else {
           message.channel
-            .send(message.author, messageForChannelLog())
+            .send({
+              content: `${message.author}`,
+              embeds: [messageForChannelLog()],
+            })
             .then((msg) => msg.delete({ timeout: 15000 }));
         }
         user
-          .send(
-            new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(message.guild.iconURL())
-              .setTitle(`Você foi banido do servidor **${message.guild.name}**`)
-              .setDescription(
-                `**Motivo: **\nVocê levou ${maxWarns}\nCaso ache que o banimento foi injusto, **fale com ${message.author}**`
-              )
-              .setFooter(`ID do usuário: ${user.id}`)
-              .setTimestamp()
-          )
+          .send({
+            embeds: [
+              {
+                color: Colors.pink_red,
+                thumbnail: message.guild.iconURL(),
+                title: `Você foi banido do servidor **${message.guild.name}**`,
+                description: `**Motivo: **\nVocê levou ${maxWarns}\nCaso ache que o banimento foi injusto, **fale com ${message.author}**`,
+                footer: { text: `ID do usuário: ${user.id}` },
+                timestamp: new Date(),
+              },
+            ],
+          })
           .catch(() => {
             if (channelLog) {
-              channelLog.send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                  .setColor(Colors.pink_red)
-                  .setTitle(
-                    `Não foi possível avisar na DM do usuário ${user.tag}!`
-                  )
-              );
+              channelLog.send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    thumbnail: user.displayAvatarURL({ dynamic: true }),
+                    color: Colors.pink_red,
+                    title: `Não foi possível avisar na DM do usuário ${user.tag}!`,
+                  },
+                ],
+              });
             } else {
               message.channel
-                .send(
-                  message.author,
-                  message.author,
-                  new Discord.MessageEmbed()
-                    .setAuthor(
-                      message.author.tag,
-                      message.author.displayAvatarURL({ dynamic: true })
-                    )
-                    .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                    .setColor(Colors.pink_red)
-                    .setTitle(
-                      `Não foi possível avisar na DM do usuário ${user.tag}!`
-                    )
-                )
+                .send({
+                  content: `${message.author}`,
+                  embeds: [
+                    {
+                      author: {
+                        name: message.author.tag,
+                        icon_url: message.author.displayAvatarURL({
+                          dynamic: true,
+                        }),
+                      },
+                      thumbnail: user.displayAvatarURL({ dynamic: true }),
+                      color: Colors.pink_red,
+                      title: `Não foi possível avisar na DM do usuário ${user.tag}!`,
+                    },
+                  ],
+                })
                 .then((msg) => msg.delete({ timeout: 15000 }));
             }
           });

@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
@@ -40,42 +39,43 @@ export default {
           }
         }
 
-        message.channel.send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.subwords)
-            .setTitle(`As Palavras ou Links foram **removidos** do banco! `)
-            .setDescription(
-              `**Essas foram as palavras ou links removidos:** \n> \`${deleteRegexList.join(
+        message.channel.send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.subwords,
+              title: `As Palavras ou Links foram **removidos** do banco! `,
+              description: `**Essas foram as palavras ou links removidos:** \n> \`${deleteRegexList.join(
                 ' | '
-              )}\``
-            )
-            .setFooter(
-              `${message.author.tag}`,
-              `${message.author.displayAvatarURL({ dynamic: true })}`
-            )
-            .setTimestamp()
-        );
+              )}\``,
+              footer: {
+                text: `${message.author.tag}`,
+                icon_url: `${message.author.displayAvatarURL({
+                  dynamic: true,
+                })}`,
+              },
+            },
+          ],
+        });
         return;
       }
     }
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(
-          `O seu servidor **não possui** um banco para excluir palavras e links proibidos`
-        )
-        .setDescription(
-          `**Para usar o comando:**\n> primeiro adicione palavras no banco com o comando:\n>\`${prefix}addwords <palavra1> <palavra2> <palavra3> etc \``
-        )
-        .setFooter(
-          `${message.author.tag}`,
-          `${message.author.displayAvatarURL({ dynamic: true })}`
-        )
-        .setTimestamp()
-    );
+    message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.pink_red,
+          thumbnail: client.user.displayAvatarURL({ dynamic: true }),
+          title: `O seu servidor **não possui** um banco para excluir palavras e links proibidos`,
+          description: `**Para usar o comando:**\n> primeiro adicione palavras no banco com o comando:\n>\`${prefix}addwords <palavra1> <palavra2> <palavra3> etc \``,
+          footer: {
+            text: `${message.author.tag}`,
+            icon_url: `${message.author.displayAvatarURL({ dynamic: true })}`,
+          },
+          timestamp: new Date(),
+        },
+      ],
+    });
   },
 };

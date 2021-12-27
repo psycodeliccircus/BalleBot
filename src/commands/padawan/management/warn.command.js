@@ -27,24 +27,24 @@ export default {
     }
 
     if (users === undefined) {
-      message.channel
-        .send(
-          message.author,
-          new Discord.MessageEmbed()
-            .setColor(Colors.pink_red)
-            .setThumbnail(Icons.erro)
-            .setAuthor(
-              message.author.tag,
-              message.author.displayAvatarURL({ dynamic: true })
-            )
-            .setTitle(`Não encontrei o usuário!`)
-            .setDescription(
-              `**Tente usar**\`\`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`\``
-            )
-            .setTimestamp()
-        )
+      return message.channel
+        .send({
+          content: `${message.author}`,
+          embeds: [
+            {
+              color: Colors.pink_red,
+              thumbnail: Icons.erro,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `Não encontrei o usuário!`,
+              description: `*Tente usar**\`\`\`${prefix}warn @Usuários/TAGs/Nomes/IDs/Citações <motivo>\`\`\``,
+              timestamp: new Date(),
+            },
+          ],
+        })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
 
     let reason = `${restOfMessage}` || '<Motivo não especificado>';
@@ -54,27 +54,27 @@ export default {
       reason += `\n**Arquivo anexado**: ${anexo.url}`;
     }
 
-    const messageAnt = await message.channel.send(
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(Icons.warn)
-        .setAuthor(
-          message.author.tag,
-          message.author.displayAvatarURL({ dynamic: true })
-        )
-        .setTitle(`Você está preste a avisar os Usuários:`)
-        .setDescription(
-          `**Usuários: ${users.join('|')}**
+    const messageAnt = await message.channel.send({
+      embeds: [
+        {
+          color: Colors.pink_red,
+          thumbnail: Icons.warn,
+          author: {
+            name: message.author.tag,
+            icon_url: message.author.displayAvatarURL({ dynamic: true }),
+          },
+          title: `Você está preste a avisar os Usuários:`,
+          description: `**Usuários: ${users.join('|')}**
 **Pelo Motivo de: **
 ${reason}
 
 ✅ Para confirmar
 ❎ Para cancelar
-🕵️‍♀️ Para confirmar e não avisa na DM do usuário`
-        )
-
-        .setTimestamp()
-    );
+🕵️‍♀️ Para confirmar e não avisa na DM do usuário`,
+          timestamp: new Date(),
+        },
+      ],
+    });
 
     await confirmMessage(message, messageAnt).then(async (res) => {
       await messageAnt.delete();
@@ -93,26 +93,30 @@ ${reason}
             .get(message.guild.id)
             .members.cache.get(user.id);
           if (!memberUser) {
-            return message.channel.send(
-              'não encontrei o usuário no servidor, talvez ele não esteja entre nós'
-            );
+            return message.channel.send({
+              content:
+                'não encontrei o usuário no servidor, talvez ele não esteja entre nós',
+            });
           }
           if (user.id === message.guild.me.id) {
             message.channel
-              .send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setThumbnail(Icons.erro)
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setColor(Colors.pink_red)
-                  .setTitle(
-                    `Hey, você não pode avisar eu mesma, isso não é legal :(`
-                  )
-                  .setTimestamp()
-              )
+              .send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    thumbnail: Icons.erro,
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    color: Colors.pink_red,
+                    title: `Hey, você não pode avisar eu mesma, isso não é legal :(`,
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .then((msg) => msg.delete({ timeout: 15000 }));
             return;
           }
@@ -121,87 +125,97 @@ ${reason}
             message.member.roles.highest.position
           ) {
             message.channel
-              .send(
-                message.author,
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(Icons.erro)
-                  .setAuthor(
-                    message.author.tag,
-                    message.author.displayAvatarURL({ dynamic: true })
-                  )
-                  .setTitle(`Você não tem permissão para avisar o usuário`)
-                  .setDescription(
-                    `O usuário ${user} está acima ou no mesmo cargo que você, por isso não podes adicionar um aviso a ele`
-                  )
-                  .setTimestamp()
-              )
+              .send({
+                content: `${message.author}`,
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: Icons.erro,
+                    author: {
+                      name: message.author.tag,
+                      icon_url: message.author.displayAvatarURL({
+                        dynamic: true,
+                      }),
+                    },
+                    title: `Você não tem permissão para avisar o usuário`,
+                    description: `O usuário ${user} está acima ou no mesmo cargo que você, por isso não podes adicionar um aviso a ele`,
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .then((msg) => msg.delete({ timeout: 15000 }));
             return;
           }
 
           function messageSucess() {
-            return new Discord.MessageEmbed()
-              .setColor(Colors.pink_red)
-              .setThumbnail(Icons.sucess)
-              .setAuthor(
-                message.author.tag,
-                message.author.displayAvatarURL({ dynamic: true })
-              )
-              .setTitle(`O usuário ${user.tag} foi avisado!`)
-              .setDescription(`**Pelo Motivo de: **\n${reason}`)
-              .setFooter(`ID do usuário avisado: ${user.id}`)
-              .setTimestamp();
+            return {
+              color: Colors.pink_red,
+              thumbnail: Icons.sucess,
+              author: {
+                name: message.author.tag,
+                icon_url: message.author.displayAvatarURL({ dynamic: true }),
+              },
+              title: `O usuário ${user.tag} foi avisado!`,
+              description: `**Pelo Motivo de: **\n${reason}`,
+              footer: {
+                text: `ID do usuário avisado: ${user.id}`,
+              },
+              timestamp: new Date(),
+            };
           }
           if (channelLog) {
-            channelLog.send(message.author, messageSucess()).catch(() => {
-              const buffer = Buffer.from(reason);
-              const attachment = new Discord.MessageAttachment(
-                buffer,
-                `ban_of_${user.tag}.txt`
-              );
-              message.channel.send(
-                `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
-                attachment
-              );
-            });
+            channelLog
+              .send({ content: `${message.author}`, embeds: [messageSucess()] })
+              .catch(() => {
+                const buffer = Buffer.from(reason);
+                const attachment = new Discord.MessageAttachment(
+                  buffer,
+                  `ban_of_${user.tag}.txt`
+                );
+                message.channel.send({
+                  content: `${user} O usuário possui um motivo muito grande e por esse motivo enviei um arquivo para você ver todo o motivo`,
+                  files: [attachment],
+                });
+              });
           } else {
             message.channel
-              .send(message.author, messageSucess())
+              .send({ content: `${message.author}`, embeds: [messageSucess()] })
               .then((msg) => msg.delete({ timeout: 15000 }));
           }
           if (inviteDm) {
             user
-              .send(
-                new Discord.MessageEmbed()
-                  .setColor(Colors.pink_red)
-                  .setThumbnail(message.guild.iconURL())
-                  .setTitle(
-                    `Você recebeu um warn do servidor **${message.guild}**`
-                  )
-                  .setDescription(
-                    `**Descrição: **
+              .send({
+                embeds: [
+                  {
+                    color: Colors.pink_red,
+                    thumbnail: message.guild.iconURL(),
+                    title: `Você recebeu um warn do servidor **${message.guild}**`,
+                    description: `**Descrição: **
 ${reason}
-**Para rever seu caso fale com: ${message.author}**`
-                  )
-                  .setFooter(`ID do usuário: ${user.id}`)
-                  .setTimestamp()
-              )
+**Para rever seu caso fale com: ${message.author}**`,
+                    footer: { text: `ID do usuário: ${user.id}` },
+                    timestamp: new Date(),
+                  },
+                ],
+              })
               .catch(() =>
                 message.channel
-                  .send(
-                    message.author,
-                    new Discord.MessageEmbed()
-                      .setAuthor(
-                        message.author.tag,
-                        message.author.displayAvatarURL({ dynamic: true })
-                      )
-                      .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-                      .setColor(Colors.pink_red)
-                      .setTitle(
-                        `Não foi possível avisar na DM do usuário ${user.tag}!`
-                      )
-                  )
+                  .send({
+                    content: `${message.author}`,
+                    embeds: [
+                      {
+                        author: {
+                          name: message.author.tag,
+                          icon_url: message.author.displayAvatarURL({
+                            dynamic: true,
+                          }),
+                        },
+                        thumbnail: user.displayAvatarURL({ dynamic: true }),
+                        color: Colors.pink_red,
+                        title: `Não foi possível avisar na DM do usuário ${user.tag}!`,
+                      },
+                    ],
+                  })
                   .then((msg) => msg.delete({ timeout: 15000 }))
               );
           }

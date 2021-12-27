@@ -1,4 +1,3 @@
-import Discord from 'discord.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 
@@ -16,34 +15,39 @@ export default {
     const antiself = guildIdDatabase.get('recaptcha');
     if (antiself) {
       guildIdDatabase.set('recaptcha', false);
-      message.channel.send(
-        message.author,
-        new Discord.MessageEmbed()
-          .setColor(Colors.pink_red)
-          .setThumbnail(Icons.erro)
-          .setTitle(`O Sitema de Recaptcha foi desativado!`)
-          .setAuthor(
-            message.author.tag,
-            message.author.displayAvatarURL({ dynamic: true })
-          )
-          .setDescription(`Para reativar use o comando novamente!`)
-          .setTimestamp()
-      );
-      return;
+      return message.channel.send({
+        content: `${message.author}`,
+        embeds: [
+          {
+            color: Colors.pink_red,
+            thumbnail: Icons.erro,
+            title: `O Sitema de Recaptcha foi desativado!`,
+            author: {
+              name: message.author.tag,
+              icon_url: message.author.displayAvatarURL({ dynamic: true }),
+            },
+            description: `Para reativar use o comando novamente!`,
+            timestamp: new Date(),
+          },
+        ],
+      });
     }
     guildIdDatabase.set('recaptcha', true);
-    message.channel.send(
-      message.author,
-      new Discord.MessageEmbed()
-        .setColor(Colors.pink_red)
-        .setThumbnail(Icons.sucess)
-        .setTitle(`O Sitema de Recaptcha foi Ativado!`)
-        .setAuthor(
-          message.author.tag,
-          message.author.displayAvatarURL({ dynamic: true })
-        )
-        .setDescription(`Para desativar use o comando novamente!`)
-        .setTimestamp()
-    );
+    message.channel.send({
+      content: `${message.author}`,
+      embeds: [
+        {
+          color: Colors.pink_red,
+          thumbnail: Icons.sucess,
+          title: `O Sitema de Recaptcha foi Ativado!`,
+          author: {
+            name: message.author.tag,
+            icon_url: message.author.displayAvatarURL({ dynamic: true }),
+          },
+          description: `Para desativar use o comando novamente!`,
+          timestamp: new Date(),
+        },
+      ],
+    });
   },
 };
