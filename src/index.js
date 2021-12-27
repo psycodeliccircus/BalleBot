@@ -7,8 +7,20 @@ import commandHandler from './commands/Command.handler.js';
 
 const { TOKEN } = process.env;
 
+const intents = new Intents();
+
+intents.add(
+  Intents.FLAGS.GUILD_PRESENCES,
+  Intents.FLAGS.GUILD_MEMBERS,
+  Intents.FLAGS.GUILDS,
+  Intents.FLAGS.GUILD_MESSAGES,
+  Intents.FLAGS.GUILD_BANS,
+  Intents.FLAGS.DIRECT_MESSAGES,
+  Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+);
+
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents,
 });
 
 client.Events = eventHandler(client);
