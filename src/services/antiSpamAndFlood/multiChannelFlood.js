@@ -19,7 +19,7 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
       i++;
     });
     if (!message.guild.me.permissions.has('BAN_MEMBERS')) {
-      channelLog?.send({
+      return channelLog?.send({
         content: `${message.author}`,
         embeds: [
           {
@@ -38,8 +38,6 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
           },
         ],
       });
-
-      return;
     }
 
     const reason = `Flood em Canais, supeita de Scam pela mensagem:

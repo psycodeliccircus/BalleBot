@@ -102,7 +102,7 @@ Caso queira suporte com nossos desenvolvedores entre em contato com a equipe res
 **Essas são as categorias e comandos que podem ser usados: **\n
 ${getMessageCommands(listTempleteCategories, namesCategories)}`;
 
-      message.channel.send({
+      return message.channel.send({
         content: `${message.author}`,
         embeds: [
           {
@@ -119,8 +119,6 @@ ${getMessageCommands(listTempleteCategories, namesCategories)}`;
           },
         ],
       });
-
-      return;
     }
     helpWithASpecificCommand(helpCommand, client, message);
   },

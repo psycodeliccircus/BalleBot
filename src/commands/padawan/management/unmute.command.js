@@ -17,7 +17,7 @@ export default {
       return;
     }
     if (!message.member.permissions.has('MANAGE_ROLES')) {
-      message.channel
+      return message.channel
         .send({
           content: `${message.author}`,
           embeds: [
@@ -31,11 +31,10 @@ export default {
           ],
         })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
 
     if (!users) {
-      message.channel
+      return message.channel
         .send({
           content: `${message.author}`,
           embeds: [
@@ -49,7 +48,6 @@ export default {
           ],
         })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
     const tableTemporarilyMutated = new client.Database.table(
       `tableTemporarilyMutated`
@@ -64,7 +62,7 @@ export default {
         ) || guildUndefinedMutated.get(`user_id_${user.id}`);
 
       if (!userMuted) {
-        message.channel
+        return message.channel
           .send({
             content: `${message.author}`,
             embeds: [
@@ -83,7 +81,6 @@ export default {
             ],
           })
           .then((msg) => msg.delete({ timeout: 15000 }));
-        return;
       }
 
       if (guildUndefinedMutated.has(`user_id_${user.id}`)) {

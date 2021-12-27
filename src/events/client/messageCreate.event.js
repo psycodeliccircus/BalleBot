@@ -50,7 +50,7 @@ export default {
       (message.content === `<@!${message.guild.me.id}>` ||
         message.content === `<@${message.guild.me.id}>`)
     ) {
-      message.channel.send({
+      return message.channel.send({
         content: `${message.author}`,
         embeds: [
           {
@@ -64,7 +64,6 @@ export default {
           },
         ],
       });
-      return;
     }
 
     if (!message.content.startsWith(prefix)) return;
@@ -98,7 +97,7 @@ export default {
             commandToBeExecuted.name.toLowerCase() !== 'setadm') &&
           !rolesPermissions.staff
         ) {
-          message.channel.send({
+          return message.channel.send({
             content: `${message.author}`,
             embeds: [
               {
@@ -114,8 +113,6 @@ ${prefix}setAdm @cargoPadawan @cargoModeradores @cargoStaff `,
               },
             ],
           });
-
-          return;
         }
         if (permissionIsTrueOrFalse) {
           commandToBeExecuted.run({ client, message, args, prefix });

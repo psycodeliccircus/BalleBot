@@ -42,8 +42,9 @@ export async function getUserOfCommand(client, message, prefix) {
               userbanned.user.id === stringSearchUser[0] ||
               userbanned.user.username === stringSearchUser[0]
           )?.user;
-        // eslint-disable-next-line no-empty
-      } catch (e) { }
+      } catch (e) {
+        // ignore exception
+      }
 
       if (userPush) {
         if (usersInMessage.indexOf(userPush) === -1) {

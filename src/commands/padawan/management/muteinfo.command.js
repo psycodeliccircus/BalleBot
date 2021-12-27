@@ -21,7 +21,7 @@ export default {
     }
 
     if (!users) {
-      message.channel
+      return message.channel
         .send({
           content: `${message.author}`,
           embeds: [
@@ -39,7 +39,6 @@ export default {
           ],
         })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
     users.forEach((user) => {
       const tableTemporarilyMutated = new client.Database.table(

@@ -102,7 +102,7 @@ export async function verifyWarnCountUser(client, message, userId) {
           });
       })
       .catch(() => {
-        // Failmessage
+        // just ignore exception
       });
   }
 }

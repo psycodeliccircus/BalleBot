@@ -39,7 +39,7 @@ export default {
           }
         }
 
-        message.channel.send({
+        return message.channel.send({
           content: `${message.author}`,
           embeds: [
             {
@@ -58,7 +58,6 @@ export default {
             },
           ],
         });
-        return;
       }
     }
     message.channel.send({

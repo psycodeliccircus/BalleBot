@@ -99,7 +99,7 @@ ${reason}
             });
           }
           if (user.id === message.guild.me.id) {
-            message.channel
+            return message.channel
               .send({
                 content: `${message.author}`,
                 embeds: [
@@ -118,13 +118,12 @@ ${reason}
                 ],
               })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
           if (
             memberUser.roles.highest.position >=
             message.member.roles.highest.position
           ) {
-            message.channel
+            return message.channel
               .send({
                 content: `${message.author}`,
                 embeds: [
@@ -144,7 +143,6 @@ ${reason}
                 ],
               })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
 
           function messageSucess() {

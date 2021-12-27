@@ -56,7 +56,7 @@ export default {
         .members.cache.get(message.author.id)
         .permissions.has('MANAGE_ROLES')
     ) {
-      message.channel
+      return message.channel
         .send({
           content: `${message.author}`,
           embeds: [
@@ -77,7 +77,6 @@ export default {
           ],
         })
         .then((msg) => msg.delete({ timeout: 15000 }));
-      return;
     }
 
     if (users === undefined) {
@@ -168,7 +167,7 @@ ${reasonMuted}
             memberUser.roles.highest.position >=
             message.guild.me.roles.highest.position
           ) {
-            message.channel
+            return message.channel
               .send({
                 content: `${message.author}`,
                 embeds: [
@@ -188,10 +187,9 @@ ${reasonMuted}
                 ],
               })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
           if (memberUser.permissions.has('ADMINISTRATOR')) {
-            message.channel
+            return message.channel
               .send({
                 content: `${message.author}`,
                 embeds: [
@@ -211,7 +209,6 @@ ${reasonMuted}
                 ],
               })
               .then((msg) => msg.delete({ timeout: 15000 }));
-            return;
           }
 
           if (

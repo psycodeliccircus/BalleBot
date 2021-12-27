@@ -27,7 +27,7 @@ export default {
       ).sort();
 
       if (listOfWords.length > 0) {
-        message.channel.send({
+        return message.channel.send({
           content: `${message.author}`,
           embeds: [
             {
@@ -48,8 +48,6 @@ export default {
             },
           ],
         });
-
-        return;
       }
     }
 
