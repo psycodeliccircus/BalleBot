@@ -44,7 +44,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     let reason = restOfMessage || '<Motivo não especificado>';
@@ -108,7 +108,7 @@ ${reason}
                 },
               ],
             })
-            .then((msg) => msg.delete({ timeout: 15000 }));
+            .then((msg) => setTimeout(() => msg.delete(), 15000));
         }
 
         if (!message.member.permissions.has('BAN_MEMBERS')) {
@@ -131,7 +131,7 @@ ${reason}
                 },
               ],
             })
-            .then((msg) => msg.delete({ timeout: 15000 }));
+            .then((msg) => setTimeout(() => msg.delete(), 15000));
         }
 
         users.forEach(async (user) => {
@@ -154,7 +154,7 @@ ${reason}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
 
           const memberUser = client.guilds.cache
@@ -183,7 +183,7 @@ ${reason}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           let reasonOfBan = `${restOfMessage}` || '<Motivo não especificado>';
           if (message.attachments.some((anex) => anex.url)) {

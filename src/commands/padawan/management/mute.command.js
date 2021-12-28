@@ -4,7 +4,7 @@ import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.com
 import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/layoutEmbed/colors.js';
 import { muteUserInDatabase } from '../../../utils/createRoleMuted/roleMutedUserInDatabase.js';
-
+import { createChannelRevision } from '../../../utils/createChannelRevision/createChannelRevision.js';
 import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
 
 export default {
@@ -47,7 +47,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     if (
@@ -76,7 +76,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     if (users === undefined) {
@@ -97,7 +97,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
     const textMessage = restOfMessage || '<Motivo não especificado>';
     const timeValidation = /(\d+d)|(\d+h)|(\d+m)|(\d+s)/gi;
@@ -161,7 +161,7 @@ ${reasonMuted}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           if (
             memberUser.roles.highest.position >=
@@ -186,7 +186,7 @@ ${reasonMuted}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           if (memberUser.permissions.has('ADMINISTRATOR')) {
             return message.channel
@@ -208,7 +208,7 @@ ${reasonMuted}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
 
           if (
@@ -234,7 +234,7 @@ ${reasonMuted}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           } else {
             let messageReasonMuted =
               restOfMessage || '<Motivo não especificado>';
@@ -245,13 +245,14 @@ ${reasonMuted}
               }
             }
 
-            const { userReasonFullMuted, inviteMessageDate } =
+            const { userReasonFullMuted, inviteMessageDate, muterole } =
               await muteUserInDatabase(
                 client,
                 message,
                 messageReasonMuted,
                 user
               );
+            createChannelRevision(message, muterole);
             const description = userReasonFullMuted.reason.replace(
               /((Punido por )(.*)\n)|(— Motivo: )/g,
               ''
@@ -289,7 +290,7 @@ ${reasonMuted}
                     description: `**Data final do Mute: ${inviteMessageDate}**
 **Motivo:**
 ${reasonMuted}
-Caso ache que o mute foi injusto, **fale com ${inviteDmAutor}**`,
+Caso ache que o mute foi injusto, **fale com ${inviteDmAutor.tag}**`,
                     footer: { text: `ID do usuário: ${user.id}` },
                     timestamp: new Date(),
                   },
@@ -315,7 +316,7 @@ Caso ache que o mute foi injusto, **fale com ${inviteDmAutor}**`,
                       },
                     ],
                   })
-                  .then((msg) => msg.delete({ timeout: 15000 }))
+                  .then((msg) => setTimeout(() => msg.delete(), 15000))
               );
           }
         });

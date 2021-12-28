@@ -190,9 +190,8 @@ export default {
                       }),
                     },
                     title: `Aviso ${warnRemove + 1} foi removido do usuário`,
-                    description: `O usuário ${
-                      user.tag
-                    } teve um aviso removido! \n
+                    description: `O usuário ${user.tag
+                      } teve um aviso removido! \n
 **Punido por**: <@${autorDeleted}>
 **Data:** ${parseDateForDiscord(dataDeleted)}
 **Motivo** ${avisoDeleted}`,
@@ -200,7 +199,7 @@ export default {
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           return;
         }

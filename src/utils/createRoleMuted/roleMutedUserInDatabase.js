@@ -81,5 +81,5 @@ export async function muteUserInDatabase(client, event, reason, userMutated) {
     dateForDatabase !== 'indefinido'
       ? parseDateForDiscord(dateForDatabase)
       : '`indefinido`';
-  return { userReasonFullMuted, inviteMessageDate };
+  return { userReasonFullMuted, inviteMessageDate, muterole };
 }

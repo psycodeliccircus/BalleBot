@@ -46,7 +46,7 @@ export async function verifyWarnCountUser(client, message, userId) {
               content: `${message.author}`,
               embeds: [messageForChannelLog()],
             })
-            .then((msg) => msg.delete({ timeout: 15000 }));
+            .then((msg) => setTimeout(() => msg.delete(), 15000));
         }
         user
           .send({
@@ -55,7 +55,7 @@ export async function verifyWarnCountUser(client, message, userId) {
                 color: Colors.pink_red,
                 thumbnail: message.guild.iconURL(),
                 title: `Você foi banido do servidor **${message.guild.name}**`,
-                description: `**Motivo: **\nVocê levou ${maxWarns}\nCaso ache que o banimento foi injusto, **fale com ${message.author}**`,
+                description: `**Motivo: **\nVocê levou ${maxWarns} warns e foi banido\nCaso ache que o banimento foi injusto, **fale com ${message.author.tag}**`,
                 footer: { text: `ID do usuário: ${user.id}` },
                 timestamp: new Date(),
               },
@@ -97,7 +97,7 @@ export async function verifyWarnCountUser(client, message, userId) {
                     },
                   ],
                 })
-                .then((msg) => msg.delete({ timeout: 15000 }));
+                .then((msg) => setTimeout(() => msg.delete(), 15000));
             }
           });
       })

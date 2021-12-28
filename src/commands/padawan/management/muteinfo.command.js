@@ -38,7 +38,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
     users.forEach((user) => {
       const tableTemporarilyMutated = new client.Database.table(

@@ -33,7 +33,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
     const permissionRequired = 'mods';
     const { userHasPermissionOf } = userHasPermission(

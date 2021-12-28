@@ -35,7 +35,7 @@ export async function messageWarnAndMute(message, client, messageMarked) {
         },
       ],
     })
-    .then((msg) => msg.delete({ timeout: 15000 }));
+    .then((msg) => setTimeout(() => msg.delete(), 15000));
 
   const guildIdDatabase = new client.Database.table(
     `guild_id_${message.guild.id}`

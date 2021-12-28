@@ -38,7 +38,7 @@ export default {
       });
     }
 
-    const usersBanneds = await message.guild.fetchBans();
+    const usersBanneds = await message.guild.bans.fetch();
     users.forEach(async (user) => {
       if (!usersBanneds.some((x) => x.user.id === user.id)) {
         return message.channel.send({
@@ -70,7 +70,6 @@ export default {
         ? reasonFull
           .match(autorValidation)[0]
           .replace(/(Punido por )|(\n)/g, '')
-          .replace(/(\d{18})/, `<@$1>`)
         : `<sem autor>`;
 
       const descriptionBan = userBanned.reason

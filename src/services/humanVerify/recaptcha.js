@@ -44,18 +44,19 @@ export async function recaptcha(client, memberAdd) {
         },
       ],
     });
-
-    const idVerification = makeid(5);
+    const numberOfChars = Math.floor(Math.random() * (5 - 3) + 3);
+    const idVerification = makeid(numberOfChars);
     const fonte = await jimp.loadFont(
       './src/services/humanVerify/font/Chiller.ttf.fnt'
     );
     const fundo = await jimp.read('https://i.imgur.com/xUDuQ6P.png');
     const line = await jimp.read('https://i.imgur.com/aeD0ucO.png');
+    const yLine = Math.floor(Math.random() * (120 - 70) + 70);
     line.resize(500, 5);
     fundo
       .resize(500, 200)
       .print(fonte, 150, 20, idVerification)
-      .composite(line, 0, 100);
+      .composite(line, 0, yLine);
 
     fundo.getBuffer(jimp.MIME_PNG, async (err, buffer) => {
       await channel.send({
@@ -63,8 +64,12 @@ export async function recaptcha(client, memberAdd) {
         embeds: [
           {
             color: Colors.pink_red,
-            title: `Escreva o código de 5 caracteres abaixo no chat para confirmar que você é um humano! :eyes:`,
+            title: `Escreva o código de ${numberOfChars} caracteres abaixo no chat para confirmar que você é um humano! :eyes:`,
             timestamp: new Date(),
+            description: `**Caso não esteja vendo a código, siga estas intruções para ver o código:**
+> **Abra Configurações do usuário**
+> **Texto e Imagens**
+> **Ative a primeira opção**: \`Quando publicados como links no chat\``,
             image: { url: 'attachment://image.png' },
           },
         ],
@@ -78,9 +83,10 @@ export async function recaptcha(client, memberAdd) {
     });
 
     const filter = (m) => m.author.id === memberAdd.user.id;
-    const collector = channel.createMessageCollector(filter, {
+    const collector = channel.createMessageCollector({
+      filter,
       max: 1,
-      time: 120000,
+      time: 1000 * 60 * 2,
     });
     let answered = false;
     collector.on('collect', async (m) => {
@@ -93,11 +99,11 @@ export async function recaptcha(client, memberAdd) {
           guildIdDatabase.get('channel_log')
         );
         channelLog?.send({
-          content: `${userMember}`,
+          content: `${userMember} `,
           embeds: [
             {
               title: `O usuário ${userMember.user.tag} confirmou que é um humano e entrou no servidor!`,
-              description: `**Código verificado: ${idVerification}**`,
+              description: `**Código verificado: ${idVerification}** `,
               color: Colors.pink_red,
               thumbnail: userMember.user.displayAvatarURL({ dynamic: true }),
               footer: { text: `ID do usuário: ${userMember.user.id}` },

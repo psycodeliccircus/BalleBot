@@ -11,7 +11,7 @@ export function userHasPermission(
   );
 
   const rolesPermissions = guildIdDatabase.get('admIds') || {};
-  rolesPermissions.owner = message.guild.ownerID;
+  rolesPermissions.owner = message.guild.ownerId;
 
   const rolesUser = client.guilds.cache
     .get(message.guild.id)

@@ -44,7 +44,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     let reason = `${restOfMessage}` || '<Motivo não especificado>';
@@ -117,7 +117,7 @@ ${reason}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           if (
             memberUser.roles.highest.position >=
@@ -142,7 +142,7 @@ ${reason}
                   },
                 ],
               })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
 
           function messageSucess() {
@@ -178,7 +178,7 @@ ${reason}
           } else {
             message.channel
               .send({ content: `${message.author}`, embeds: [messageSucess()] })
-              .then((msg) => msg.delete({ timeout: 15000 }));
+              .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           if (inviteDm) {
             user
@@ -190,7 +190,7 @@ ${reason}
                     title: `Você recebeu um warn do servidor **${message.guild}**`,
                     description: `**Descrição: **
 ${reason}
-**Para rever seu caso fale com: ${message.author}**`,
+**Para rever seu caso fale com: ${message.author.tag}**`,
                     footer: { text: `ID do usuário: ${user.id}` },
                     timestamp: new Date(),
                   },
@@ -214,7 +214,7 @@ ${reason}
                       },
                     ],
                   })
-                  .then((msg) => msg.delete({ timeout: 15000 }))
+                  .then((msg) => setTimeout(() => msg.delete(), 15000))
               );
           }
 

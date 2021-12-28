@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, Permissions } from 'discord.js';
 import db from 'quick.db';
 import eventHandler from './events/Events.handler.js';
 import commandHandler from './commands/Command.handler.js';
@@ -26,5 +26,5 @@ const client = new Client({
 client.Events = eventHandler(client);
 client.Commands = commandHandler();
 client.Database = db;
-
+client.Permission = new Permissions(104324673n);
 client.login(TOKEN);

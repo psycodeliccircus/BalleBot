@@ -16,7 +16,7 @@ export function verifyBannedWords(client, message) {
 
   if (guildIdDatabase.has('admIds')) {
     const rolesPermissions = guildIdDatabase.get('admIds') || {};
-    rolesPermissions.owner = message.guild.ownerID;
+    rolesPermissions.owner = message.guild.ownerId;
 
     const namesOfRoles = Object.keys(rolesPermissions).reverse();
 
@@ -47,7 +47,10 @@ export function verifyBannedWords(client, message) {
           'g'
         );
         if (wordsRegex.test(messageLowerCase) && wordsRegex !== false) {
-          let messageMarked = messageLowerCase.replace(wordsRegex, '-->$&<--');
+          let messageMarked = messageLowerCase.replace(
+            wordsRegex,
+            '--->$&<---'
+          );
           const anexo = message.attachments.map((anex) => anex.url);
 
           if (anexo.length > 0) {

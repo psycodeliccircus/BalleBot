@@ -12,7 +12,8 @@ export const confirmMessage = (message, messageAnt) =>
 
     const filter = (reaction) => reactions.includes(reaction.emoji.name);
 
-    const collector = messageAnt.createReactionCollector(filter, {
+    const collector = messageAnt.createReactionCollector({
+      filter,
       time: 15000,
       dispose: true,
     });
@@ -48,7 +49,7 @@ export const confirmMessage = (message, messageAnt) =>
           .send({
             content: `${message.author} você não confirmou e o comando foi cancelado`,
           })
-          .then((msg) => msg.delete({ timeout: 15000 }));
+          .then((msg) => setTimeout(() => msg.delete(), 15000));
         resolve(false);
       }
     });

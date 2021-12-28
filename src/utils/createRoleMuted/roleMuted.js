@@ -12,7 +12,7 @@ export async function roleMuted(event, nameRoleMuted) {
     });
 
     event.guild.channels.cache.forEach(async (channel) => {
-      channel.updateOverwrite(muterole, {
+      channel.permissionOverwrites.edit(muterole, {
         VIEW_MESSAGES: false,
         SEND_MESSAGES: false,
         VIEW_CHANNEL: false,

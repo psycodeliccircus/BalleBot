@@ -30,7 +30,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     if (!users) {
@@ -47,7 +47,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
     const tableTemporarilyMutated = new client.Database.table(
       `tableTemporarilyMutated`
@@ -80,7 +80,7 @@ export default {
               },
             ],
           })
-          .then((msg) => msg.delete({ timeout: 15000 }));
+          .then((msg) => setTimeout(() => msg.delete(), 15000));
       }
 
       if (guildUndefinedMutated.has(`user_id_${user.id}`)) {
@@ -127,7 +127,7 @@ export default {
       } else {
         message.channel
           .send({ content: `${message.author}`, embeds: [messageInviteLog()] })
-          .then((msg) => msg.delete({ timeout: 15000 }));
+          .then((msg) => setTimeout(() => msg.delete(), 15000));
       }
     });
   },

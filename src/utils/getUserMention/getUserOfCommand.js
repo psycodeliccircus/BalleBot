@@ -6,7 +6,7 @@ export async function getUserOfCommand(client, message, prefix) {
     /(<@(!?)(?=[0-9]{18}))|((?<=[0-9]{18})>)|(<(?=[0-9]{18}))/g;
 
   const [, ...args] = message.content.split(/ +/);
-  const usersBanneds = await message.guild.fetchBans();
+  const usersBanneds = await message.guild.bans.fetch();
   args.forEach(async (text) => {
     const itemArgs = text.replace(regexForRemoveMention, '');
 

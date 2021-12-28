@@ -10,7 +10,7 @@ export default {
   aliases: ['removeban', 'removerban', 'retirarban', 'desban'],
   category: 'Moderação ⚔️',
   run: async ({ message, client, args, prefix }) => {
-    const ban = await message.guild.fetchBans();
+    const ban = await message.guild.bans.fetch();
     const { users } = await getUserOfCommand(client, message, prefix);
 
     if (!args[0] && !users) {
@@ -53,7 +53,7 @@ export default {
             },
           ],
         })
-        .then((msg) => msg.delete({ timeout: 15000 }));
+        .then((msg) => setTimeout(() => msg.delete(), 15000));
     }
 
     users.forEach(async (userBanned) => {
@@ -76,7 +76,7 @@ export default {
               },
             ],
           })
-          .then((msg) => msg.delete({ timeout: 15000 }));
+          .then((msg) => setTimeout(() => msg.delete(), 15000));
       }
 
       message.guild.members.unban(member);
@@ -112,7 +112,7 @@ export default {
             content: `${message.author}`,
             embeds: [messageInviteLog()],
           })
-          .then((msg) => msg.delete({ timeout: 15000 }));
+          .then((msg) => setTimeout(() => msg.delete(), 15000));
       }
     });
   },
