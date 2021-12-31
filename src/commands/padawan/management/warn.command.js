@@ -48,10 +48,15 @@ export default {
     }
 
     let reason = `${restOfMessage}` || '<Motivo não especificado>';
-    const anexo = message.attachments.find((anex) => anex.url);
+    const attachmentsLinks = message.attachments.map((anex) => anex.url);
 
-    if (anexo) {
-      reason += `\n**Arquivo anexado**: ${anexo.url}`;
+    if (attachmentsLinks.length > 0) {
+      if (attachmentsLinks.length > 3) {
+        return message.channel.send({
+          content: `${message.author} Você pode enviar no máximo 3 imagens como prova`,
+        });
+      }
+      reason += `\n**Arquivos anexados**: ${attachmentsLinks.join('\n')}`;
     }
 
     const messageAnt = await message.channel.send({
@@ -144,7 +149,15 @@ ${reason}
               })
               .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
+          let reasonOfWarn = `${restOfMessage}` || '<Motivo não especificado>';
 
+          if (attachmentsLinks.length > 0) {
+            await uploadImage(message).then((linksImages) => {
+              reasonOfWarn += `\n**Arquivos anexados**:\n${linksImages.join(
+                '\n'
+              )}`;
+            });
+          }
           function messageSucess() {
             return {
               color: Colors.pink_red,
@@ -154,7 +167,7 @@ ${reason}
                 icon_url: message.author.displayAvatarURL({ dynamic: true }),
               },
               title: `O usuário ${user.tag} foi avisado!`,
-              description: `**Pelo Motivo de: **\n${reason}`,
+              description: `**Pelo Motivo de: **\n${reasonOfWarn}`,
               footer: {
                 text: `ID do usuário avisado: ${user.id}`,
               },
@@ -218,13 +231,6 @@ ${reason}
               );
           }
 
-          let reasonOfWarn = `${restOfMessage}` || '<Motivo não especificado>';
-          if (message.attachments.some((anex) => anex.url)) {
-            const urlUpload = await uploadImage(message);
-            if (urlUpload) {
-              reasonOfWarn += `\n**Arquivo anexado**: ${urlUpload}`;
-            }
-          }
           if (guildIdDatabase.has(`user_id_${user.id}`)) {
             guildIdDatabase.push(`user_id_${user.id}.autor`, message.author.id);
             guildIdDatabase.push(`user_id_${user.id}.reasons`, reasonOfWarn);

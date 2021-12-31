@@ -1,17 +1,29 @@
 import imgur from 'imgur';
 
-export async function uploadImage(message) {
-  const anexo = message.attachments.find((anex) => anex.url);
+export const uploadImage = (message) =>
+  new Promise((resolve) => {
+    const anexos = message.attachments;
 
-  let urlUpload;
-  imgur.setClientId(process.env.IMGUR_TOKEN);
-  imgur.getClientId();
-  await imgur
-    .uploadUrl(anexo.url)
-    .then((json) => {
-      urlUpload = json.link;
-    })
-    .catch();
+    const linksImages = [];
+    imgur.setClientId(process.env.IMGUR_TOKEN);
+    imgur.getClientId();
 
-  return urlUpload;
-}
+    anexos.map(async (imageUrl) => {
+      if (
+        imageUrl.url.endsWith('.png') ||
+        imageUrl.url.endsWith('.jpg') ||
+        imageUrl.url.endsWith('.jpeg')
+      ) {
+        await imgur
+          .uploadUrl(imageUrl.url)
+          .then((json) => {
+            linksImages.push(json.link);
+          })
+          .catch();
+
+        if (linksImages.length === anexos.size) {
+          resolve(linksImages);
+        }
+      }
+    });
+  });

@@ -48,10 +48,16 @@ export default {
     }
 
     let reason = restOfMessage || '<Motivo não especificado>';
-    const anexo = message.attachments.map((anex) => anex.url);
 
-    if (anexo.length > 0) {
-      reason += `\n**Arquivo anexado:** ${anexo}`;
+    const attachmentsLinks = message.attachments.map((anex) => anex.url);
+
+    if (attachmentsLinks.length > 0) {
+      if (attachmentsLinks.length > 3) {
+        return message.channel.send({
+          content: `${message.author} Você pode enviar no máximo 3 imagens como prova`,
+        });
+      }
+      reason += `\n**Arquivos anexados**: ${attachmentsLinks.join('\n')}`;
     }
 
     const messageAnt = await message.channel.send({
@@ -186,11 +192,12 @@ ${reason}
               .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           let reasonOfBan = `${restOfMessage}` || '<Motivo não especificado>';
-          if (message.attachments.some((anex) => anex.url)) {
-            const urlUpload = await uploadImage(message);
-            if (urlUpload) {
-              reasonOfBan += `\n**Arquivo anexado**: ${urlUpload}`;
-            }
+          if (attachmentsLinks.length > 0) {
+            await uploadImage(message).then((linksImages) => {
+              reasonOfBan += `\n**Arquivos anexados**:\n${linksImages.join(
+                '\n'
+              )}`;
+            });
           }
 
           await message.guild.members
