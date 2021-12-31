@@ -4,17 +4,12 @@ export async function roleMuted(event, nameRoleMuted) {
   );
   if (!muterole) {
     muterole = await event.guild.roles.create({
-      data: {
-        name: nameRoleMuted,
-        color: 'ligth_brown',
-        permissions: [],
-      },
+      name: nameRoleMuted,
+      permissions: [],
     });
 
     event.guild.channels.cache.forEach(async (channel) => {
-      channel.permissionOverwrites.edit(muterole, {
-        VIEW_MESSAGES: false,
-        SEND_MESSAGES: false,
+      channel.permissionOverwrites.edit(muterole.id, {
         VIEW_CHANNEL: false,
       });
     });

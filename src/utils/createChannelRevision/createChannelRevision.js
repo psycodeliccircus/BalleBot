@@ -9,21 +9,21 @@ export function createChannelRevision(message, muterole) {
     message.guild.channels
       .create(channelName, {
         type: 'text',
-        permissionOverwrites: [
-          {
-            id: muterole.id,
-            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
-          },
-          {
-            id: message.guild.roles.everyone,
-            deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
-          },
-        ],
       })
       .then((channel) => {
         message.guild.channels
           .create('REVISÃO', {
             type: 'GUILD_CATEGORY',
+            permissionOverwrites: [
+              {
+                id: muterole.id,
+                allow: ['VIEW_CHANNEL'],
+              },
+              {
+                id: message.guild.roles.everyone,
+                deny: ['VIEW_CHANNEL'],
+              },
+            ],
           })
           .then((category) => channel.setParent(category.id));
       })

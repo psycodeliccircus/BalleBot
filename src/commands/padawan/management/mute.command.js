@@ -105,10 +105,15 @@ export default {
       `${textMessage.replace(timeValidation, '').trim()}` ||
       '<Motivo não especificado>';
 
-    const anexo = message.attachments.map((anex) => anex.url);
+    const attachmentsLinks = message.attachments.map((anex) => anex.url);
 
-    if (anexo.length > 0) {
-      reasonMuted += `\n**Arquivo anexado:** ${anexo}`;
+    if (attachmentsLinks.length > 0) {
+      if (attachmentsLinks.length > 3) {
+        return message.channel.send({
+          content: `${message.author} Você pode enviar no máximo 3 imagens como prova`,
+        });
+      }
+      reasonMuted += `\n**Arquivos anexados**: ${attachmentsLinks.join('\n')}`;
     }
 
     const messageAnt = await message.channel.send({
@@ -213,7 +218,8 @@ ${reasonMuted}
 
           if (
             memberUser.roles.highest.position >=
-            message.member.roles.highest.position
+            message.member.roles.highest.position &&
+            !(message.member.id === message.guild.ownerId)
           ) {
             message.channel
               .send({
@@ -238,11 +244,12 @@ ${reasonMuted}
           } else {
             let messageReasonMuted =
               restOfMessage || '<Motivo não especificado>';
-            if (message.attachments.some((anex) => anex.url)) {
-              const urlUpload = await uploadImage(message);
-              if (urlUpload) {
-                messageReasonMuted += `\n**Arquivo anexado**: ${urlUpload}`;
-              }
+            if (attachmentsLinks.length > 0) {
+              await uploadImage(message).then((linksImages) => {
+                messageReasonMuted += `\n**Arquivos anexados**:\n${linksImages.join(
+                  '\n'
+                )}`;
+              });
             }
 
             const { userReasonFullMuted, inviteMessageDate, muterole } =
