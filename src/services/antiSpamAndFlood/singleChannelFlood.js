@@ -39,7 +39,7 @@ ${message.content}
             icon_url: message.author.displayAvatarURL({ dynamic: true }),
           },
           title: `**Usuário ${message.author.tag} mutado por enviar um flood em UM canal!**`,
-          description: `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes em <#${it[idUser].lastChannel}>:**
+          description: `**O usuário floodou a seguinte mensagem ${maxMessageRep} vezes muito rapidamente em <#${it[idUser].lastChannel}>:**
 ${it[idUser].content}
 **Data final do Mute: ${inviteMessageDate}**`,
           footer: { text: `ID do usuário: ${message.author.id}` },

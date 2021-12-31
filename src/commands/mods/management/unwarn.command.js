@@ -60,7 +60,8 @@ export default {
         .members.cache.get(user.id);
       if (
         memberUser.roles.highest.position >=
-        message.member.roles.highest.position
+        message.member.roles.highest.position &&
+        !(message.member.id === message.guild.ownerId)
       ) {
         return message.channel.send({
           content: `${message.author}`,

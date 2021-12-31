@@ -15,7 +15,7 @@ export async function messageWarnAndMute(message, client, messageMarked) {
             fields: [
               {
                 name: 'Mensagem enviada no canal:',
-                value: message.channel,
+                value: `${message.channel}`,
               },
             ],
             timestamp: new Date(),
@@ -61,33 +61,35 @@ export async function messageWarnAndMute(message, client, messageMarked) {
   }
 
   if (guildIdDatabase.has('channel_log')) {
-    const channel = client.channels.cache.get(
+    const channelLog = client.channels.cache.get(
       guildIdDatabase.get('channel_log')
     );
 
-    if (channel) {
-      channel.send({
+    if (channelLog) {
+      channelLog.send({
+        content: `${message.author}`,
         embeds: [
           {
             color: 'YELLOW',
             title: `Usuário ${message.author.tag} enviou uma mensagem suspeita:`,
+            description: messageMarked,
             timestamp: new Date(),
             author: {
               name: `${message.author.tag}`,
               icon_url: message.author.displayAvatarURL({ dynamic: true }),
-              footer: { text: `ID do usuário: ${message.author.id}` },
-              fields: [
-                {
-                  name: 'Essa foi a mensagem:',
-                  value: messageMarked,
-                },
-                {
-                  name: 'Mensagem enviada no canal:',
-                  value: message.channel,
-                },
-              ],
-              thumbnail: message.author.displayAvatarURL({ dynamic: true }),
             },
+            footer: { text: `ID do usuário: ${message.author.id}` },
+            fields: [
+              {
+                name: 'Essa foi a mensagem:',
+                value: messageMarked,
+              },
+              {
+                name: 'Mensagem enviada no canal:',
+                value: `${message.channel}`,
+              },
+            ],
+            thumbnail: message.author.displayAvatarURL({ dynamic: true }),
           },
         ],
       });
