@@ -59,7 +59,7 @@ export default {
         .get(message.guild.id)
         .members.cache.get(user.id);
       if (
-        memberUser.roles.highest.position >=
+        memberUser?.roles.highest.position >=
         message.member.roles.highest.position &&
         !(message.member.id === message.guild.ownerId)
       ) {

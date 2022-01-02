@@ -107,7 +107,7 @@ export default {
                 description: `Primeiramente, nós do servidor Ballerini ficamos honrados por usar nosso bot. Isso é incrível! 🙀 😻
 Para começar vamos definir os cargos administrativos:
 Eu ofereço 4 cargos de hierarquia, Everyone, Padawan, Moderadores e Staff.
-O único que poderá definir os cargos será o dono do servidor!
+O único que poderá definir os cargos será o dono do servidor ou um administrador real!
 Então mande a seguinte mensagem para definir os cargos repectivamente e saiba sobre os comandos com ${prefix}help!
 ${prefix}setAdm @cargoPadawan @cargoModeradores @cargoStaff `,
               },
@@ -130,9 +130,7 @@ ${prefix}setAdm @cargoPadawan @cargoModeradores @cargoStaff `,
                 },
               ],
             })
-            .then((msg) => {
-              msg.delete({ timeout: 10000 });
-            });
+            .then((msg) => setTimeout(() => msg.delete(), 15000));
         }
         message.delete();
       }

@@ -41,7 +41,7 @@ export default {
     let position = 0;
 
     for (let i = 0; i < args.length; i++) {
-      setRegexList.push(args[i].toLowerCase());
+      setRegexList.push(` ${args[i].toLowerCase()}`);
     }
 
     function messageSucess() {

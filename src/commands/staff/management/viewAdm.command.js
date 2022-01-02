@@ -30,9 +30,9 @@ export default {
           description: `**Para atualizar os cargos use ${prefix}setAdm @padawan @mods @staff.**
             \nCada cargo possui acesso a comandos de acordo com sua hierarquia, para saber se um cargo pode usar um comando use ${prefix}help <comando>`,
           fields: [
-            { name: 'Padawan', value: permissions.padawans, inline: true },
-            { name: 'Mods', value: permissions.mods, inline: true },
-            { name: 'Staff', value: permissions.staff, inline: true },
+            { name: 'Padawan', value: `${permissions.padawans}`, inline: true },
+            { name: 'Mods', value: `${permissions.mods}`, inline: true },
+            { name: 'Staff', value: `${permissions.staff}`, inline: true },
           ],
         },
       ],

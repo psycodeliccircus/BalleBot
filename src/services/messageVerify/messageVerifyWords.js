@@ -36,20 +36,23 @@ export function verifyBannedWords(client, message) {
     if (!userHasPermission && guildIdDatabase.has('listOfWordsBanned')) {
       const listOfWordsBannedGuild = guildIdDatabase.get('listOfWordsBanned');
 
-      const messageLowerCase = message.content.toLowerCase();
+      const messageLowerCase =
+        message.content.split(' ').length === 1
+          ? ` ${message.content.toLowerCase()}`
+          : message.content.toLowerCase();
 
       if (
         listOfWordsBannedGuild.length !== 0 &&
         listOfWordsBannedGuild[0] !== null
       ) {
         const wordsRegex = new RegExp(
-          listOfWordsBannedGuild.filter((word) => word).join('|'),
-          'g'
+          listOfWordsBannedGuild.filter((word) => word).join('|')
         );
         if (wordsRegex.test(messageLowerCase) && wordsRegex !== false) {
           let messageMarked = messageLowerCase.replace(
             wordsRegex,
-            '--->$&<---'
+            '--->$&<---',
+            'g'
           );
           const anexo = message.attachments.map((anex) => anex.url);
 

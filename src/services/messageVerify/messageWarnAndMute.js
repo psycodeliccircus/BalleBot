@@ -9,7 +9,7 @@ export async function messageWarnAndMute(message, client, messageMarked) {
             color: 'YELLOW',
             thumbnail: message.guild.iconURL(),
             title: `Você enviou uma mensagem suspeita em ${message.guild}:`,
-            description: `**Um moderador irá rever seu caso! Por hora você está mutado**
+            description: `**Por hora você levou um warn até um moderador revisar seu caso!**
             \n**Essa foi a mensagem:**
             ${messageMarked}`,
             fields: [
@@ -72,7 +72,6 @@ export async function messageWarnAndMute(message, client, messageMarked) {
           {
             color: 'YELLOW',
             title: `Usuário ${message.author.tag} enviou uma mensagem suspeita:`,
-            description: messageMarked,
             timestamp: new Date(),
             author: {
               name: `${message.author.tag}`,
