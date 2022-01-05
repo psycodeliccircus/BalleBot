@@ -59,6 +59,20 @@ export default {
       collector.on('collect', async (m) => {
         m.react(reactionEmoji);
         answered = true;
+        if (count === 0) {
+          if (m.content.length > 256) {
+            return message.channel.send(
+              'O título deve conter menos de 246 caracteres'
+            );
+          }
+        }
+        if (count === 1) {
+          if (m.content.length > 5000) {
+            return message.channel.send(
+              'A descrição deve conter menos de 5000 caracteres'
+            );
+          }
+        }
         if (count === 2) {
           if (m.attachments.size > 0) {
             const link = await uploadImage(m);

@@ -101,8 +101,14 @@ export default {
           }
         }
         argsRole.splice(0, 2);
-        newOptionRole.description = argsRole.join(' ');
 
+        newOptionRole.description = argsRole.join(' ');
+        if (newOptionRole.description.length > 100) {
+          message.channel.send(
+            'A descrição do comando deve haver no máximo 100 caracteres'
+          );
+          return addRoleInMessage();
+        }
         const menu =
           row.components[0] instanceof MessageSelectMenu
             ? row.components[0]
