@@ -47,7 +47,7 @@ export async function recaptcha(client, memberAdd) {
     const numberOfChars = Math.floor(Math.random() * (6 - 3) + 3);
     const idVerification = makeid(numberOfChars);
     const fonte = await jimp.loadFont(
-      './src/services/humanVerify/font/Chiller.ttf.fnt'
+      './src/utils/verifications/humanVerify/font/Chiller.ttf.fnt'
     );
     const fundo = await jimp.read('https://i.imgur.com/xUDuQ6P.png');
     const line = await jimp.read('https://i.imgur.com/aeD0ucO.png');
