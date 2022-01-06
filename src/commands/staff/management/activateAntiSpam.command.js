@@ -1,5 +1,5 @@
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
 
 export default {
   name: 'activateAntiSpam',

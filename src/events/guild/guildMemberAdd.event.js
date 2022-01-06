@@ -1,5 +1,5 @@
-import { checkIfItIsMutated } from '../../services/muteVerify/checkIfItIsMutated.js';
-import { recaptcha } from '../../services/humanVerify/recaptcha.js';
+import { checkIfItIsMutated } from '../../utils/verifications/muteVerify/checkIfItIsMutated.js';
+import { recaptcha } from '../../utils/verifications/humanVerify/recaptcha.js';
 
 export default {
   name: 'guildMemberAdd',

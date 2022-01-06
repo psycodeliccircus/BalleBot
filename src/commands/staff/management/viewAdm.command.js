@@ -1,4 +1,4 @@
-import Colors from '../../../utils/layoutEmbed/colors.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 
 export default {
   name: 'viewAdm',

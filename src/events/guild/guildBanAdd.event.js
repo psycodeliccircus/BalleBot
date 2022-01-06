@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Discord from 'discord.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
-import { parseDateForDiscord } from '../../utils/TimeMessageConversor/parseDateForDiscord.js';
+import Colors from '../../utils/commandsFunctions/layoutEmbed/colors.js';
+import { parseDateForDiscord } from '../../utils/commandsFunctions/TimeMessageConversor/parseDateForDiscord.js';
 
 export default {
   name: 'guildBanAdd',

@@ -1,6 +1,6 @@
 import { GuildMember } from 'discord.js';
 
-export function autoRolesInteraction(client, interaction) {
+export function autoRolesInteraction(interaction) {
   if (!interaction.isSelectMenu()) return;
   const { customId, values, member } = interaction;
 

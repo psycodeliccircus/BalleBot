@@ -1,4 +1,4 @@
-import { verifyWarnCountUser } from '../../utils/verifyWarnCountUser/verifyWarnCountUser.js';
+import { verifyWarnCountUser } from '../verifyWarnCountUser/verifyWarnCountUser.js';
 
 export async function messageWarnAndMute(message, client, messageMarked) {
   function messageDmAlert() {

@@ -1,8 +1,8 @@
-import { verifyBannedWords } from '../../services/messageVerify/messageVerifyWords.js';
-import { antiSpamAndFlood } from '../../services/antiSpamAndFlood/functionSpamAndFlood.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
-import { userHasPermission } from '../../utils/userHasPermission/userHasPermission.js';
-import { downloadDatabase } from '../../services/developersCommands/downloadDatabase.js';
+import { verifyBannedWords } from '../../utils/verifications/messageVerify/messageVerifyWords.js';
+import { antiSpamAndFlood } from '../../utils/verifications/antiSpamAndFlood/functionSpamAndFlood.js';
+import Colors from '../../utils/commandsFunctions/layoutEmbed/colors.js';
+import { userHasPermission } from '../../utils/commandsFunctions/userHasPermission/userHasPermission.js';
+import { downloadDatabase } from '../../utils/developersCommands/downloadDatabase.js';
 
 export default {
   name: 'messageCreate',

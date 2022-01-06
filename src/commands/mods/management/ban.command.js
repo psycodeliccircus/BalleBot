@@ -1,9 +1,9 @@
-import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
-import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
+import { getUserOfCommand } from '../../../utils/commandsFunctions/getUserMention/getUserOfCommand.js';
+import { confirmMessage } from '../../../utils/commandsFunctions/confirmMessage/confirmMessage.js';
+import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.command.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage.js';
 
 export default {
   name: 'ban',

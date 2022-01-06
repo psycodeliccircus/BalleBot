@@ -1,11 +1,11 @@
 import Discord from 'discord.js';
-import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { confirmMessage } from '../../../utils/confirmMessage/confirmMessage.js';
-import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
-import { verifyWarnCountUser } from '../../../utils/verifyWarnCountUser/verifyWarnCountUser.js';
+import { getUserOfCommand } from '../../../utils/commandsFunctions/getUserMention/getUserOfCommand.js';
+import { confirmMessage } from '../../../utils/commandsFunctions/confirmMessage/confirmMessage.js';
+import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.command.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage.js';
+import { verifyWarnCountUser } from '../../../utils/verifications/verifyWarnCountUser/verifyWarnCountUser.js';
 
 export default {
   name: 'warn',
@@ -126,7 +126,7 @@ ${reason}
           }
           if (
             memberUser.roles.highest.position >=
-              message.member.roles.highest.position &&
+            message.member.roles.highest.position &&
             !(message.member.id === message.guild.ownerId)
           ) {
             return message.channel

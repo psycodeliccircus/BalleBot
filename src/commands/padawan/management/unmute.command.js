@@ -1,6 +1,6 @@
-import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
-import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
+import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.command.js';
+import { getUserOfCommand } from '../../../utils/commandsFunctions/getUserMention/getUserOfCommand.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 
 export default {
   name: 'unmute',

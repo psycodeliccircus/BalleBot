@@ -1,4 +1,4 @@
-import { removeMuteRole } from '../../services/muteVerify/removeMuteRole.js';
+import { removeMuteRole } from '../../utils/verifications/muteVerify/removeMuteRole.js';
 
 export default {
   name: 'guildMemberUpdate',

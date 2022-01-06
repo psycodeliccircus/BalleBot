@@ -1,6 +1,6 @@
-import { parseDateForDiscord } from '../TimeMessageConversor/parseDateForDiscord.js';
-import Colors from '../layoutEmbed/colors.js';
-import Icons from '../layoutEmbed/iconsMessage.js';
+import { parseDateForDiscord } from '../../commandsFunctions/TimeMessageConversor/parseDateForDiscord.js';
+import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
+import Icons from '../../commandsFunctions/layoutEmbed/iconsMessage.js';
 
 export async function verifyWarnCountUser(client, message, userId) {
   const guildIdDatabase = new client.Database.table(

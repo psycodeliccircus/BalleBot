@@ -1,5 +1,5 @@
 import { roleMuted } from './roleMuted.js';
-import { parseDateForDiscord } from '../TimeMessageConversor/parseDateForDiscord.js';
+import { parseDateForDiscord } from '../../commandsFunctions/TimeMessageConversor/parseDateForDiscord.js';
 
 export async function muteUserInDatabase(client, event, reason, userMutated) {
   const user = userMutated || event.user;

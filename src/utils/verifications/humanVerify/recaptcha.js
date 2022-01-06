@@ -1,6 +1,6 @@
 import jimp from 'jimp';
-import { roleMuted } from '../../utils/createRoleMuted/roleMuted.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
+import { roleMuted } from '../../itemCreator/createRoleMuted/roleMuted.js';
+import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
 function makeid(length) {
   let result = '';

@@ -1,6 +1,6 @@
-import { helpWithASpecificCommand } from '../../everyone/comandosCommon/help.command.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
+import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.command.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
 
 function allNull(arrayT) {
   return !arrayT.some((elementT) => elementT !== null);

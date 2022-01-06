@@ -1,5 +1,5 @@
-import { uploadImage } from '../../../services/uploadImageImgur/uploadImage.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
+import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 
 export default {
   name: 'sendEmbed',

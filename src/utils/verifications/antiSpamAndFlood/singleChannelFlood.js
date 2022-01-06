@@ -1,5 +1,5 @@
-import { muteUserInDatabase } from '../../utils/createRoleMuted/roleMutedUserInDatabase.js';
-import Colors from '../../utils/layoutEmbed/colors.js';
+import { muteUserInDatabase } from '../../itemCreator/createRoleMuted/roleMutedUserInDatabase.js';
+import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
 export async function singleChannelFlood(client, message, it, maxMessageRep) {
   const idUser = message.author.id;

@@ -1,9 +1,9 @@
 import Discord from 'discord.js';
-import { getUserOfCommand } from '../../../utils/getUserMention/getUserOfCommand.js';
-import { parseDateForDiscord } from '../../../utils/TimeMessageConversor/parseDateForDiscord.js';
-import Colors from '../../../utils/layoutEmbed/colors.js';
-import Icons from '../../../utils/layoutEmbed/iconsMessage.js';
-import { userHasPermission } from '../../../utils/userHasPermission/userHasPermission.js';
+import { getUserOfCommand } from '../../../utils/commandsFunctions/getUserMention/getUserOfCommand.js';
+import { parseDateForDiscord } from '../../../utils/commandsFunctions/TimeMessageConversor/parseDateForDiscord.js';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
+import { userHasPermission } from '../../../utils/commandsFunctions/userHasPermission/userHasPermission.js';
 
 export default {
   name: 'warnlist',

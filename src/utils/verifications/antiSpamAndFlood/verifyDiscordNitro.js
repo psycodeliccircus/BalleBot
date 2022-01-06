@@ -1,4 +1,4 @@
-import Colors from '../../utils/layoutEmbed/colors.js';
+import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
 export async function verifyDiscordNitro(client, message) {
   const contentMessage = message.content;
