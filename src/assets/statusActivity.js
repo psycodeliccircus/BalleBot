@@ -5,7 +5,7 @@ export function statusActivity(client) {
     `🧡Rafaella Ballerini on Instagram!`,
     `🎧Coding with Lo-fi!`,
     `⭐Stream Lo-fi!`,
-    `😺Contact TAUZ#1786 for questions about me`,
+    `😺Contact TAUZ#4635 for questions about me`,
   ];
   let i = 0;
 
