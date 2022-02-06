@@ -5,6 +5,7 @@ export default {
   name: 'guildMemberAdd',
   once: false,
   run: async (client, memberAdd) => {
+    if (memberAdd.user.bot) return;
     await checkIfItIsMutated(client, memberAdd);
     await recaptcha(client, memberAdd);
   },
