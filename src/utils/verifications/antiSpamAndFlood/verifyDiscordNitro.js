@@ -44,9 +44,7 @@ ${message.content}
       });
     }
 
-    const reason = `Scam de Discord Nitro Free falso:
-    ${message.content}
-      `;
+    const reason = `Scam de Discord Nitro Free falso:\n${message.content}`;
     await message.guild.members
       .ban(message.author, {
         reason: `Punido por ${client.user.tag} | ${client.user.id}
@@ -54,25 +52,6 @@ ${message.content}
       })
       .then(() => {
         message.delete();
-
-        channelLog?.send({
-          content: `${message.author}`,
-          embeds: [
-            {
-              color: Colors.pink_red,
-              thumbnail: message.author.displayAvatarURL({ dynamic: true }),
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL({ dynamic: true }),
-              },
-              title: `**Usuário ${message.author.tag} Banido por enviar um Scam de Discord Nitro!**`,
-              description: `**O usuário enviou a seguinte mensagem em ${message.channel}:**
-${message.content}`,
-              footer: `ID do usuário: ${message.author.id}`,
-              timestamp: new Date(),
-            },
-          ],
-        });
 
         message.author
           .send({
