@@ -4,7 +4,14 @@ import { Collection } from 'discord.js';
 import db from 'quick.db';
 import { setCommandsInDatabase } from '../services/database/setCommandsInDatabase.js';
 
-const commandFolders = ['everyone', 'padawan', 'mods', 'staff', 'owner'];
+const commandFolders = [
+  'everyone',
+  'padawan',
+  'mods',
+  'staff',
+  'owner',
+  'developers',
+];
 
 function genCommand(folder, returnCollection) {
   const folderPath = path.resolve(path.dirname(''), 'src', 'commands', folder);

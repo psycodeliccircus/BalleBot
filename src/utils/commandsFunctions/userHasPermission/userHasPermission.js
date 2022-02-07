@@ -6,6 +6,15 @@ export function userHasPermission(
   rolePerm
 ) {
   const commandToBeExecuted = client.Commands.get(commandName);
+
+  const developersList = process.env.DEVELOPERS?.split(',');
+  if (
+    developersList.includes(message.author.id) &&
+    commandToBeExecuted?.permissions?.includes('developers')
+  ) {
+    return { permissionIsTrueOrFalse: true };
+  }
+
   const guildIdDatabase = new client.Database.table(
     `guild_id_${message.guild.id}`
   );

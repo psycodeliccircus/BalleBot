@@ -2,7 +2,6 @@ import { verifyBannedWords } from '../../utils/verifications/messageVerify/messa
 import { antiSpamAndFlood } from '../../utils/verifications/antiSpamAndFlood/functionSpamAndFlood.js';
 import Colors from '../../utils/commandsFunctions/layoutEmbed/colors.js';
 import { userHasPermission } from '../../utils/commandsFunctions/userHasPermission/userHasPermission.js';
-import { downloadDatabase } from '../../utils/developersCommands/downloadDatabase.js';
 
 export default {
   name: 'messageCreate',
@@ -11,9 +10,7 @@ export default {
     if (message.author.bot) return;
     if (message.content === '') return;
     let { prefix } = process.env;
-    if (message.author.id === process.env.developers) {
-      if (message.content === 'database') downloadDatabase(message);
-    }
+
     if (message.channel.type !== 'dm') {
       const guildIdDatabase = new client.Database.table(
         `guild_id_${message.guild.id}`
