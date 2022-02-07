@@ -9,7 +9,7 @@ export function userHasPermission(
 
   const developersList = process.env.DEVELOPERS?.split(',');
   if (
-    developersList.includes(message.author.id) &&
+    developersList?.includes(message.author.id) &&
     commandToBeExecuted?.permissions?.includes('developers')
   ) {
     return { permissionIsTrueOrFalse: true };
