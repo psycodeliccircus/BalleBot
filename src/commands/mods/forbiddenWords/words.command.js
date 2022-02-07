@@ -14,7 +14,6 @@ export default {
   description: `<prefix>words para ver mensagens proibidas no servidor`,
   permissions: ['mods'],
   aliases: ['viewwords', 'words?'],
-  dm: true,
   category: 'AntiSpam ⚠️',
   run: ({ message, client, prefix }) => {
     const guildIdDatabase = new client.Database.table(

@@ -21,10 +21,12 @@ intents.add(
 
 const client = new Client({
   intents,
+  partials: ['CHANNEL'],
 });
 
 client.Events = eventHandler(client);
 client.Commands = commandHandler();
 client.Database = db;
 client.Permission = new Permissions(104324673n);
+
 client.login(TOKEN);

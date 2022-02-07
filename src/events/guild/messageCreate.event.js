@@ -11,7 +11,7 @@ export default {
     if (message.content === '') return;
     let { prefix } = process.env;
 
-    if (message.channel.type !== 'dm') {
+    if (message.channel.type !== 'DM') {
       const guildIdDatabase = new client.Database.table(
         `guild_id_${message.guild.id}`
       );
@@ -71,7 +71,8 @@ export default {
       const commandToBeExecuted = client.Commands.get(commandName);
       if (commandToBeExecuted) {
         const dmTrueOrFalse = commandToBeExecuted.dm;
-        if (message.channel.type === 'dm') {
+
+        if (message.channel.type === 'DM') {
           if (dmTrueOrFalse) {
             return commandToBeExecuted.run({ client, message, args, prefix });
           }
