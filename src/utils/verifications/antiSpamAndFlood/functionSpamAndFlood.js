@@ -33,7 +33,7 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].countRaid++;
 
       if (it[idUser].countRaid >= maxMessageRep) {
-        await multiChannelFlood(client, message, it, maxMessageRep);
+        await multiChannelFlood(client, message, it);
 
         delete it[idUser];
         return;
@@ -53,7 +53,7 @@ export async function antiSpamAndFlood(client, message) {
       it[idUser].countFlood++;
 
       if (it[idUser].countFlood >= maxMessageRep) {
-        await singleChannelFlood(client, message, it, maxMessageRep);
+        await singleChannelFlood(client, message, it);
 
         delete it[idUser];
       }

@@ -1,7 +1,7 @@
 import { muteUserInDatabase } from '../../itemCreator/createRoleMuted/roleMutedUserInDatabase.js';
 import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
-export async function singleChannelFlood(client, message, it, maxMessageRep) {
+export async function singleChannelFlood(client, message, it) {
   const idUser = message.author.id;
   const reason = `Flood em Canais, supeita de spam pela mensagem:
 ${message.content}
@@ -39,7 +39,7 @@ ${message.content}
             icon_url: message.author.displayAvatarURL({ dynamic: true }),
           },
           title: `**Usuário ${message.author.tag} mutado por enviar um flood em UM canal!**`,
-          description: `**O usuário floodou a seguinte mensagem ${maxMessageRep} vezes muito rapidamente em <#${it[idUser].lastChannel}>:**
+          description: `**O usuário floodou a seguinte mensagem várias vezes muito rapidamente em <#${it[idUser].lastChannel}>:**
 ${it[idUser].content}
 **Data final do Mute: ${inviteMessageDate}**`,
           footer: { text: `ID do usuário: ${message.author.id}` },

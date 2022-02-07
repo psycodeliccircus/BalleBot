@@ -1,6 +1,6 @@
 import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
-export async function multiChannelFlood(client, message, it, maxMessageRep) {
+export async function multiChannelFlood(client, message, it) {
   const idUser = message.author.id;
 
   if (it[idUser]) {
@@ -30,7 +30,7 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
               icon_url: message.author.displayAvatarURL({ dynamic: true }),
             },
             title: `**Usuário ${message.author.tag} mandou uma suspeita de Scam por enviar um Flood/Scam em VÁRIOS canais!**`,
-            description: `**O usuário floodou a seguinte mensagem ${maxMessageRep} vezes muitp rapidamente em <#${it[idUser].lastChannel}>:**
+            description: `**O usuário floodou a seguinte mensagem várias vezes muito rapidamente em <#${it[idUser].lastChannel}>:**
   ${it[idUser].content}
   **Eu não tenho permissão de banir o usuário, verifique antes que seja tarde e me dê permissão!`,
             footer: { text: `ID do usuário: ${message.author.id}` },
@@ -65,7 +65,7 @@ export async function multiChannelFlood(client, message, it, maxMessageRep) {
                 icon_url: message.author.displayAvatarURL({ dynamic: true }),
               },
               title: `**Usuário ${message.author.tag} Banido por enviar um Flood/Scam em VÁRIOS canais!**`,
-              description: `**O usuário enviou a seguinte mensagem ${maxMessageRep} vezes muito rapidamente em ${maxMessageRep} chats:**
+              description: `**O usuário enviou a seguinte mensagem várias vezes muito rapidamente em vários chats:**
 ${it[idUser].content}`,
               fields: [
                 {
