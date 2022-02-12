@@ -100,7 +100,6 @@ export default {
 
     coletor.on('collect', async (collect) => {
       const myUser = users.find((u) => u.id.toString() === collect.values[0]);
-      console.log(myUser);
 
       const emoji = client.emojis.cache.get('941841017227857941');
 
