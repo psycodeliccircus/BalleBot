@@ -1,10 +1,28 @@
 import Colors from '../../commandsFunctions/layoutEmbed/colors.js';
 
 export async function verifyDiscordNitro(client, message) {
-  const contentMessage = message.content;
+  let contentMessage = message.content;
   const regex = [/discord/gi, /free/gi, /nitro/gi, /http(s?):\/\//gi];
   const linkTrue = /http(s?):\/\/discord\.gift\//gi;
   let scam = true;
+
+  const regexLink = /https:\/\/.* /;
+
+  function removeLinkTenorGif() {
+    let contentMessageClone = contentMessage;
+    while (contentMessageClone.includes('https://tenor.com/')) {
+      const matchcontent = contentMessageClone?.match(regexLink);
+      const link = matchcontent
+        ? matchcontent[0].split(' ')[0]
+        : contentMessageClone;
+
+      if (link.includes('https://tenor.com/')) {
+        contentMessage = contentMessage.replace(link, '');
+      }
+      contentMessageClone = contentMessageClone.replace(link, '');
+    }
+  }
+  removeLinkTenorGif();
 
   regex.forEach((reg) => {
     if (!reg.test(contentMessage)) {
