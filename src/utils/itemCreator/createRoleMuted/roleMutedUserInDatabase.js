@@ -35,9 +35,6 @@ export async function muteUserInDatabase(client, event, reason, userMutated) {
     );
   }
 
-  const muterole = await roleMuted(event, 'MutedBallebot');
-  guildIdDatabase.set('roleMutedId', muterole.id);
-
   const tableTemporarilyMutated = new client.Database.table(
     `tableTemporarilyMutated`
   );
@@ -45,7 +42,6 @@ export async function muteUserInDatabase(client, event, reason, userMutated) {
     id: user.id,
     dateMuted: new Date(dateForDatabase),
     guildId: event.guild.id,
-    roleId: muterole.id,
     reason: `Punido por ${event.author.tag || client.user.tag} | ${event.author.id || client.user.id
       }\n— Motivo: ${reasonMuted}`,
   };
@@ -76,10 +72,10 @@ export async function muteUserInDatabase(client, event, reason, userMutated) {
     .get(event.guild.id)
     .members.cache.get(user.id);
 
-  await userMember.roles.add(muterole.id);
+  userMember.disableCommunicationUntil(new Date(dateForDatabase).getTime(), reasonMuted);
   const inviteMessageDate =
     dateForDatabase !== 'indefinido'
       ? parseDateForDiscord(dateForDatabase)
       : '`indefinido`';
-  return { userReasonFullMuted, inviteMessageDate, muterole };
+  return { userReasonFullMuted, inviteMessageDate };
 }
