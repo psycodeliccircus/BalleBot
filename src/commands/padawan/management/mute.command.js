@@ -6,7 +6,6 @@ import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 import { muteUserInDatabase } from '../../../utils/itemCreator/createRoleMuted/roleMutedUserInDatabase.js';
 import { createChannelRevision } from '../../../utils/itemCreator/createChannelRevision/createChannelRevision.js';
 import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage.js';
-import { Message, Client } from 'discord.js';
 
 export default {
   name: 'mute',
@@ -15,11 +14,6 @@ export default {
   aliases: ['mutar', 'silenciar'],
   category: 'Moderação ⚔️',
   dm: false,
-  /**
-   * 
-   * @param {{ message: Message; client: Client; args: Array<string>; string }} param0 
-   * @returns 
-   */
   run: async ({ message, client, args, prefix }) => {
     const { users, restOfMessage } = await getUserOfCommand(
       client,
@@ -32,7 +26,7 @@ export default {
       return;
     }
 
-    if (!message.guild.me.permissions.has('MODERATE_MEMBERS')) {
+    if (!message.guild.me.permissions.has('MANAGE_ROLES')) {
       return message.channel
         .send({
           content: `${message.author}`,
@@ -44,7 +38,7 @@ export default {
                 name: message.author.tag,
                 icon_url: message.author.displayAvatarURL({ dynamic: true }),
               },
-              description: `Ative a permissão de moderar membros para mim, para que você possa usar o comando mute`,
+              description: `Ative a permissão de manusear cargos para mim, para que você possa usar o comando mute`,
               title: `Eu não tenho permissão para mutar usuários`,
               footer: {
                 text: `A permissão pode ser ativada no cargo do bot em configurações`,
@@ -57,8 +51,10 @@ export default {
     }
 
     if (
-      !message.member.permissions
-        .has('MANAGE_ROLES')
+      !client.guilds.cache
+        .get(message.guild.id)
+        .members.cache.get(message.author.id)
+        .permissions.has('MANAGE_ROLES')
     ) {
       return message.channel
         .send({
@@ -71,7 +67,7 @@ export default {
                 name: message.author.tag,
                 icon_url: message.author.displayAvatarURL({ dynamic: true }),
               },
-              description: `Peça a um administrador ver o seu caso, você precisa de permissão para moderar membros`,
+              description: `Peça a um administrador ver o seu caso, você precisa de permissão para manusear cargos`,
               title: `Você não tem permissão para mutar usuários`,
               footer: {
                 text: `A permissão pode ser ativada no seu cargo em configurações`,
@@ -108,29 +104,6 @@ export default {
     let reasonMuted =
       `${textMessage.replace(timeValidation, '').trim()}` ||
       '<Motivo não especificado>';
-    
-    const timeArray = textMessage.match(timeValidation);
-
-    if(!timeArray) {
-      return message.channel
-        .send({
-          contet: `${message.author}`,
-          embeds: [
-            {
-              color: Colors.pink_red,
-              thumbnail: Icons.erro,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL({ dynamic: true }),
-              },
-              title: `Ei, você esqueceu de determinar o tempo do mute!`,
-              description: `**Tente usar**\n\`\`${prefix}mute @Usuários/TAGs/Nomes/IDs/Citações <motivo> <tempo/2d 5h 30m 12s>\`\``,
-              timestamp: new Date(),
-            },
-          ],
-        })
-        .then((msg) => setTimeout(() => msg.delete(), 15000));
-    }
 
     const attachmentsLinks = message.attachments.map((anex) => anex.url);
 
@@ -196,7 +169,8 @@ ${reasonMuted}
               .then((msg) => setTimeout(() => msg.delete(), 15000));
           }
           if (
-            !memberUser.moderatable
+            memberUser.roles.highest.position >=
+            message.guild.me.roles.highest.position
           ) {
             return message.channel
               .send({
@@ -278,15 +252,14 @@ ${reasonMuted}
               });
             }
 
-            memberUser.timeout
-            const { userReasonFullMuted, inviteMessageDate } =
+            const { userReasonFullMuted, inviteMessageDate, muterole } =
               await muteUserInDatabase(
                 client,
                 message,
                 messageReasonMuted,
                 user
               );
-
+            createChannelRevision(message, muterole);
             const description = userReasonFullMuted.reason.replace(
               /((Punido por )(.*)\n)|(— Motivo: )/g,
               ''
