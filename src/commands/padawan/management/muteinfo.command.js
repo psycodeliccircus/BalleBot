@@ -58,8 +58,6 @@ export default {
           `guild_id_${message.guild.id}_user_id_${user.id}`
         ) || guildUndefinedMutated.get(`user_id_${user.id}`);
 
-      console.log(userMuted);
-
       function messageUserNotMutated() {
         return message.channel.send({
           content: `${message.author}`,
