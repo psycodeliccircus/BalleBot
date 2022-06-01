@@ -4,9 +4,7 @@ import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.com
 import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
 import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 import { muteUserInDatabase } from '../../../utils/itemCreator/createRoleMuted/roleMutedUserInDatabase.js';
-import { createChannelRevision } from '../../../utils/itemCreator/createChannelRevision/createChannelRevision.js';
 import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage.js';
-import { Message, Client } from 'discord.js';
 
 export default {
   name: 'mute',
