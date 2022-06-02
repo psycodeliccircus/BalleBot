@@ -200,13 +200,7 @@ ${reason}
             });
           }
 
-          await message.guild.members
-            .ban(user, {
-              reason: `Punido por ${message.author.tag} | ${message.author.id}
-               — Data: ${message.createdAt.toISOString()} — Motivo: ${reasonOfBan}`,
-            })
-            .then(() => {
-              const inviteDmAutor =
+          const inviteDmAutor =
                 res === 'anonimo' ? 'a administração' : message.author;
               user
                 .send({
@@ -239,6 +233,11 @@ ${reason}
                     ],
                   })
                 );
+
+          await message.guild.members
+            .ban(user, {
+              reason: `Punido por ${message.author.tag} | ${message.author.id}
+               — Data: ${message.createdAt.toISOString()} — Motivo: ${reasonOfBan}`,
             })
             .catch(() => {
               message.channel.send({

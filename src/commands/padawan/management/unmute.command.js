@@ -1,6 +1,7 @@
 import { helpWithASpecificCommand } from '../../everyone/commandsCommon/help.command.js';
 import { getUserOfCommand } from '../../../utils/commandsFunctions/getUserMention/getUserOfCommand.js';
 import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import Discord from 'discord.js';
 
 export default {
   name: 'unmute',
@@ -8,6 +9,11 @@ export default {
   permissions: ['padawans'],
   aliases: ['tirarmute', 'desmutar', 'desmute'],
   category: 'Moderação ⚔️',
+  /**
+   * 
+   * @param {{ message: Discord.Message; client: Discord.Client; args: Array<string>; string }} param0 
+   * @returns 
+   */
   run: async ({ message, client, args, prefix }) => {
     const { users } = await getUserOfCommand(client, message, prefix);
 
@@ -16,7 +22,7 @@ export default {
       helpWithASpecificCommand(command, client, message);
       return;
     }
-    if (!message.member.permissions.has('MANAGE_ROLES')) {
+    if (!message.member.permissions.has('MODERATE_MEMBERS')) {
       return message.channel
         .send({
           content: `${message.author}`,
@@ -61,7 +67,7 @@ export default {
           `guild_id_${message.guild.id}_user_id_${user.id}`
         ) || guildUndefinedMutated.get(`user_id_${user.id}`);
 
-      if (!userMuted) {
+      if (!userMuted || user.communicationDisabledUntilTimestamp <= Date.now()) {
         return message.channel
           .send({
             content: `${message.author}`,
@@ -98,7 +104,7 @@ export default {
         .get(userMuted.guildId)
         .members.cache.get(userMuted.id);
 
-      userMember.roles.remove(userMuted.roleId);
+      userMember.timeout(0);
       const guildIdDatabase = new client.Database.table(
         `guild_id_${message.guild.id}`
       );

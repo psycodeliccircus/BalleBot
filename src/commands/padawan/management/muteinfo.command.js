@@ -11,6 +11,11 @@ export default {
   permissions: ['padawans'],
   aliases: ['vermute', 'viewmute', 'muteuser', 'infomute'],
   category: 'Moderação ⚔️',
+  /**
+   * 
+   * @param {{ message: Discord.Message; client: Discord.Client; args: Array<string>; string }} param0 
+   * @returns 
+   */
   run: async ({ message, client, args, prefix }) => {
     const { users } = await getUserOfCommand(client, message, prefix);
 
@@ -78,12 +83,12 @@ export default {
       const muterole = message.guild.roles.cache.find(
         (muteroleObj) => muteroleObj.name === 'MutedBallebot'
       );
-      const userHasRoleMuted = client.guilds.cache
+      const userTimeouted = client.guilds.cache
         .get(message.guild.id)
         .members.cache.get(userMuted.id)
-        .roles.cache.some((role) => role.id === muterole.id);
+        .communicationDisabledUntilTimestamp
 
-      if (userHasRoleMuted) {
+      if (userTimeouted && userTimeouted > Date.now()) {
         const dataForMessage = userMuted.dateMuted
           ? parseDateForDiscord(userMuted.dateMuted)
           : '`<indefinido>`';
