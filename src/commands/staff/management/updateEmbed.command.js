@@ -3,7 +3,7 @@ import { uploadImage } from '../../../services/APIs/uploadImageImgur/uploadImage
 
 export default {
   name: 'updateEmbed',
-  description: `Comando para criar um embed para o sistema de cargos, envie o prefixo + sendEmbed + <channelID/#channel>`,
+  description: `Comando para atualizar um embed para o sistema de cargos, envie o prefixo + sendEmbed + <channelID/#channel>`,
   permissions: ['staff'],
   aliases: ['uptadeEmbedRole', 'updateEmbedRole', 'ataualizarEmbed'],
   category: 'RolesSystem 👔',
