@@ -60,16 +60,15 @@ export async function recaptcha(client, memberAdd) {
 
     fundo.getBuffer(jimp.MIME_PNG, async (err, buffer) => {
       await channel.send({
-        content: `${memberAdd.user}`,
+        content: `${memberAdd.user} **Caso não esteja vendo a código para entrar no servidor, siga estas intruções para habilitar e ver o código:**
+> **Abra Configurações do usuário**
+> **Texto e Imagens**
+> **Ative a primeira opção**: \`Quando publicados como links no chat\``,
         embeds: [
           {
             color: Colors.pink_red,
             title: `Escreva o código de ${numberOfChars} caracteres abaixo no chat para confirmar que você é um humano! :eyes:`,
             timestamp: new Date(),
-            description: `**Caso não esteja vendo a código, siga estas intruções para ver o código:**
-> **Abra Configurações do usuário**
-> **Texto e Imagens**
-> **Ative a primeira opção**: \`Quando publicados como links no chat\``,
             image: { url: 'attachment://image.png' },
           },
         ],
