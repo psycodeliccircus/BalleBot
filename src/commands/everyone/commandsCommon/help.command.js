@@ -1,7 +1,7 @@
-import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
-import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
+import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 function getMessageCommands(listTempleteCategories, namesCategories) {
@@ -53,19 +53,23 @@ export default {
   category: 'Utility ⛏️',
   dm: true,
   run: ({ message, client, args, prefix }) => {
-
-    if (message.channel.type !== 'DM') return message.channel.send("Esse comando só funciona na DM/privado");
-
+    if (message.channel.type !== 'DM') return;
+    if (
+      message.channel.type !== 'DM' &&
+      message.channel.id === '969676874634641449'
+    ) {
+      return message.channel.send(
+        'Esse comando só funciona na DM/privado >:D corra, vá para lá antes dos outros!'
+      );
+    }
     message.channel.send({
       ephemeral: true,
-      content: "Qual o nome?",
-      files: [{
-        attachment: __dirname + "/necessarioemaisumavezpedirajudamasagoranaoparaomonstromassimparaolugarquedetemmaisconhecimentodoplaneta.jpg"
-      }],
-
-
-    })
-
-
+      content: 'Qual o nome?',
+      files: [
+        {
+          attachment: `${__dirname}/necessarioemaisumavezpedirajudamasagoranaoparaomonstromassimparaolugarquedetemmaisconhecimentodoplaneta.jpg`,
+        },
+      ],
+    });
   },
 };
