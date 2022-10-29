@@ -63,7 +63,14 @@ export default {
       });
     }
 
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.startsWith(prefix)) {
+      if (message.channel.type === 'DM') {
+        return message.channel.send(
+          "Envie tudo começando com o caracter  '=' exemplo: =ping"
+        );
+      }
+      return;
+    }
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();

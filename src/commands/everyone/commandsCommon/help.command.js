@@ -1,6 +1,9 @@
 import Colors from '../../../utils/commandsFunctions/layoutEmbed/colors.js';
 import Icons from '../../../utils/commandsFunctions/layoutEmbed/iconsMessage.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 function getMessageCommands(listTempleteCategories, namesCategories) {
   return listTempleteCategories.reduce((prev, _arr, index) => {
     return `${prev}**${listTempleteCategories[index]}**
@@ -48,78 +51,21 @@ export default {
   permissions: ['everyone'],
   aliases: ['ajuda', 'h'],
   category: 'Utility ⛏️',
+  dm: true,
   run: ({ message, client, args, prefix }) => {
-    const commandsDatabase = new client.Database.table('commandsDatabase');
 
-    const helpCommand = args[0]?.replace(prefix, '').toLowerCase();
+    if (message.channel.type !== 'DM') return message.channel.send("Esse comando só funciona na DM/privado");
 
-    const fullCommand = commandsDatabase.get(`${helpCommand}`);
+    message.channel.send({
+      ephemeral: true,
+      content: "Qual o nome?",
+      files: [{
+        attachment: __dirname + "/necessarioemaisumavezpedirajudamasagoranaoparaomonstromassimparaolugarquedetemmaisconhecimentodoplaneta.jpg"
+      }],
 
-    if (!fullCommand) {
-      const getNamesCommands = [];
-      const allCommands = commandsDatabase.all();
-      const namesCategories = {};
 
-      for (let i = 0; i < allCommands.length; i++) {
-        const commandAmongAll = JSON.parse(allCommands[i].data);
+    })
 
-        const categoryCommand = commandAmongAll.category;
 
-        if (namesCategories[categoryCommand]) {
-          namesCategories[categoryCommand].namesCommands.push(
-            `\`${prefix + commandAmongAll.name}\``
-          );
-        } else if (categoryCommand === undefined) {
-          if (namesCategories['Sem categoria ❔']) {
-            namesCategories['Sem categoria ❔'].namesCommands.push(
-              `\`${prefix + commandAmongAll.name}\``
-            );
-          } else {
-            namesCategories['Sem categoria ❔'] = {
-              namesCommands: [`\`${prefix + commandAmongAll.name}\``],
-            };
-          }
-        } else {
-          namesCategories[categoryCommand] = {
-            namesCommands: [`\`${prefix + commandAmongAll.name}\``],
-          };
-        }
-      }
-      const listTempleteCategories =
-        Object.getOwnPropertyNames(namesCategories).sort();
-
-      getNamesCommands.sort();
-
-      const descriptInviteInMessage = `
-Hey ${message.author}, muito prazer!
-Eu sou a Bot do servidor Ballerini (pode me chamar de Balle).
-Fui criada para várias funções dentro de um servidor,\n
-Entre elas: Moderação, Cargos, AntiSpam, Forbidden Words, Welcome, Eventos Especiais, Diversão, Economia, e muito mais!\n
-Meus criadores me criaram para ser um bot completo com praticamente tudo que é necessário para um servidor e um pouquinho a mais,
-trazendo segurança e diversão para o seu servidor!\n
-Caso queira suporte com nossos desenvolvedores entre em contato com a equipe responsável no servidor Ballerini:\n
-> **Ballerini:** https://discord.gg/ballerini \n
-**Essas são as categorias e comandos que podem ser usados: **\n
-${getMessageCommands(listTempleteCategories, namesCategories)}`;
-
-      return message.channel.send({
-        content: `${message.author}`,
-        embeds: [
-          {
-            color: Colors.pink_red,
-            author: {
-              name: 'Balle Bot • Ballerini',
-              icon_url: client.user.displayAvatarURL({ dynamic: true }),
-              url: 'https://discord.gg/ballerini',
-            },
-            thumbnail: client.user.displayAvatarURL({ dynamic: true }),
-            title: `Ajuda Sobre Comandos e Funções:`,
-            description: descriptInviteInMessage,
-            footer: `• Para saber as informações de um comando específico, use ${prefix}help <comando>`,
-          },
-        ],
-      });
-    }
-    helpWithASpecificCommand(helpCommand, client, message);
   },
 };
