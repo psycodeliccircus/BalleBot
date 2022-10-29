@@ -53,7 +53,6 @@ export default {
   category: 'Utility ⛏️',
   dm: true,
   run: ({ message, client, args, prefix }) => {
-    if (message.channel.type !== 'DM') return;
     if (
       message.channel.type !== 'DM' &&
       message.channel.id === '969676874634641449'
@@ -62,6 +61,7 @@ export default {
         'Esse comando só funciona na DM/privado >:D corra, vá para lá antes dos outros!'
       );
     }
+    if (message.channel.type !== 'DM') return;
     message.channel.send({
       ephemeral: true,
       content: 'Qual o nome?',
