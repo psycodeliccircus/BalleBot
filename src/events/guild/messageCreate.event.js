@@ -71,6 +71,7 @@ export default {
       }
       return;
     }
+    if (/= /.test(message.content)) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
