@@ -20,6 +20,7 @@ intents.add(
 );
 
 const client = new Client({
+  restRequestTimeout: 60000,
   intents,
   partials: ['CHANNEL'],
 });
