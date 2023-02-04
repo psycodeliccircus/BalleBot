@@ -4,7 +4,7 @@ export function statusActivity(client) {
 
   setInterval(() => {
     i = (i + 1) % status.length;
-    client.user.setActivity(`${status[i]}`, {
+    client.user.setActivity(`🎵 ${status[i]}`, {
       type: 'LISTENING',
     });
   }, 5000);
