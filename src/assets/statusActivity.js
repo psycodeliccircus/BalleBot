@@ -8,8 +8,12 @@ export function statusActivity(client) {
 
   setInterval(() => {
     i = (i + 1) % status.length;
-    client.user.setActivity(`🎵 ${status[i]}`, {
-      type: 'LISTENING',
+    client.user.setPresence({
+      activity: {
+        name: `🎵 ${status[i]}`,
+        type: 'LISTENING',
+      },
+      status: 'online',
     });
   }, 5000);
 }
