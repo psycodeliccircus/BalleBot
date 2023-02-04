@@ -14,6 +14,8 @@ export function statusActivity(client) {
         type: 'LISTENING',
       },
       status: 'online',
-    });
+    })
+      .then(console.log)
+      .catch(console.error);
   }, 5000);
 }
