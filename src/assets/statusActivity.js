@@ -6,7 +6,7 @@ export function statusActivity(client) {
   ];
   let i = 0;
 
-  setInterval(() => {
+  function setStatus() {
     i = (i + 1) % status.length;
     client.user.setPresence({
       activity: {
@@ -15,7 +15,13 @@ export function statusActivity(client) {
       },
       status: 'online',
     })
-      .then(console.log)
-      .catch(console.error);
-  }, 5000);
+      .then(() => {
+        console.log(`Status set to "${status[i]}"`);
+      })
+      .catch(error => {
+        console.error(`Error setting status: ${error}`);
+      });
+  }
+
+  setInterval(setStatus, 5000);
 }
