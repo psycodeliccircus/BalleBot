@@ -7,6 +7,11 @@ import commandHandler from './commands/Command.handler.js';
 
 const { TOKEN } = process.env;
 
+// Check if token is set
+if (!TOKEN) {
+  throw new Error('Discord token not provided.');
+}
+
 const intents = new Intents()
   .add([
     Intents.FLAGS.GUILD_PRESENCES,
@@ -24,9 +29,11 @@ const client = new Client({
   partials: ['CHANNEL'],
 });
 
+// Attach event handler to client instance
 client.events = eventHandler(client);
 client.commands = commandHandler();
 client.database = new Database();
 client.permission = new Permissions(104324673n);
 
+// Login to Discord API
 client.login(TOKEN);
