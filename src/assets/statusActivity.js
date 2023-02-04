@@ -1,5 +1,9 @@
 export function statusActivity(client) {
-  const status = ['Radio CODE-FI'];
+  const status = [
+    'Radio CODE-FI',
+    'the music of your life',
+    'the best tunes',
+  ];
   let i = 0;
 
   setInterval(() => {
