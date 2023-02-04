@@ -1,4 +1,6 @@
-export function statusActivity(client) {
+let statusIntervalId;
+
+export function startStatusActivity(client) {
   const status = [
     'Radio CODE-FI',
     'the music of your life',
@@ -23,9 +25,9 @@ export function statusActivity(client) {
       });
   }
 
-  setInterval(setStatus, 5000);
+  statusIntervalId = setInterval(setStatus, 5000);
 }
 
-export function stopStatusActivity(client) {
+export function stopStatusActivity() {
   clearInterval(statusIntervalId);
 }
