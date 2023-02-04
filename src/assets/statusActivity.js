@@ -25,3 +25,7 @@ export function statusActivity(client) {
 
   setInterval(setStatus, 5000);
 }
+
+export function stopStatusActivity(client) {
+  clearInterval(statusIntervalId);
+}
